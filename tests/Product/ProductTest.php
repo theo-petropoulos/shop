@@ -2,6 +2,7 @@
 
 namespace App\Tests\Product;
 
+use App\Entity\Brand;
 use App\Entity\Product;
 use Doctrine\ORM\EntityManager;
 use Exception;
@@ -20,13 +21,22 @@ class ProductTest extends KernelTestCase
         $this->em = $kernel->getContainer()->get('doctrine')->getManager();
     }
 
-    /** Test New Product
+    /** Test New Products
      * @throws Exception
      */
     public function testNewProducts()
     {
+        $brand = $this->em->getRepository(Brand::class)->findOneBy([], ['id' => 'DESC']);
         for ($i = 0; $i < 10; $i++) {
             $product = new Product();
+            $product
+                ->setActive(true)
+                ->setDescription("Description product " . $i)
+                ->setName("Name product " . $i)
+                ->setBrand($brand)
+                ->setImagePath("/assets/products/images/toto.jpg")
+                ->setPrice("45.95")
+                ->setStock("25");
             try {
                 $this->em->persist($product);
             } catch (Exception $e) {
@@ -42,6 +52,5 @@ class ProductTest extends KernelTestCase
     {
         parent::tearDown();
         $this->em->close();
-        $this->em = null;
     }
 }
