@@ -445,9 +445,6 @@
     "symfony/string": {
         "version": "v5.4.0"
     },
-    "symfony/test-pack": {
-        "version": "v1.0.9"
-    },
     "symfony/translation-contracts": {
         "version": "v2.5.0"
     },
