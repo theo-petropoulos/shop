@@ -27,6 +27,7 @@ class ProductTest extends KernelTestCase
     public function testNewProducts()
     {
         $brand = $this->em->getRepository(Brand::class)->findOneBy([], ['id' => 'DESC']);
+        $counterInitial = $this->em->getRepository(Product::class)->count([]);
         for ($i = 0; $i < 10; $i++) {
             $product = new Product();
             $product
@@ -44,8 +45,27 @@ class ProductTest extends KernelTestCase
             }
             $this->em->flush();
         }
-        $counter = $this->em->getRepository(Product::class)->count([]);
-        $this->assertEquals(10, $counter);
+        $counterFinal = $this->em->getRepository(Product::class)->count([]);
+        $this->assertEquals($counterInitial + 10, $counterFinal);
+    }
+
+    /** Test Delete Products
+     * @throws Exception
+     */
+    public function testDeleteProducts()
+    {
+        $counterInitial = $this->em->getRepository(Product::class)->count([]);
+        for ($i = 0; $i < 10; $i++) {
+            $brand = $this->em->getRepository(Product::class)->findOneBy([], ['id' => 'DESC']);
+            try {
+                $this->em->remove($brand);
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+            }
+            $this->em->flush();
+        }
+        $counterFinal = $this->em->getRepository(Product::class)->count([]);
+        $this->assertEquals($counterInitial - 10, $counterFinal);
     }
 
     protected function tearDown(): void

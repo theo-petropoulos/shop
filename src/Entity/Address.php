@@ -12,10 +12,9 @@ use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(denormalizationContext: [
-    "disable_type_enforcement"=>true
-])]
+#[ApiResource(denormalizationContext: ["disable_type_enforcement"=>true])]
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
+
 class Address
 {
 
@@ -28,7 +27,7 @@ class Address
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "addresses")]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotBlank(message: "Le champ 'customer' est obligatoire.")]
-    private $customer;
+    private ?User $customer;
 
 
     #[ORM\Column(type: "string", length: 155)]
@@ -36,7 +35,7 @@ class Address
     #[Assert\Type(type: "string", message: "Le nom doit être une chaine de caractères valides.")]
     #[Assert\Length(max: 155, maxMessage: "Le nom ne doit pas excéder {{limit}} caractères.")]
     #[Assert\Regex(pattern: "/^[a-z ,.'-]+$/i", message: "Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
-    private $lastName;
+    private ?string $lastName;
 
 
     #[ORM\Column(type: "string", length: 155)]
@@ -44,13 +43,13 @@ class Address
     #[Assert\Type(type: "string", message: "Le nom doit être une chaine de caractères valide.")]
     #[Assert\Length(max: 155, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
     #[Assert\Regex(pattern: "/^[a-z ,.'-]+$/i", message: "Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
-    private $firstName;
+    private ?string $firstName;
 
 
     #[ORM\Column(type: "string", length: 15, nullable: true)]
     #[Assert\Length(max: 15, maxMessage: "Le numéro d'adresse ne peut pas excéder {{ limit }} caractères.")]
     #[Assert\Regex(pattern: "/^[a-z0-9]+$/i",message: "Le numéro d'adresse ne peut contenir que des lettres et des chiffres.")]
-    private $streetNumber;
+    private ?string $streetNumber;
 
 
     #[ORM\Column(type: "string", length: 255)]
@@ -61,20 +60,20 @@ class Address
         maxMessage: "L'adresse doit ne doit pas excéder {{ limit }} caractères."
     )]
     #[Assert\Regex(pattern:"/^[a-z0-9 ,.'-]+$/i", message: "L'adresse ne peut contenir que des lettres, des chiffres, des apostrophes, des points et des tirets.")]
-    private $streetName;
+    private ?string $streetName;
 
 
     #[ORM\Column("string", length: 255, nullable: true)]
     #[Assert\Type("string", message: "Le complément d'adresse doit être une chaine de caractères valides.")]
     #[Assert\Regex(pattern: "/^[a-z0-9 ,.'-]+$/i", message: "Le complément d'adresse ne peut contenir que des lettres, des chiffres, des apostrophes, des points et des tirets.")]
-    private $streetAddition;
+    private ?string $streetAddition;
 
 
     #[Column("integer")]
     #[Assert\NotBlank(message: 'Le champ du code postal est obligatoire.')]
     #[Assert\Type(type: 'numeric',message: 'Le code postal ne doit contenir que des chiffres.')]
     #[Assert\Length(min: 5, max: 5, minMessage: 'Le code postal doit contenir exactement {{limit}} caractères. Pour un département étranger, utilisez le code 99999', maxMessage: 'Le code postal doit contenir exactement {{limit}} caractères. Pour un département étranger, utilisez le code 99999')]
-    private $postalCode;
+    private ?int $postalCode;
 
 
     #[ORM\Column(type: "string", length: 80)]
@@ -82,12 +81,12 @@ class Address
     #[Assert\Type(type: "string",message: "La ville doit être une chaine de caractères valides.")]
     #[Assert\Length(min: 3, max: 80, minMessage: "La ville doit contneir au moins {{ limit }} caractères.", maxMessage: "La ville ne doit pas excéder {{ limit }} caractères.")]
     #[Assert\Regex(pattern: "/^[a-z ,.'-]+$/i", message: "La ville ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
-    private $city;
+    private ?string $city;
 
 
     #[ORM\Column(type: "boolean", nullable: true)]
     #[Assert\Type(type: "bool", message: "La valeur main doit être de type {{ type }}.")]
-    private $main;
+    private ?bool $main;
 
     /**
      * @return ?int

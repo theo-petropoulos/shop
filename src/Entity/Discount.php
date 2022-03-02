@@ -11,70 +11,41 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\DateValidator;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ApiResource()
- * @ORM\Entity(repositoryClass=DiscountRepository::class)
- */
+#[ApiResource(denormalizationContext: ["disable_type_enforcement"=>true])]
+#[ORM\Entity(repositoryClass: DiscountRepository::class)]
+
 class Discount
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="discount")
-     */
+    #[ORM\OneToMany(mappedBy: "brand", targetEntity: Product::class)]
     private $product;
 
-    /**
-     * @ORM\Column(type="string", length=155)
-     * @Assert\NotBlank(
-     *  message="Le champ du nom est obligatoire."
-     * )
-     * @Assert\Type(
-     *  type="string",
-     *  message="Le champ du nom doit contenir une chaine de caractères valides."
-     * )
-     * @Assert\Length(
-     *  min=4,
-     *  minMessage="Le champ du nom doit contenir au moins {{ limit }} caractères.",
-     *  max=155,
-     *  maxMessage="Le champ du nom ne doit pas excéder {{ limit }} messages."
-     * )
-     */
-    private $name;
+    #[ORM\Column(type: "string", length: 155)]
+    #[Assert\NotBlank(message: "Le champ du nom est obligatoire.")]
+    #[Assert\Type(type: "string", message: "Le nom doit contenir une chaine de caractères valides.")]
+    #[Assert\Length(
+        min: 4, max: 155,
+        minMessage: "Le champ du nom doit contenir au moins {{ limit }} caractères.", maxMessage: "Le nom ne peut excéder {{ limit }} caractères."
+    )]
+    private ?string $name;
 
-    /**
-     * @ORM\Column(type="float")
-     * @Assert\NotBlank(
-     *  message="Le champ promotion est obligatoire."
-     * )
-     * @Assert\Type(
-     *  type="numeric",
-     *  message="Le champ promotion doit être de type {{ type }}."
-     * )
-     * @Assert\Range(
-     *  min=1,
-     *  max=99,
-     *  notInRangeMessage="La promotion doit être au minimum de {{ min }}% et au maximum de {{ max }}%."
-     * )
-     */
-    private $percentage;
+    #[ORM\Column(type: "float")]
+    #[Assert\NotBlank(message: "Le champ promotion est obligatoire.")]
+    #[Assert\Type(type: "numeric", message: "Le champ promotion doit être de type {{ type }}.")]
+    #[Assert\Range(notInRangeMessage: "La promotion doit être au minimum de {{ min }}% et au maximum de {{ max }}%.", min: 1, max: 99)]
+    private ?float$percentage;
 
-    /**
-     * @ORM\Column(type="date")
-     * @Assert\Type("DateTime")
-     */
-    private $startingDate;
+    #[ORM\Column(type: "date")]
+    #[Assert\Type("DateTime")]
+    private ?\DateTimeInterface $startingDate;
 
-    /**
-     * @ORM\Column(type="date")
-     * @Assert\Type("DateTime")
-     */
-    private $endingDate;
+    #[ORM\Column(type: "date")]
+    #[Assert\Type("DateTime")]
+    private ?\DateTimeInterface $endingDate;
 
     public function __construct()
     {

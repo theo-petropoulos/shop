@@ -25,6 +25,7 @@ class BrandTest extends KernelTestCase
      */
     public function testNewBrands()
     {
+        $counterInitial = $this->em->getRepository(Brand::class)->count([]);
         for ($i = 0; $i < 5; $i++) {
             $brand = new Brand();
             $brand->setName('Brand ' . $i);
@@ -37,8 +38,8 @@ class BrandTest extends KernelTestCase
             }
             $this->em->flush();
         }
-        $counter = $this->em->getRepository(Brand::class)->count([]);
-        $this->assertEquals(10, $counter);
+        $counterFinal = $this->em->getRepository(Brand::class)->count([]);
+        $this->assertEquals($counterInitial + 5, $counterFinal);
     }
 
     /** Test Delete Brands
@@ -46,6 +47,7 @@ class BrandTest extends KernelTestCase
      */
     public function testDeleteBrands()
     {
+        $counterInitial = $this->em->getRepository(Brand::class)->count([]);
         for ($i = 0; $i < 5; $i++) {
             $brand = $this->em->getRepository(Brand::class)->findOneBy([], ['id' => 'DESC']);
             try {
@@ -55,8 +57,8 @@ class BrandTest extends KernelTestCase
             }
             $this->em->flush();
         }
-        $counter = $this->em->getRepository(Brand::class)->count([]);
-        $this->assertEquals(5, $counter);
+        $counterFinal = $this->em->getRepository(Brand::class)->count([]);
+        $this->assertEquals($counterInitial - 5, $counterFinal);
     }
 
     protected function tearDown(): void

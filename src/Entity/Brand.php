@@ -10,67 +10,33 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ApiResource(
- *  denormalizationContext={
- *      "disable_type_enforcement"=true
- *  }
- * )
- * @ORM\Entity(repositoryClass=BrandRepository::class)
- */
+#[ApiResource(denormalizationContext: ["disable_type_enforcement"=>true])]
+#[ORM\Entity(repositoryClass: BrandRepository::class)]
+
 class Brand
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=155)
-     * @Assert\NotBlank(
-     *  message="Le champ du nom est obligatoire."
-     * )
-     * @Assert\Type(
-     *  type="string",
-     *  message="Le nom doit contenir une chaine de caractères valides."
-     * )
-     * @Assert\Length(
-     *  max=155,
-     *  maxMessage="Le nom ne peut excéder {{ limit }} caractères."
-     * )
-     */
-    private $name;
+    #[ORM\Column(type: "string", length: 155)]
+    #[Assert\NotBlank(message: "Le champ du nom est obligatoire.")]
+    #[Assert\Type(type: "string", message: "Le nom doit contenir une chaine de caractères valides.")]
+    #[Assert\Length(max: 155, maxMessage: "Le nom ne peut excéder {{ limit }} caractères.")]
+    private ?string $name;
 
-    /**
-     * @ORM\Column(type="string", length=500)
-     * @Assert\NotBlank(
-     *  message="Le champ description est obligatoire."
-     * )
-     * @Assert\Type(
-     *  type="string",
-     *  message="La description doit contenir une chaine de caractères valides."
-     * )
-     * @Assert\Length(
-     *  max=500,
-     *  maxMessage="La description ne peut excéder {{ limit }} caractères."
-     * )
-     */
-    private $description;
+    #[ORM\Column(type: "string", length: 500)]
+    #[Assert\NotBlank(message: "Le champ description est obligatoire.")]
+    #[Assert\Type(type: "string", message: "La description doit contenir une chaine de caractères valides.")]
+    #[Assert\Length(max: 500, maxMessage: "La description ne peut excéder {{ limit }} caractères.")]
+    private ?string $description;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     * @Assert\Type(
-     *  type="bool",
-     *  message="Le champ active doit être de type {{ type }}."
-     * )
-     */
-    private $active;
+    #[ORM\Column(type:"boolean", nullable: true)]
+    #[Assert\Type(type: "bool", message: "La valeur active doit être de type {{ type }}.")]
+    private ?bool $active;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="brand")
-     */
+    #[ORM\OneToMany(mappedBy: "brand", targetEntity: Product::class)]
     private $products;
 
     public function __construct()
