@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="96d400a4-8bb1-4344-a300-e74f562e248f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Exceptions/InvalidEmailException.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/Address/AddressCreationTest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/User/UserMailTest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/User/UserOrderTest.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/User/UserPersonalDataTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Address.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Address.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Brand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Brand.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Discount.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Discount.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Order.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Order.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/User/UserTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/User/UserCreationTest.php" afterDir="false" />
-    </list>
+    <list default="true" id="96d400a4-8bb1-4344-a300-e74f562e248f" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -26,6 +13,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/templates/home/index.html.twig" root0="SKIP_INSPECTION" root1="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -162,15 +152,13 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/Exceptions" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/tests/User" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.phpOptions" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\wamp64\www\shop\src\Exceptions" />
-      <recent name="C:\wamp64\www\shop\tests\Address" />
       <recent name="C:\wamp64\www\shop\tests\User" />
     </key>
   </component>
@@ -191,22 +179,11 @@
       <workItem from="1646214316822" duration="41000" />
       <workItem from="1646214378580" duration="1751000" />
       <workItem from="1646236905894" duration="4425000" />
-      <workItem from="1646295653520" duration="16069000" />
+      <workItem from="1646295653520" duration="5818000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
   </component>
 </project>
