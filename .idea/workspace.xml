@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="96d400a4-8bb1-4344-a300-e74f562e248f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/HomeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Address.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Address.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Brand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Brand.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Discount.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Discount.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/IPs.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/IPs.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Order.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Order.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/OrderDetail.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/OrderDetail.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Brand/BrandTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Brand/BrandTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Product/ProductTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Product/ProductTest.php" afterDir="false" />
-    </list>
+    <list default="true" id="96d400a4-8bb1-4344-a300-e74f562e248f" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,6 +13,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/templates/home/index.html.twig" root0="SKIP_INSPECTION" root1="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
