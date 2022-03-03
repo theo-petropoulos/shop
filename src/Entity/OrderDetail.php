@@ -6,40 +6,28 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\OrderDetailRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ApiResource()
- * @ORM\Entity(repositoryClass=OrderDetailRepository::class)
- */
+#[ApiResource()]
+#[ORM\Entity(repositoryClass: OrderDetailRepository::class)]
 class OrderDetail
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="orderDetails")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $order;
+    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: "orderDetails")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Order $order;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Product::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $product;
+    #[ORM\OneToOne(targetEntity: Product::class, cascade: ["persist", "remove"])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Product $product;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $productQuantity;
+    #[ORM\Column(type: "integer")]
+    private ?int $productQuantity;
 
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $total;
+    #[ORM\Column(type: "float")]
+    private ?float $total;
 
     public function getId(): ?int
     {

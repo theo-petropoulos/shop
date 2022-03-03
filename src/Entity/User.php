@@ -7,133 +7,71 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ApiResource(
- *  denormalizationContext={
- *      "disable_type_enforcement"=true
- *  }
- * )
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ApiResource(denormalizationContext: ["disable_type_enforcement" => true])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotBlank(
-     *  message="Le champ email est obligatoire."
-     * )
-     * @Assert\Email(
-     *  message="L'adresse '{{ email }}' n'est pas valide."
-     * )
-     */
-    private $email;
+    #[ORM\Column(type: "string", length: 180, unique: true)]
+    #[Assert\NotBlank(message: "Le champ email est obligatoire.")]
+    #[Assert\Email(message: "L'adresse '{{ email }}' n'est pas valide.")]
+    private ?string $email;
 
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
+    #[ORM\Column(type: "json")]
+    private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
-     */
-    private $password;
+    #[ORM\Column(type: "string")]
+    private string $password;
 
-    /**
-     * @ORM\Column(type="string", length=155)
-     * @Assert\NotBlank(
-     *  message="Le champ du nom de famille est obligatoire."
-     * )
-     * @Assert\Type(
-     *  type="string",
-     *  message="Le nom doit être une chaine de caractères valides."
-     * )
-     * @Assert\Length(
-     *  max=155,
-     *  maxMessage="Le nom ne doit pas excéder {{ limit }} caractères."
-     * )
-     * @Assert\Regex(
-     *  pattern="/^[a-z ,.'-]+$/i",
-     *  message="Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets."
-     * )
-     */
-    private $lastName;
+    #[ORM\Column(type: "string", length: 155)]
+    #[Assert\NotBlank(message: "Le champ du nom de famille est obligatoire.")]
+    #[Assert\Type(type: "string", message: "Le nom doit être une chaine de caractères valides.")]
+    #[Assert\Length(max: 155, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
+    #[Assert\Regex(pattern: "/^[a-z ,.'-]+$/i", message: "Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
+    private ?string $lastName;
 
-    /**
-     * @ORM\Column(type="string", length=155)
-     * @Assert\NotBlank(
-     *  message="Le champ du prénom est obligatoire."
-     * )
-     * @Assert\Type(
-     *  type="string",
-     *  message="Le nom doit être une chaine de caractères valides."
-     * )
-     * @Assert\Length(
-     *  max=155,
-     *  maxMessage="Le nom ne doit pas excéder {{ limit }} caractères."
-     * )
-     * @Assert\Regex(
-     *  pattern="/^[a-z ,.'-]+$/i",
-     *  message="Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets."
-     * )
-     */
-    private $firstName;
+    #[ORM\Column(type: "string", length: 155)]
+    #[Assert\NotBlank(message: "Le champ du prénom est obligatoire.")]
+    #[Assert\Type(type: "string", message: "Le nom doit être une chaine de caractères valides.")]
+    #[Assert\Length(max: 155, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
+    #[Assert\Regex(pattern: "/^[a-z ,.'-]+$/i", message: "Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
+    private ?string $firstName;
 
-    /**
-     * @ORM\Column(type="string", length=20)
-     * @Assert\NotBlank(
-     *  message="Le champ du numéro de téléphone est obligatoire."
-     * )
-     * @Assert\Type(
-     *  type="numeric",
-     *  message="Le numéro {{ value }} n'est pas valide, il ne doit contenir que des chiffres."
-     * )
-     * @Assert\Length(
-     *  min=10,
-     *  minMessage="Le numéro de téléphone doit contenir exactement {{ limit }} caractères.",
-     *  max=10,
-     *  maxMessage="Le numéro de téléphone doit contenir exactement {{ limit }} caractères."
-     * )
-     */
-    private $phone;
+    #[ORM\Column(type: "integer", length: 20)]
+    #[Assert\NotBlank(message: "Le champ du numéro de téléphone est obligatoire.")]
+    #[Assert\Type(type: "numeric", message: "Le numéro {{ value }} n'est pas valide, il ne doit contenir que des chiffres.")]
+    #[Assert\Length(
+        min: 10, max: 10,
+        minMessage: "Le numéro de téléphone doit contenir exactement {{ limit }} caractères.",
+        maxMessage: "Le numéro de téléphone doit contenir exactement {{ limit }} caractères."
+    )]
+    private ?int $phone;
 
-    /**
-     * @ORM\Column(type="date")
-     * @Assert\NotBlank(
-     *  message="Le champ de la date de création est obligatoire."
-     * )
-     */
-    private $creationDate;
+    #[ORM\Column(type: "date")]
+    #[Assert\NotBlank(message: "Le champ de la date de création est obligatoire.")]
+    private ?\DateTimeInterface $creationDate;
 
-    /**
-     * @ORM\OneToMany(targetEntity=IPs::class, mappedBy="user", orphanRemoval=true)
-     */
-    private $IPs;
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: IPs::class, orphanRemoval: true)]
+    private Collection $IPs;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Address::class, mappedBy="customer", orphanRemoval=true)
-     */
-    private $addresses;
+    #[ORM\OneToMany(mappedBy: "customer", targetEntity: Address::class, orphanRemoval: true)]
+    private Collection $addresses;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="customer")
-     */
-    private $orders;
+    #[ORM\OneToMany(mappedBy: "customer", targetEntity: Order::class)]
+    private Collection $orders;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->IPs = new ArrayCollection();
         $this->addresses = new ArrayCollection();
@@ -278,7 +216,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|IPs[]
+     * @return Collection
      */
     public function getIPs(): Collection
     {
@@ -308,7 +246,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Address[]
+     * @return Collection
      */
     public function getAddresses(): Collection
     {
@@ -338,7 +276,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Order[]
+     * @return Collection
      */
     public function getOrders(): Collection
     {

@@ -14,23 +14,30 @@ class BrandTest extends KernelTestCase
      */
     private EntityManager $em;
 
+    /**
+     * Set up the kernel
+     * @test
+     * @return void
+     */
     protected function setUp(): void
     {
-        $kernel = self::bootKernel();
-        $this->em = $kernel->getContainer()->get('doctrine')->getManager();
+        $kernel     = self::bootKernel();
+        $this->em   = $kernel->getContainer()->get('doctrine')->getManager();
     }
 
-    /** Test New Brands
+    /** Test adding new Brands to the database
+     * @test
      * @throws Exception
      */
-    public function testNewBrands()
+    public function createNewBrands()
     {
         $counterInitial = $this->em->getRepository(Brand::class)->count([]);
         for ($i = 0; $i < 5; $i++) {
             $brand = new Brand();
-            $brand->setName('Brand ' . $i);
-            $brand->setDescription('Brand Description ' . $i);
-            $brand->setActive(true);
+            $brand
+                ->setName('Brand ' . $i)
+                ->setDescription('Brand Description ' . $i)
+                ->setActive(true);
             try {
                 $this->em->persist($brand);
             } catch (Exception $e) {
@@ -42,10 +49,11 @@ class BrandTest extends KernelTestCase
         $this->assertEquals($counterInitial + 5, $counterFinal);
     }
 
-    /** Test Delete Brands
+    /** Test deleting newly added Brands from the database
+     * @test
      * @throws Exception
      */
-    public function testDeleteBrands()
+    public function deleteNewlyCreatedBrands()
     {
         $counterInitial = $this->em->getRepository(Brand::class)->count([]);
         for ($i = 0; $i < 5; $i++) {
@@ -61,6 +69,11 @@ class BrandTest extends KernelTestCase
         $this->assertEquals($counterInitial - 5, $counterFinal);
     }
 
+    /**
+     * Close kernel
+     * @test
+     * @return void
+     */
     protected function tearDown(): void
     {
         parent::tearDown();

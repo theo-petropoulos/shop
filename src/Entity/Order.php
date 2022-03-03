@@ -7,54 +7,39 @@ use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
-/**
- * @ApiResource()
- * @ORM\Entity(repositoryClass=OrderRepository::class)
- * @ORM\Table(name="`order`")
- */
+#[ApiResource()]
+#[ORM\Entity(repositoryClass: OrderRepository::class)]
+#[ORM\Table(name: "`order`")]
 class Order
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $customer;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "orders")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $customer;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Address::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $address;
+    #[ORM\ManyToOne(targetEntity: Address::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Address $address;
 
-    /**
-     * @ORM\Column(type="date")
-     */
-    private $purchaseDate;
+    #[ORM\Column(type: "date")]
+    private ?\DateTimeInterface $purchaseDate;
 
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    private $status;
+    #[ORM\Column(type: "string", length: 100, nullable: true)]
+    private ?string $status;
 
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
-    private $trackingNumber;
+    #[ORM\Column(type: "string", length: 50, nullable: true)]
+    private ?string $trackingNumber;
 
-    /**
-     * @ORM\OneToMany(targetEntity=OrderDetail::class, mappedBy="order", orphanRemoval=true)
-     */
-    private $orderDetails;
+    #[ORM\OneToMany(mappedBy: "order", targetEntity: OrderDetail::class, orphanRemoval: true)]
+    private Collection $orderDetails;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->orderDetails = new ArrayCollection();
     }
@@ -125,7 +110,7 @@ class Order
     }
 
     /**
-     * @return Collection|OrderDetail[]
+     * @return Collection
      */
     public function getOrderDetails(): Collection
     {

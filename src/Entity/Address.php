@@ -63,13 +63,13 @@ class Address
     private ?string $streetName;
 
 
-    #[ORM\Column("string", length: 255, nullable: true)]
-    #[Assert\Type("string", message: "Le complément d'adresse doit être une chaine de caractères valides.")]
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    #[Assert\Type(type: "string", message: "Le complément d'adresse doit être une chaine de caractères valides.")]
     #[Assert\Regex(pattern: "/^[a-z0-9 ,.'-]+$/i", message: "Le complément d'adresse ne peut contenir que des lettres, des chiffres, des apostrophes, des points et des tirets.")]
     private ?string $streetAddition;
 
 
-    #[Column("integer")]
+    #[Column(type: "integer", length: 5)]
     #[Assert\NotBlank(message: 'Le champ du code postal est obligatoire.')]
     #[Assert\Type(type: 'numeric',message: 'Le code postal ne doit contenir que des chiffres.')]
     #[Assert\Length(min: 5, max: 5, minMessage: 'Le code postal doit contenir exactement {{limit}} caractères. Pour un département étranger, utilisez le code 99999', maxMessage: 'Le code postal doit contenir exactement {{limit}} caractères. Pour un département étranger, utilisez le code 99999')]
@@ -88,9 +88,6 @@ class Address
     #[Assert\Type(type: "bool", message: "La valeur main doit être de type {{ type }}.")]
     private ?bool $main;
 
-    /**
-     * @return ?int
-     */
     public function getId(): ?int
     {
         return $this->id;
@@ -105,7 +102,7 @@ class Address
     }
 
     /**
-     * @param ?User
+     * @param User|null $customer
      * @return self
      */
     public function setCustomer(?User $customer): self
@@ -162,7 +159,7 @@ class Address
     }
 
     /**
-     * @param ?string
+     * @param string|null $streetNumber
      * @return self
      */
     public function setStreetNumber(?string $streetNumber): self
@@ -200,7 +197,7 @@ class Address
     }
 
     /**
-     * @param ?string
+     * @param string|null $streetAddition
      * @return self
      */
     public function setStreetAddition(?string $streetAddition): self
@@ -257,7 +254,7 @@ class Address
     }
 
     /**
-     * @param ?bool
+     * @param bool|null $main
      * @return self
      */
     public function setMain(?bool $main): self

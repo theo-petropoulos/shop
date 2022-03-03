@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Validator\Constraints\DateValidator;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -47,7 +48,7 @@ class Discount
     #[Assert\Type("DateTime")]
     private ?\DateTimeInterface $endingDate;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->product = new ArrayCollection();
     }
@@ -57,9 +58,6 @@ class Discount
         return $this->id;
     }
 
-    /**
-     * @return Collection|Product[]
-     */
     public function getProduct(): Collection
     {
         return $this->product;

@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(denormalizationContext: ["disable_type_enforcement"=>true])]
@@ -37,9 +38,9 @@ class Brand
     private ?bool $active;
 
     #[ORM\OneToMany(mappedBy: "brand", targetEntity: Product::class)]
-    private $products;
+    private Collection $products;
 
-    public function __construct()
+    #[Pure] public function __construct()
     {
         $this->products = new ArrayCollection();
     }
@@ -86,7 +87,7 @@ class Brand
     }
 
     /**
-     * @return Collection|Product[]
+     * @return Collection
      */
     public function getProducts(): Collection
     {

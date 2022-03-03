@@ -5,33 +5,23 @@ namespace App\Entity;
 use App\Repository\IPsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=IPsRepository::class)
- */
+#[ORM\Entity(repositoryClass: IPsRepository::class)]
 class IPs
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=20)
-     */
-    private $address;
+    #[ORM\Column(type: "string", length: 20)]
+    private ?string $address;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="IPs")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "IPs")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $blacklist;
+    #[ORM\Column(type: "boolean", nullable: true)]
+    private ?bool $blacklist;
 
     public function getId(): ?int
     {
