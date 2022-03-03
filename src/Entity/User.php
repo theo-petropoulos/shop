@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Exceptions\InvalidEmailException;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use http\Exception\InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -71,7 +73,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: "customer", targetEntity: Order::class)]
     private Collection $orders;
 
-    #[Pure] public function __construct()
+    #[Pure]
+    public function __construct()
     {
         $this->IPs = new ArrayCollection();
         $this->addresses = new ArrayCollection();
@@ -88,11 +91,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function setEmail(string $email): self
     {
-        $this->email = $email;
-
-        return $this;
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->email = $email;
+            return $this;
+        }
+        else throw new InvalidEmailException("L'adresse mail utilisée n'est pas valide.", 403);
     }
 
     /**
@@ -174,9 +182,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setLastName(string $lastName): self
     {
-        $this->lastName = $lastName;
-
-        return $this;
+        if (!preg_match("/^[a-z ,.'-]+$/i", $lastName))
+            throw new \InvalidArgumentException("Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.");
+        else {
+            $this->lastName = $lastName;
+            return $this;
+        }
     }
 
     public function getFirstName(): ?string
@@ -186,9 +197,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setFirstName(string $firstName): self
     {
-        $this->firstName = $firstName;
-
-        return $this;
+        if (!preg_match("/^[a-z ,.'-]+$/i", $firstName))
+            throw new \InvalidArgumentException("Le prénom ne peut contenir que des lettres, des apostrophes, des points et des tirets.");
+        else {
+            $this->firstName = $firstName;
+            return $this;
+        }
     }
 
     public function getPhone(): ?string
@@ -198,9 +212,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setPhone(string $phone): self
     {
-        $this->phone = $phone;
-
-        return $this;
+        if (!preg_match("/^[0-9 .-]+$/i", $phone))
+            throw new \InvalidArgumentException("Le numéro de téléphone ne peut contenir que des nombres et si besoin des espaces, points, tirets.");
+        else{
+            $this->phone = str_replace([' ', '-', ',', '.'], '', $phone);
+            return $this;
+        }
     }
 
     public function getCreationDate(): ?\DateTimeInterface

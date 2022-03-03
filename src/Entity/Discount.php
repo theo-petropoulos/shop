@@ -48,7 +48,8 @@ class Discount
     #[Assert\Type("DateTime")]
     private ?\DateTimeInterface $endingDate;
 
-    #[Pure] public function __construct()
+    #[Pure]
+    public function __construct()
     {
         $this->product = new ArrayCollection();
     }

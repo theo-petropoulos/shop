@@ -2,17 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="96d400a4-8bb1-4344-a300-e74f562e248f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/Exceptions/InvalidEmailException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/Address/AddressCreationTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/User/UserMailTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/User/UserOrderTest.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/User/UserPersonalDataTest.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/HomeController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Address.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Address.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Brand.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Brand.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Discount.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Discount.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/IPs.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/IPs.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Order.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Order.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/OrderDetail.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/OrderDetail.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Brand/BrandTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Brand/BrandTest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Product/ProductTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Product/ProductTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/User/UserTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/tests/User/UserCreationTest.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,13 +162,15 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/tests/User" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/Exceptions" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="editor.preferences.phpOptions" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\wamp64\www\shop\src\Exceptions" />
+      <recent name="C:\wamp64\www\shop\tests\Address" />
       <recent name="C:\wamp64\www\shop\tests\User" />
     </key>
   </component>
@@ -188,11 +191,22 @@
       <workItem from="1646214316822" duration="41000" />
       <workItem from="1646214378580" duration="1751000" />
       <workItem from="1646236905894" duration="4425000" />
-      <workItem from="1646295653520" duration="5818000" />
+      <workItem from="1646295653520" duration="16069000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

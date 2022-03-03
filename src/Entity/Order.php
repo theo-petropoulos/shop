@@ -14,6 +14,11 @@ use JetBrains\PhpStorm\Pure;
 #[ORM\Table(name: "`order`")]
 class Order
 {
+    const STATUS_PENDING    = "PENDING";
+    const STATUS_PAID       = "PAID";
+    const STATUS_SHIPPED    = "SHIPPED";
+    const STATUS_DELIVERED  = "DELIVERED";
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
@@ -39,7 +44,8 @@ class Order
     #[ORM\OneToMany(mappedBy: "order", targetEntity: OrderDetail::class, orphanRemoval: true)]
     private Collection $orderDetails;
 
-    #[Pure] public function __construct()
+    #[Pure]
+    public function __construct()
     {
         $this->orderDetails = new ArrayCollection();
     }

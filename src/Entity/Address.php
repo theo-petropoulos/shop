@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Exceptions\InvalidSizeException;
 use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -11,6 +12,7 @@ use phpDocumentor\Reflection\Type;
 use phpDocumentor\Reflection\Types\Boolean;
 use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\Validator\Constraints as Assert;
+use function PHPUnit\Framework\throwException;
 
 #[ApiResource(denormalizationContext: ["disable_type_enforcement"=>true])]
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
@@ -25,7 +27,7 @@ class Address
 
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "addresses")]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: "cascade")]
     #[Assert\NotBlank(message: "Le champ 'customer' est obligatoire.")]
     private ?User $customer;
 
@@ -218,12 +220,16 @@ class Address
     /**
      * @param int
      * @return self
+     * @throws InvalidSizeException
      */
     public function setPostalCode(int $postalCode): self
     {
-        $this->postalCode = $postalCode;
-
-        return $this;
+        if (strlen((string) $postalCode) > 5)
+            throw new InvalidSizeException("Le champ du code postal ne peut contenir que 5 caractères");
+        else {
+            $this->postalCode = $postalCode;
+            return $this;
+        }
     }
 
     /**

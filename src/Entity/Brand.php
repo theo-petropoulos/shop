@@ -40,7 +40,8 @@ class Brand
     #[ORM\OneToMany(mappedBy: "brand", targetEntity: Product::class)]
     private Collection $products;
 
-    #[Pure] public function __construct()
+    #[Pure]
+    public function __construct()
     {
         $this->products = new ArrayCollection();
     }
