@@ -20,7 +20,7 @@ class OrderDetail
     private ?Order $order;
 
     #[ORM\OneToOne(targetEntity: Product::class, cascade: ["persist", "remove"])]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(unique: false, nullable: false)]
     private ?Product $product;
 
     #[ORM\Column(type: "integer")]

@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class ProductTest extends KernelTestCase
+class ProductCreationTest extends KernelTestCase
 {
     /**
      * @var EntityManager
@@ -53,6 +53,58 @@ class ProductTest extends KernelTestCase
         }
         $counterFinal = $this->em->getRepository(Product::class)->count([]);
         $this->assertEquals($counterInitial + 10, $counterFinal);
+    }
+
+    /**
+     * Test adding new Product with invalid stock
+     * @test
+     * @throws Exception
+     */
+    public function invalidStock()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $brand          = $this->em->getRepository(Brand::class)->findOneBy([], ['id' => 'DESC']);
+        $product = new Product();
+        $product
+            ->setActive(true)
+            ->setDescription("Description product fail")
+            ->setName("Name product fail")
+            ->setBrand($brand)
+            ->setImagePath("/assets/products/images/product_fail.jpg")
+            ->setPrice("45.95")
+            ->setStock("-1");
+        try {
+            $this->em->persist($product);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+        $this->em->flush();
+    }
+
+    /**
+     * Test adding new Product with invalid price
+     * @test
+     * @throws Exception
+     */
+    public function invalidPrice()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $brand          = $this->em->getRepository(Brand::class)->findOneBy([], ['id' => 'DESC']);
+        $product = new Product();
+        $product
+            ->setActive(true)
+            ->setDescription("Description product fail")
+            ->setName("Name product fail")
+            ->setBrand($brand)
+            ->setImagePath("/assets/products/images/product_fail.jpg")
+            ->setPrice("-1")
+            ->setStock("15");
+        try {
+            $this->em->persist($product);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+        }
+        $this->em->flush();
     }
 
     /** Test deleting newly added Products from the database

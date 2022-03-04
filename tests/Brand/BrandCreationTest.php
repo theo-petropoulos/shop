@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class BrandTest extends KernelTestCase
+class BrandCreationTest extends KernelTestCase
 {
     /**
      * @var EntityManager

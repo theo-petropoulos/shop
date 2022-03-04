@@ -54,28 +54,6 @@ class UserCreationTest extends KernelTestCase
         $this->assertEquals($counterInitial + 10, $counterFinal);
     }
 
-    /**
-     * Test creating an User with an already used mail
-     * @test
-     */
-    public function alreayUsedMail()
-    {
-        $this->expectException(UniqueConstraintViolationException::class);
-        $registeredUser = $this->em->getRepository(User::class)->findOneBy([], ['id' => 'DESC']);
-        $mail = $registeredUser->getEmail();
-        $user = new User();
-        $user
-            ->setCreationDate(new \DateTime("today"))
-            ->setEmail($mail)
-            ->setFirstName("Patrick")
-            ->setLastName("Jane")
-            ->setPassword("h4sh3dp4ssw0rd")
-            ->setPhone("0123456789")
-            ->setRoles(["ROLE_USER"]);
-        $this->em->persist($user);
-        $this->em->flush();
-    }
-
     /** Test deleting newly added Users from the database
      * @test
      */

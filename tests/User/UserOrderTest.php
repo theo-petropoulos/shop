@@ -39,8 +39,8 @@ class UserOrderTest extends KernelTestCase
         $counterInitial = $this->em->getRepository(Order::class)->count([]);
         $user           = $this->em->getRepository(User::class)->findOneBy([], ['id' => 'DESC']);
         $products       = $this->em->getRepository(Product::class)->findBy([], [], 5, 0);
-        $order          = new Order();
 
+        $order          = new Order();
         $order
             ->setCustomer($user)
             ->setAddress($user->getAddresses()[0])

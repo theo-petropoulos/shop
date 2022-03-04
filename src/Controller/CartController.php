@@ -9,16 +9,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class CartController extends AbstractController
 {
     public function __construct(private ManagerRegistry $doctrine) {}
 
     /**
-     * Page d'accueil
+     * Ajoute un produit au panier du client
      *
-     * @Route("/", name="home")
+     * @Route("/products/{productId}/to_cart", name="add_product_to_cart")
      */
-    public function index(Request $request): Response
+    public function addProductToCart(Request $request): Response
     {
         return $this->render('home/index.html.twig');
     }

@@ -119,9 +119,11 @@ class Product
 
     public function setPrice(float $price): self
     {
-        $this->price = $price;
-
-        return $this;
+        if ($price >= 0) {
+            $this->price = $price;
+            return $this;
+        }
+        else throw new \InvalidArgumentException("Le prix ne peut pas être inférieur à 0.");
     }
 
     public function getStock(): ?int
@@ -131,9 +133,11 @@ class Product
 
     public function setStock(int $stock): self
     {
-        $this->stock = $stock;
-
-        return $this;
+        if ($stock >= 0) {
+            $this->stock = $stock;
+            return $this;
+        }
+        else throw new \InvalidArgumentException("Le stock ne peut pas être inférieur à 0.");
     }
 
     public function getActive(): ?bool
