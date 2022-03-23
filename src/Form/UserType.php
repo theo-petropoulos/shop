@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -39,12 +41,14 @@ class UserType extends AbstractType
             ->add('phone', TextType::class, [
                 'label'             => 'Téléphone',
                 'required'          => true,
-
             ])
             ->add('creationDate', DateType::class, [
+                'label'             => false,
                 'required'          => true,
-                'data'              => new \DateTime("today"),
-                'attr'              => ['hidden' => 'hidden', 'disabled' => 'disabled'],
+                'data'              => new \DateTime('today'),
+                'attr'              => [
+                    'class'     => 'invisible'
+                ]
             ])
             ->add('password', RepeatedType::class, [
                 'type'              => PasswordType::class,
@@ -54,7 +58,6 @@ class UserType extends AbstractType
                 'first_options'     => ['label' => 'Mot de passe'],
                 'second_options'    => ['label' => 'Confirmez le mot de passe'],
             ])
-            ->add('Valider', SubmitType::class)
         ;
     }
 

@@ -1,0 +1,55 @@
+@use 'assets/styles/variables' as *;
+
+footer{
+  display:flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content:space-between;
+  font-family: $font;
+  border-top:1px solid $grey;
+  background:white;
+  div{
+    padding:1% 2%;
+    width:25%;
+    flex-grow:1;
+    min-width:205px;
+  }
+  #footer_left{
+    text-align: left;
+  }
+  #footer_middle{
+    display:flex;
+    flex-direction: column;
+    text-align: center;
+    a{
+      text-decoration:none;
+      color:$orange;
+      &:hover{
+        color:$orange_light;
+        transition:color 0.3s;
+      }
+    }
+  }
+  #footer_right{
+    display:flex;
+    justify-content: flex-end;
+    text-align: right;
+    a{
+      text-decoration:none;
+      color:$orange;
+      &:hover{
+        color:$orange_light;
+        transition:color 0.3s;
+      }
+    }
+  }
+}
+
+@media screen and (max-width:499px){
+  footer{
+    #footer_left, #footer_middle, #footer_right{
+      text-align: center;
+      justify-content: center;
+    }
+  }
+}

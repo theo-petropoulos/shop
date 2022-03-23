@@ -1,0 +1,30 @@
+// Import globals
+@use 'globals/header.scss';
+@use 'globals/footer.scss';
+
+// Import user
+@use 'user/login.scss';
+@use 'user/register.scss';
+@use 'user/profile.scss';
+
+// Import admin
+@use 'admin/admin.scss';
+
+// Global rules
+*,html,body{
+  margin:0;
+  padding:0;
+}
+
+body{
+  min-width:100vw;
+  min-height:100vh;
+  overflow-x: hidden;
+  display:flex;
+  flex-direction:column;
+  background:white;
+}
+
+main{
+  min-height:85vh;
+}

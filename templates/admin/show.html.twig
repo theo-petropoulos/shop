@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+    <main id="admin">
+        <div id="admin_container">
+            <section id="admin_titles">
+                <h2>Administration</h2>
+                <a href="{{ path('user_logout') }}">Se déconnecter</a>
+            </section>
+            <section id="admin_routes">
+                <a href="{{ path('admin_edit_password') }}">Modifier le mot de passe</a>
+                <a href="{{ path('admin_show_customers') }}">Modifier les clients</a>
+                <a href="{{ path('admin_show_products') }}">Modifier les produits</a>
+                <a href="{{ path('admin_show_admins') }}">Modifier les administrateurs</a>
+            </section>
+        </div>
+    </main>
+{% endblock body %}

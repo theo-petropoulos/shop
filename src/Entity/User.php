@@ -50,15 +50,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Regex(pattern: "/^[a-z ,.'-]+$/i", message: "Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
     private ?string $firstName;
 
-    #[ORM\Column(type: "integer", length: 20)]
+    #[ORM\Column(type: "string", length: 20)]
     #[Assert\NotBlank(message: "Le champ du numéro de téléphone est obligatoire.")]
-    #[Assert\Type(type: "numeric", message: "Le numéro {{ value }} n'est pas valide, il ne doit contenir que des chiffres.")]
     #[Assert\Length(
         min: 10, max: 10,
         minMessage: "Le numéro de téléphone doit contenir exactement {{ limit }} caractères.",
         maxMessage: "Le numéro de téléphone doit contenir exactement {{ limit }} caractères."
     )]
-    private ?int $phone;
+    private ?string $phone;
 
     #[ORM\Column(type: "date")]
     #[Assert\NotBlank(message: "Le champ de la date de création est obligatoire.")]

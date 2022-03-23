@@ -24,3 +24,10 @@
 =======
 /.idea
 >>>>>>> 06b225370a4fd8bc02a6a8a773b3a0e0cd142cc2
+
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###

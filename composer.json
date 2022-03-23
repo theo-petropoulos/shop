@@ -17,6 +17,7 @@
         "php-http/curl-client": "^2.2",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.2",
+        "sensio/framework-extra-bundle": "^6.2",
         "symfony/asset": "5.4.*",
         "symfony/console": "5.4.*",
         "symfony/dotenv": "5.4.*",
@@ -30,18 +31,19 @@
         "symfony/runtime": "5.4.*",
         "symfony/security-bundle": "5.4.*",
         "symfony/serializer": "5.4.*",
+        "symfony/translation": "5.4.*",
         "symfony/twig-bundle": "5.4.*",
         "symfony/validator": "5.4.*",
+        "symfony/var-dumper": "5.4.*",
+        "symfony/webpack-encore-bundle": "^1.14",
         "symfony/yaml": "5.4.*"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.19",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "5.4.*",
         "symfony/css-selector": "5.4.*",
         "symfony/maker-bundle": "^1.36",
-        "symfony/phpunit-bridge": "^6.0",
-      "ext-http": "*"
+        "symfony/phpunit-bridge": "^6.0"
     },
     "config": {
         "allow-plugins": {

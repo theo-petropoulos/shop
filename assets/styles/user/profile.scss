@@ -1,0 +1,13 @@
+@use 'assets/styles/variables' as *;
+
+// Import user's CSS requirements
+@use './includes/landing.scss';
+
+#profile{
+  display:flex;
+  flex-direction: column;
+  font-family: $font;
+  justify-content: center;
+  align-items: center;
+  min-width: max-content;
+}

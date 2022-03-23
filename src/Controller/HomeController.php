@@ -13,11 +13,8 @@ class HomeController extends AbstractController
 {
     public function __construct(private ManagerRegistry $doctrine) {}
 
-    /**
-     * Page d'accueil
-     *
-     * @Route("/", name="home")
-     */
+    # Accueil
+    #[Route(path: '/', name: 'home')]
     public function index(Request $request): Response
     {
         return $this->render('home/index.html.twig');

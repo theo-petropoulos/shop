@@ -6,7 +6,6 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Exceptions\InvalidSizeException;
 use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
-
 use Doctrine\ORM\Mapping\Column;
 use phpDocumentor\Reflection\Type;
 use phpDocumentor\Reflection\Types\Boolean;

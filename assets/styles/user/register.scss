@@ -1,0 +1,69 @@
+@use 'assets/styles/variables' as *;
+
+#inscription{
+  @include login-register;
+  form{
+    border:1px solid $grey;
+    padding:2%;
+    display:flex;
+    flex-direction: column;
+    position:relative;
+    align-items: center;
+    justify-content: center;
+    width:50%;
+    margin:2%;
+    #user{
+      width: 100%;
+      position: relative;
+      text-align: center;
+      div{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        align-items: center;
+        justify-content: center;
+        label, input{
+          width:70%;
+          font-family: $font;
+        }
+        label{
+          margin-bottom:1%;
+        }
+        .invisible{
+          display: none;
+        }
+      }
+    }
+    input[type=submit]{
+      width:70%;
+      @include submit-button;
+    }
+  }
+}
+
+#inscription_pending{
+  font-family: $font;
+  text-align: center;
+  align-self:center;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  p{
+    a{
+      color:$orange;
+      &:hover{
+        color:$orange_light;
+        transition:color 0.3s;
+      }
+    }
+  }
+}
+
+@media screen and (max-width:499px){
+  #inscription{
+    form{
+      width:90%;
+    }
+  }
+}

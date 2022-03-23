@@ -1,6 +1,6 @@
 <header id="header_nav">
     <div id="header_left">
-        <a href="{{ path('home') }}/">
+        <a href="{{ path('home') }}">
             <h1><span>Minimal</span><br><span>SHOP</span></h1>
         </a>
     </div>
@@ -11,13 +11,13 @@
                 <button type="submit"><i class="fas fa-search"></i></button>
             </li>
             <li>
-                <a href="produits/">NOS PRODUITS</a>
+                <a href="{{ path('show_brands_all') }}">NOS PRODUITS</a>
             </li>
             <li>
-                <a href="profil/">PROFIL</a>
+                <a href="{{ path('user_show_profile') }}">PROFIL</a>
             </li>
             <li>
-                <a href="panier/">PANIER</a>
+                <a href="{{ path('show_cart') }}">PANIER</a>
             </li>
         </ul>
     </div>

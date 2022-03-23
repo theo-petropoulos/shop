@@ -22,7 +22,7 @@ class Discount
     #[ORM\Column(type: "integer")]
     private $id;
 
-    #[ORM\OneToMany(mappedBy: "brand", targetEntity: Product::class)]
+    #[ORM\OneToMany(mappedBy: "product", targetEntity: Product::class)]
     private $product;
 
     #[ORM\Column(type: "string", length: 155)]

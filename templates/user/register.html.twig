@@ -1,5 +1,17 @@
-Ici l'inscription
+{% extends 'base.html.twig' %}
 
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-{{ form_end(form) }}
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <main id="inscription">
+        <div id="inscription_header">
+            <h3>INSCRIPTION</h3>
+            <h4>Déjà inscrit ? <a href="connexion">CONNEXION</a></h4>
+        </div>
+
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <input type="submit" value="Valider">
+        {{ form_end(form) }}
+    </main>
+{% endblock %}

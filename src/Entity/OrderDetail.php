@@ -16,10 +16,10 @@ class OrderDetail
     private $id;
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: "orderDetails")]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(unique: false, nullable: false)]
     private ?Order $order;
 
-    #[ORM\OneToOne(targetEntity: Product::class, cascade: ["persist", "remove"])]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "orderDetails")]
     #[ORM\JoinColumn(unique: false, nullable: false)]
     private ?Product $product;
 

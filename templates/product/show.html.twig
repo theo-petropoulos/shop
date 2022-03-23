@@ -1,1 +1,7 @@
-Ici la page du produit : {{ product.name }} appartenant à la marque : {{ brand.name }}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block body %}
+    Ici la page du produit : {{ product.name }}
+{% endblock body %}
