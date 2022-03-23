@@ -13,13 +13,6 @@
             {% if error %}
                 <div class="alert alert-error">{{ "connexion.error"|trans({}, 'messages') }}</div>
             {% endif %}
-
-            {% if app.user %}
-                <div class="">
-                    Vous êtes déjà connecté en tant que : {{ app.user.username }}, <a href="{{ path('user_logout') }}">Se déconnecter</a>
-                </div>
-            {% endif %}
-
             <label for="inputEmail">Email</label>
             <input type="email" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus>
             <label for="inputPassword">Password</label>

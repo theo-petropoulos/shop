@@ -159,6 +159,9 @@
     "phpdocumentor/type-resolver": {
         "version": "1.5.1"
     },
+    "phpmailer/phpmailer": {
+        "version": "v6.6.0"
+    },
     "phpspec/prophecy": {
         "version": "v1.15.0"
     },

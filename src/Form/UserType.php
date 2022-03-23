@@ -14,12 +14,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class UserType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -59,6 +59,10 @@ class UserType extends AbstractType
                 'second_options'    => ['label' => 'Confirmez le mot de passe'],
             ])
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $formEvent) {
+            dump($formEvent->getForm()->getConfig()->getRequestHandler());
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
