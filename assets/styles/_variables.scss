@@ -14,7 +14,7 @@ $orange_light:rgb(240, 175, 0);
   align-items: center;
   width:100%;
   background:white;
-  #inscription_header{
+  #inscription_header, #connexion_header, #modify_password_header{
     text-align:center;
     h3{
       font-size: calc(14px + 1vw);

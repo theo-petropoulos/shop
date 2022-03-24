@@ -1,7 +1,8 @@
 @use 'assets/styles/variables' as *;
 
 // Import user's CSS requirements
-@use './includes/landing.scss';
+@use 'includes/landing';
+@use 'includes/modify_password';
 
 #profile{
   display:flex;

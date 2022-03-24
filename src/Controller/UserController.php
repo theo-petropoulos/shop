@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use App\Form\UserType;
+use App\Form\ModifyPasswordType;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use JetBrains\PhpStorm\Pure;
 
@@ -31,10 +33,32 @@ class UserController extends AbstractController
     # Modification du mot de passe
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/user/profile/password', name: 'user_edit_password')]
-    public function userEditPassword(Request $request, UserInterface $user): Response
+    public function userEditPassword(Request $request, UserInterface $user, UserPasswordHasherInterface $userPasswordHasher,  EntityManagerInterface $entityManager): Response
     {
-        return $this->render('user/includes/edit_password.html.twig', [
-            'user'  => $user
+        $form = $this->createForm(ModifyPasswordType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->doctrine->getManager()->refresh($user);
+
+            $oldPassword = $form->get('old_password')->getData();
+            if ($userPasswordHasher->isPasswordValid($user, $oldPassword)) {
+                $hashedPassword = $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('password')->getData()
+                );
+                $user->setPassword($hashedPassword);
+                $entityManager->persist($user);
+                $entityManager->flush();
+                $this->addFlash('success', 'Le mot de passe a été modifié avec succès.');
+            }
+            else
+                $this->addFlash('failure', 'Votre ancien mot de passe ne correspond pas avec ce que vous avez saisi.');
+        }
+
+        return $this->renderForm('user/includes/edit_password.html.twig', [
+            'user'  => $user,
+            'form'  => $form
         ]);
     }
 

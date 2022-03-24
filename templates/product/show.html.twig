@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ product.name }}{% endblock %}
+{% block pretitle %}{{ product.name|upper }}{% endblock %}
 
 {% block body %}
     Ici la page du produit : {{ product.name }}

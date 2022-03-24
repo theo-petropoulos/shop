@@ -1,0 +1,8 @@
+Ajouter une verif login 
+	=> isVerified
+	=> Adresse IP
+
+Ajouter sur la page utiliateur
+	=> Modification du mot de passe
+	=> Modification des adresses
+	=> Suppression du compte

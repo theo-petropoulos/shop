@@ -1,7 +1,11 @@
 <!DOCTYPE html>
     <head>
         {% include 'includes/head.html.twig' %}
-        <title>{% block title %}{% endblock %}</title>
+        <title>
+            {% block title %}
+                {% block pretitle %}{% endblock %} | MINIMAL SHOP
+            {% endblock %}
+        </title>
     </head>
     <body>
         {% include 'includes/header.html.twig' %}

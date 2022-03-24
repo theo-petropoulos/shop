@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription{% endblock %}
+{% block pretitle %}INSCRIPTION{% endblock %}
 
 {% block body %}
     <main id="inscription">
         <div id="inscription_header">
             <h3>INSCRIPTION</h3>
-            <h4>Déjà inscrit ? <a href="connexion">CONNEXION</a></h4>
+            <h4>Déjà inscrit ? <a href="{{ path('user_login') }}">CONNEXION</a></h4>
         </div>
 
         {{ form_start(form) }}

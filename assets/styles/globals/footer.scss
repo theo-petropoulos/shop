@@ -23,10 +23,11 @@ footer{
     text-align: center;
     a{
       text-decoration:none;
-      color:$orange;
+      color: $orange;
       &:hover{
-        color:$orange_light;
+        color: $orange_light;
         transition:color 0.3s;
+        text-decoration: underline;
       }
     }
   }
@@ -36,9 +37,9 @@ footer{
     text-align: right;
     a{
       text-decoration:none;
-      color:$orange;
+      color: black;
       &:hover{
-        color:$orange_light;
+        color: $grey_light;
         transition:color 0.3s;
       }
     }

@@ -29,13 +29,13 @@ class RegistrationController extends AbstractController
         $this->emailVerifier = $emailVerifier;
     }
 
-    # Inscription d'un utilisateur
-
     /**
+     * Inscription d'un utilisateur
+     *
      * @throws Exception
      */
     #[Route(path: '/user/register', name: 'user_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserLoginFormAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -47,10 +47,7 @@ class RegistrationController extends AbstractController
                 $user,
                 $data->getPassword()
             );
-            $user
-                ->setPassword($hashedPassword)
-                ->setCreationDate(new \DateTime('today'))
-                ->setRoles(["ROLE_USER"]);
+            $user->setPassword($hashedPassword);
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -67,8 +64,8 @@ class RegistrationController extends AbstractController
                 throw new Exception($e->getMessage());
             }
 
-
-            return $this->redirectToRoute('user_show_profile', ['register' => 'success']);
+            $this->addFlash('success', 'Votre inscription a été prise en compte, un mail de confirmation vient de vous être envoyé.');
+            return $this->redirectToRoute('user_login');
         }
 
         return $this->renderForm('user/register.html.twig', [
@@ -81,17 +78,14 @@ class RegistrationController extends AbstractController
     {
         $id = $request->get('id');
 
-        if (null === $id) {
+        if (null === $id)
             return $this->redirectToRoute('user_register');
-        }
 
         $user = $userRepository->find($id);
 
-        if (null === $user) {
+        if (null === $user)
             return $this->redirectToRoute('user_register');
-        }
 
-        // validate email confirmation link, sets User::isVerified=true and persists
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user);
         } catch (VerifyEmailExceptionInterface $exception) {
@@ -99,9 +93,6 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('user_register');
         }
-
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
 
         return $this->redirectToRoute('user_login');
     }
