@@ -8,6 +8,9 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordRequirements;
+use Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordStrength;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use http\Exception\InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -18,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(denormalizationContext: ["disable_type_enforcement" => true])]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -34,6 +38,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column(type: "string")]
+    #[PasswordStrength(minStrength: 4, minLength: 8)]
     private string $password;
 
     #[ORM\Column(type: "string", length: 155)]
@@ -72,12 +77,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: "customer", targetEntity: Order::class)]
     private Collection $orders;
 
-    #[Pure]
+    #[ORM\Column(type: 'boolean')]
+    private bool $isVerified = false;
+
     public function __construct()
     {
-        $this->IPs = new ArrayCollection();
-        $this->addresses = new ArrayCollection();
-        $this->orders = new ArrayCollection();
+        $this->creationDate = new \DateTime('today');
+        $this->roles        = ['ROLE_USER'];
+        $this->IPs          = new ArrayCollection();
+        $this->addresses    = new ArrayCollection();
+        $this->orders       = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -126,8 +135,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -317,6 +324,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $order->setCustomer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

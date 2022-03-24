@@ -67,33 +67,4 @@ class UserController extends AbstractController
             'user'  => $user
         ]);
     }
-
-    # Inscription d'un utilisateur
-    #[Route(path: '/user/register', name: 'user_register')]
-    public function createAccount(Request $request, UserPasswordHasherInterface $passwordHasher): Response
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user           = $form->getData();
-            $em             = $this->doctrine->getManager();
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $user->getPassword()
-            );
-            $user
-                ->setPassword($hashedPassword)
-                ->setCreationDate(new \DateTime('today'))
-                ->setRoles(["ROLE_USER"]);
-            $em->persist($user);
-            $em->flush();
-
-            return $this->redirectToRoute('user_show_profile', ['register' => 'success']);
-        }
-
-        return $this->renderForm('user/register.html.twig', [
-            'form'      => $form,
-        ]);
-    }
 }
