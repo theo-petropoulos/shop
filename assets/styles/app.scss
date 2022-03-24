@@ -31,12 +31,26 @@ main{
 
 .success{
   position:absolute;
+  z-index:9;
   top:20%;
   left:50%;
   transform:translate(-50%, -20%);
   opacity:1;
-  background:white;
+  background: white;
   border:1px solid black;
   padding:1.5%;
   animation: disappear 0.5s ease-in 3s forwards;
+}
+
+.back-btn{
+  text-decoration: none;
+  padding:1% 2%;
+  border:1px solid black;
+  background:white;
+  color:black;
+  margin:calc(max(2%, 20px));
+  &:hover{
+    background:rgb(195, 195, 195);
+    transition: all 0.3s;
+  }
 }

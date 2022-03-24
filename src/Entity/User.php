@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(denormalizationContext: ["disable_type_enforcement" => true])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -44,14 +44,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "string", length: 155)]
     #[Assert\NotBlank(message: "Le champ du nom de famille est obligatoire.")]
     #[Assert\Type(type: "string", message: "Le nom doit être une chaine de caractères valides.")]
-    #[Assert\Length(max: 155, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
+    #[Assert\Length(max: 33, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
     #[Assert\Regex(pattern: "/^[a-z ,.'-]+$/i", message: "Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
     private ?string $lastName;
 
     #[ORM\Column(type: "string", length: 155)]
     #[Assert\NotBlank(message: "Le champ du prénom est obligatoire.")]
     #[Assert\Type(type: "string", message: "Le nom doit être une chaine de caractères valides.")]
-    #[Assert\Length(max: 155, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
+    #[Assert\Length(max: 33, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
     #[Assert\Regex(pattern: "/^[a-z ,.'-]+$/i", message: "Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
     private ?string $firstName;
 

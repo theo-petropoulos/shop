@@ -20,10 +20,16 @@ class RegistrationFormType extends AbstractType
             ->add('lastName', TextType::class, [
                 'label'             => 'Nom',
                 'required'          => true,
+                'attr'              => [
+                    'maxlength' => 33
+                ]
             ])
             ->add('firstName', TextType::class, [
                 'label'             => 'Prénom',
                 'required'          => true,
+                'attr'              => [
+                    'maxlength' => 33
+                ]
             ])
             ->add('email', EmailType::class, [
                 'label'             => 'Adresse mail',
@@ -32,6 +38,9 @@ class RegistrationFormType extends AbstractType
             ->add('phone', TextType::class, [
                 'label'             => 'Téléphone',
                 'required'          => true,
+                'attr'              => [
+                    'maxlength' => 10
+                ]
             ])
             ->add('creationDate', DateType::class, [
                 'label'             => false,

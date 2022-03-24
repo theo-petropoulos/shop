@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block pretitle %}MES ADRESSES{% endblock %}
+
+{% block body %}
+    <main id="addresses">
+        <h2>Carnet d'adresses</h2>
+
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="success">{{ flashMessage }}</div>
+        {% endfor %}
+        <div class="success">test</div>
+
+        <section id="registered_addresses">
+            {% if addresses is not empty %}
+                {% for address in addresses %}
+                    <div id="address_{{ address.id }}">
+                        <button class="delete_address">X</button>
+                        <p>{{ address.lastName }}</p>
+                        <p>{{ address.firstName }}</p>
+                        <p>{{ address.streetNumber ~ " " ~ address.streetName }}</p>
+                        <p>{{ address.streetAddition }}</p>
+                        <p>{{ address.postalCode|format_number({integer_digit: 5}) }}</p>
+                        <p>{{ address.city }}</p>
+                    </div>
+                {% endfor %}
+                {% else %}
+                    <p>Vous n'avez pas encore enregistré d'adresse.</p>
+            {% endif %}
+        </section>
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <input type="submit" value="Ajouter">
+        {{ form_end(form) }}
+        <a class="back-btn" href="{{ path('user_show_profile') }}">Retour</a>
+    </main>
+{% endblock body %}

@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Address;
+use App\Entity\User;
+use App\Form\AddAddressType;
 use App\Form\ModifyPasswordType;
+use App\Repository\AddressRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -12,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use JetBrains\PhpStorm\Pure;
 
@@ -33,14 +36,12 @@ class UserController extends AbstractController
     # Modification du mot de passe
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/user/profile/password', name: 'user_edit_password')]
-    public function userEditPassword(Request $request, UserInterface $user, UserPasswordHasherInterface $userPasswordHasher,  EntityManagerInterface $entityManager): Response
+    public function userEditPassword(Request $request, UserInterface $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ModifyPasswordType::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->doctrine->getManager()->refresh($user);
-
+            $entityManager->refresh($user);
             $oldPassword = $form->get('old_password')->getData();
             if ($userPasswordHasher->isPasswordValid($user, $oldPassword)) {
                 $hashedPassword = $userPasswordHasher->hashPassword(
@@ -62,13 +63,29 @@ class UserController extends AbstractController
         ]);
     }
 
-    # Modification des adresses
+    # Affichage des adresses
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
-    #[Route(path: '/user/profile/addresses', name: 'user_edit_addresses')]
-    public function userEditAddresses(Request $request, UserInterface $user): Response
+    #[Route(path: '/user/profile/addresses', name: 'user_show_addresses')]
+    public function userShowAddresses(Request $request, UserInterface $user, AddressRepository $addressRepository, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('user/includes/edit_addresses.html.twig', [
-            'user'  => $user
+        $addresses  = $addressRepository->findBy(['customer' => $user], ['id' => 'ASC']);
+        $address    = new Address($user);
+        $form       = $this->createForm(AddAddressType::class, $address);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $entityManager->persist($address);
+            $entityManager->flush();
+            $this->addFlash('success', 'L\'adresse a été ajoutée avec succès.');
+
+            return $this->redirectToRoute('user_show_addresses');
+        }
+
+        return $this->renderForm('user/includes/show_addresses.html.twig', [
+            'user'      => $user,
+            'addresses' => $addresses,
+            'form'      => $form
         ]);
     }
 
