@@ -2,6 +2,8 @@
 
 namespace App\Security;
 
+use App\Entity\IP;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,10 +24,12 @@ class UserLoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public const LOGIN_ROUTE = 'user_login';
 
     private UrlGeneratorInterface $urlGenerator;
+    private EntityManagerInterface $entityManager;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $entityManager)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->entityManager = $entityManager;
     }
 
     public function authenticate(Request $request): Passport
@@ -45,8 +49,27 @@ class UserLoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
+        $currentIP  =
+            $this->entityManager->getRepository(IP::class)->findOneBy(['address' => $request->getClientIp()]) ??
+            (new IP())->setAddress($request->getClientIp());
+        $user       = $token->getUser();
+        $knownIPs   = $user->getIP();
+
+        // If the User is logging in for the first time, set the current IP as one of his
+        if ($knownIPs->isEmpty()) {
+            $currentIP->setUser($user);
+            $this->entityManager->persist($currentIP);
+            $this->entityManager->flush();
+        }
+
+        else {
+            $IPVerifier = new IPVerifier();
+            if ($IPVerifier->belongsToUser($currentIP, $user)) {
+
+            }
+            if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+                return new RedirectResponse($targetPath);
+            }
         }
 
         return new RedirectResponse($this->urlGenerator->generate('user_show_profile'));

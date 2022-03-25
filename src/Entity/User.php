@@ -2,25 +2,18 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Exceptions\InvalidEmailException;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordRequirements;
 use Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordStrength;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use http\Exception\InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource(denormalizationContext: ["disable_type_enforcement" => true])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface
 {
@@ -68,8 +61,8 @@ class User implements UserInterface
     #[Assert\NotBlank(message: "Le champ de la date de création est obligatoire.")]
     private ?\DateTimeInterface $creationDate;
 
-    #[ORM\OneToMany(mappedBy: "user", targetEntity: IPs::class, orphanRemoval: true)]
-    private Collection $IPs;
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: IP::class, orphanRemoval: true)]
+    private Collection $IP;
 
     #[ORM\OneToMany(mappedBy: "customer", targetEntity: Address::class, orphanRemoval: true)]
     private Collection $addresses;
@@ -84,7 +77,7 @@ class User implements UserInterface
     {
         $this->creationDate = new \DateTime('today');
         $this->roles        = ['ROLE_USER'];
-        $this->IPs          = new ArrayCollection();
+        $this->IP           = new ArrayCollection();
         $this->addresses    = new ArrayCollection();
         $this->orders       = new ArrayCollection();
     }
@@ -241,24 +234,24 @@ class User implements UserInterface
     /**
      * @return Collection
      */
-    public function getIPs(): Collection
+    public function getIP(): Collection
     {
-        return $this->IPs;
+        return $this->IP;
     }
 
-    public function addIP(IPs $iP): self
+    public function addIP(IP $iP): self
     {
-        if (!$this->IPs->contains($iP)) {
-            $this->IPs[] = $iP;
+        if (!$this->IP->contains($iP)) {
+            $this->IP[] = $iP;
             $iP->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeIP(IPs $iP): self
+    public function removeIP(IP $iP): self
     {
-        if ($this->IPs->removeElement($iP)) {
+        if ($this->IP->removeElement($iP)) {
             // set the owning side to null (unless already changed)
             if ($iP->getUser() === $this) {
                 $iP->setUser(null);

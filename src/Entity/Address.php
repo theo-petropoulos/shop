@@ -2,30 +2,22 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Exceptions\InvalidSizeException;
 use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
-use phpDocumentor\Reflection\Type;
-use phpDocumentor\Reflection\Types\Boolean;
-use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\Validator\Constraints as Assert;
-use function PHPUnit\Framework\throwException;
 
-#[ApiResource(denormalizationContext: ["disable_type_enforcement"=>true])]
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
-
 class Address
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
     private $id;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "addresses")]
-    #[ORM\JoinColumn(nullable: false, onDelete: "cascade")]
+    #[ORM\JoinColumn(nullable: true, onDelete: "set null")]
     #[Assert\NotBlank(message: "Le champ 'customer' est obligatoire.")]
     private ?User $customer;
 

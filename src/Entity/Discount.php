@@ -2,19 +2,14 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\DiscountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
 use JetBrains\PhpStorm\Pure;
-use Symfony\Component\Validator\Constraints\DateValidator;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ApiResource(denormalizationContext: ["disable_type_enforcement"=>true])]
 #[ORM\Entity(repositoryClass: DiscountRepository::class)]
-
 class Discount
 {
     #[ORM\Id]

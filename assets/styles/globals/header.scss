@@ -27,10 +27,10 @@
       li{
         list-style-type: none;
         display:flex;
-        min-width:max-content;
+        justify-content: center;
+        min-width: 120px;
         position:relative;
         margin:0% 2%;
-        min-width: 100px;
         a{
           font-family:$font;
           text-decoration: none;
@@ -49,6 +49,7 @@
             border-radius: unset;
             font-family: $font;
             outline: 0;
+            border-bottom: none;
           }
           button{
             background:none;
@@ -84,6 +85,7 @@
         span{
           width:100%;
           display:block;
+          transition:all 0.3s;
           &:first-of-type{
             background:black;
             text-align: center;

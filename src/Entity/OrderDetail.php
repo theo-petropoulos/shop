@@ -2,11 +2,9 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\OrderDetailRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ApiResource()]
 #[ORM\Entity(repositoryClass: OrderDetailRepository::class)]
 class OrderDetail
 {

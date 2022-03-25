@@ -9,15 +9,13 @@
         {% for flashMessage in app.session.flashbag.get('success') %}
             <div class="success">{{ flashMessage }}</div>
         {% endfor %}
-        <div class="success">test</div>
 
         <section id="registered_addresses">
             {% if addresses is not empty %}
                 {% for address in addresses %}
                     <div id="address_{{ address.id }}">
                         <button class="delete_address">X</button>
-                        <p>{{ address.lastName }}</p>
-                        <p>{{ address.firstName }}</p>
+                        <p class="str">{{ address.lastName }} {{ address.firstName }}</p>
                         <p>{{ address.streetNumber ~ " " ~ address.streetName }}</p>
                         <p>{{ address.streetAddition }}</p>
                         <p>{{ address.postalCode|format_number({integer_digit: 5}) }}</p>
