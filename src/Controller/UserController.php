@@ -82,11 +82,39 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_show_addresses');
         }
 
-        return $this->renderForm('user/includes/show_addresses.html.twig', [
+        return $this->renderForm('user/address/index.html.twig', [
             'user'      => $user,
             'addresses' => $addresses,
             'form'      => $form
         ]);
+    }
+
+    # Modification d'une adresse
+    #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/user/profile/addresses/edit/{addressId}', name: 'user_edit_address')]
+    public function userEditAddress(Request $request, UserInterface $user, AddressRepository $addressRepository, EntityManagerInterface $entityManager, int $addressId): Response
+    {
+        $address    = $addressRepository->findOneBy(['id' => $addressId]);
+        $form       = $this->createForm(AddAddressType::class, $address);
+        $form->handleRequest($request);
+
+        return $this->renderForm('user/address/_modal_edit_address.html.twig', [
+            'address'   => $address,
+            'user'      => $user,
+            'form'      => $form
+        ]);
+    }
+
+    # Suppression d'une adresse
+    #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/user/profile/addresses/delete/{addressId}', name: 'user_delete_address')]
+    public function userDeleteAddress(Request $request, UserInterface $user, AddressRepository $addressRepository, EntityManagerInterface $entityManager, int $addressId): Response
+    {
+        $address    = $addressRepository->findOneBy(['id' => $addressId]);
+        $entityManager->remove($address);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('user_show_addresses');
     }
 
     # Commandes de l'utilisateur

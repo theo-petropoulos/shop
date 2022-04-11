@@ -86,19 +86,27 @@
       border:1px solid black;
       margin:2%;
       padding:1% 2%;
-      button{
+      .modal_buttons{
         position:absolute;
         top:3%;
         right:3%;
-        background:white;
-        border-radius: unset;
-        outline: none;
-        border:1px solid black;
-        padding:1%;
-        &:hover{
-          background:rgb(209, 209, 209);
-          cursor:pointer;
-          transition:all 0.3s;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 10%;
+        button{
+          width: 45%;
+          background:white;
+          border-radius: unset;
+          outline: none;
+          border: 1px solid black;
+          padding: 5%;
+          margin: 1%;
+          &:hover{
+            background:rgb(209, 209, 209);
+            cursor:pointer;
+            transition:all 0.3s;
+          }
         }
       }
     }

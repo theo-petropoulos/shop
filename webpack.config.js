@@ -32,9 +32,6 @@ Encore
     // but, you probably want this, unless you're building a single-page app
     .enableSingleRuntimeChunk()
 
-    // processes files ending in .scss or .sass
-    .enableSassLoader()
-
     /*
      * FEATURE CONFIG
      *
@@ -59,7 +56,7 @@ Encore
     })
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .enableSassLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()

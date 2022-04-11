@@ -13,3 +13,7 @@ import './bootstrap';
 
 // loads the jquery package from node_modules
 import $ from 'jquery';
+
+$(function(){
+    console.log('toto');
+})
