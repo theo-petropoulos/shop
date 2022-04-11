@@ -6,3 +6,7 @@ Ajouter sur la page utiliateur
 	=> Modification du mot de passe
 	=> Modification des adresses
 	=> Suppression du compte
+
+IPRecords 
+	=> Tentatives de connexions
+	=> Nombre de comptes différents

@@ -1,5 +1,12 @@
 <?php
 
+namespace App\Security;
+
+use App\Entity\IP;
+use App\Entity\User;
+use App\Repository\IPRepository;
+use App\Repository\UserRepository;
+
 /*
  * Enables multiple adress IPs verifications, such as :
  *
@@ -10,16 +17,15 @@
  * - Store IP address for a new User
  *
  */
-
-namespace App\Security;
-
-use App\Entity\IP;
-
 class IPVerifier
 {
-    public function __construct()
+    public function __construct(IPRepository $IPRepository, UserRepository $userRepository)
     {
+    }
 
+    public function belongsToUser(IP $ip, User $user): bool
+    {
+        return true;
     }
 
     public function verifyIPAdressUponLogin(): bool
