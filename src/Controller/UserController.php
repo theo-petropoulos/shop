@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Address;
 use App\Entity\User;
 use App\Form\AddAddressType;
+use App\Form\EditAddressType;
 use App\Form\ModifyPasswordType;
 use App\Repository\AddressRepository;
 use Doctrine\ORM\EntityManager;
@@ -22,7 +23,7 @@ use JetBrains\PhpStorm\Pure;
 class UserController extends AbstractController
 {
     #[Pure]
-    public function __construct(private ManagerRegistry $doctrine) {}
+    public function __construct(protected ManagerRegistry $doctrine) {}
 
     # Affiche le profil de l'utilisateur
     #[Route(path: '/user/profile/', name: 'user_show_profile')]
@@ -77,6 +78,7 @@ class UserController extends AbstractController
         {
             $entityManager->persist($address);
             $entityManager->flush();
+
             $this->addFlash('success', 'L\'adresse a été ajoutée avec succès.');
 
             return $this->redirectToRoute('user_show_addresses');
@@ -95,8 +97,27 @@ class UserController extends AbstractController
     public function userEditAddress(Request $request, UserInterface $user, AddressRepository $addressRepository, EntityManagerInterface $entityManager, int $addressId): Response
     {
         $address    = $addressRepository->findOneBy(['id' => $addressId]);
-        $form       = $this->createForm(AddAddressType::class, $address);
+
+        if (!$address)
+            throw $this->createNotFoundException();
+
+        $form       = $this->createForm(EditAddressType::class, $address);
         $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                /** @var Address $address */
+                $address = $form->getData();
+
+                $entityManager->persist($address);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'L\'adresse a été modifiée avec succès.');
+            }
+            else $this->addFlash('failure', 'Votre saisie comporte un ou plusieurs caractères interdits. Veuillez réessayer.');
+
+            return $this->redirectToRoute('user_show_addresses');
+        }
 
         return $this->renderForm('user/address/_modal_edit_address.html.twig', [
             'address'   => $address,
@@ -111,6 +132,10 @@ class UserController extends AbstractController
     public function userDeleteAddress(Request $request, UserInterface $user, AddressRepository $addressRepository, EntityManagerInterface $entityManager, int $addressId): Response
     {
         $address    = $addressRepository->findOneBy(['id' => $addressId]);
+
+        if (!$address)
+            throw $this->createNotFoundException();
+
         $entityManager->remove($address);
         $entityManager->flush();
 

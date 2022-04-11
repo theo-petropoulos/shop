@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-    <head>
-        {% include 'includes/head.html.twig' %}
-        <title>
-            {% block title %}
-                {% block pretitle %}{% endblock %} | MINIMAL SHOP
-            {% endblock %}
-        </title>
-    </head>
-    <body>
-        {% include 'includes/header.html.twig' %}
-        {% block body %}{% endblock %}
-        {% include 'includes/footer.html.twig' %}
-    </body>
-<html>
+<div id="main_modal_container">
+    <div id="main_modal">
+        <span class="modal_buttons">
+            <button class="close-modal" id="close_main_modal">X</button>
+        </span>
+        {% block modal %}
+        {% endblock %}
+    </div>
+</div>

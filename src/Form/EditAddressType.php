@@ -9,7 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class AddAddressType extends AbstractType
+class EditAddressType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

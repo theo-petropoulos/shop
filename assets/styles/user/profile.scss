@@ -3,7 +3,8 @@
 // Import user's CSS requirements
 @use 'includes/landing';
 @use 'includes/modify_password';
-@use 'includes/show_addresses';
+@use 'address/show_addresses';
+@use 'address/_modal_address';
 
 #profile{
   display:flex;

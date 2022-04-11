@@ -1,4 +1,4 @@
-@use 'assets/styles/variables' as *;
+@use '../../variables' as *;
 
 #addresses{
   font-family: $font;
@@ -23,53 +23,7 @@
       transition: all 0.3s;
     }
   }
-  form{
-    border:1px solid $grey;
-    padding:2%;
-    display:flex;
-    flex-direction: column;
-    position:relative;
-    align-items: center;
-    justify-content: center;
-    width:50%;
-    margin:2%;
-    div{
-      position: relative;
-      width: 100%;
-      div{
-        display: flex;
-        flex-direction: row;
-        margin:1%;
-        label, input{
-          width:70%;
-          font-family: $font;
-        }
-        label{
-          margin-right:1%;
-          text-align: right;
-          width:30%;
-        }
-      }
-    }
-    input[type=submit]{
-      margin-top:2%;
-      background:$grey;
-      color:white;
-      font-family: $font;
-      outline:0;
-      border:1px solid black;
-      border-radius: unset;
-      padding:1.5%;
-      font-size:calc(10px + 0.5vw);
-      line-height:calc(10px + 0.5vw);
-      &:hover{
-        background:$grey_light;
-        transition:all 0.3s;
-        cursor:pointer;
-        font-size:calc(13px + 0.5vw);
-      }
-    }
-  }
+  @include address-form;
   #registered_addresses{
     display:flex;
     flex-direction: row;

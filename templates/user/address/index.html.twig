@@ -10,13 +10,17 @@
             <div class="success">{{ flashMessage }}</div>
         {% endfor %}
 
+        {% for flashMessage in app.session.flashbag.get('failure') %}
+            <div class="failure">{{ flashMessage }}</div>
+        {% endfor %}
+
         <section id="registered_addresses">
             {% if addresses is not empty %}
                 {% for address in addresses %}
-                    <div id="address_{{ address.id }}">
+                    <div class="address_container" id="address_{{ address.id }}">
                         <span class="modal_buttons">
-                            <button class="edit_address"><i class="fa-solid fa-pen"></i></button>
-                            <button class="delete_address"><i class="fa-solid fa-xmark"></i></button>
+                            <button href="{{ path('user_edit_address', {addressId: address.id}) }}" class="edit_address"><i class="fa fa-solid fa-pen"></i></button>
+                            <button href="{{ path('user_delete_address', {addressId: address.id}) }}" class="delete_address"><i class="fa fa-solid fa-trash"></i></button>
                         </span>
                         <p class="str">{{ address.lastName }} {{ address.firstName }}</p>
                         <p>{{ address.streetNumber ~ " " ~ address.streetName }}</p>
@@ -35,4 +39,56 @@
         {{ form_end(form) }}
         <a class="back-btn" href="{{ path('user_show_profile') }}">Retour</a>
     </main>
+{% endblock %}
+
+{% block javascripts %}
+    <script defer>
+        $(function (){
+            // Affiche un pop-up de confirmation pour la suppression d'une adresse
+            $(document).on('click', '.delete_address', function(){
+                let href = $(this).attr('href')
+                Swal.fire({
+                    title: 'Vous êtes sur le point de supprimer cette adresse',
+                    text: 'Confirmez-vous cette action ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Supprimer l\'adresse',
+                    cancelButtonText: 'Annuler'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Succès',
+                            text: 'L\'adresse a bien été supprimée.',
+                            icon: 'success'
+                        }).then (function() {
+                            window.location.replace(href)
+                        })
+                    }
+                })
+            })
+
+            // Affiche la modal d'édition d'adresse
+            $(document).on('click', '.edit_address', function(){
+                $.post(
+                    $(this).attr('href')
+                ).done(function (data){
+                    let mainModalContainer = $('#main_modal_container')
+                    if ($(mainModalContainer).length) $(mainModalContainer).remove()
+                    $('body').append(data)
+                })
+            })
+
+            // Retire la modal d'édition d'adresse
+            $(document).on('click', '#main_modal_container, .close-modal', function(e){
+                if (e.target === document.getElementById('main_modal_container') || e.target === document.getElementById('close_main_modal'))
+                    $("#main_modal_container").remove()
+            })
+            $(document).on('keydown', function(e){
+                if (e.key === 'Escape')
+                    $('#main_modal_container').remove()
+            })
+        })
+    </script>
 {% endblock %}
