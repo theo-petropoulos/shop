@@ -16,21 +16,20 @@ class SecurityController extends AbstractController
     #[Route(path: '/user/login', name: 'user_login')]
     public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
+        if ($this->getUser()) {
+             return $this->redirectToRoute('user_show_profile');
+        }
 
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
+        $error          = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername   = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('user/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error'         => $error
+        ]);
     }
 
     #[Route(path: '/user/logout', name: 'user_logout')]
-    public function logout(): void
-    {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
-    }
+    public function logout(): void {}
+
 }

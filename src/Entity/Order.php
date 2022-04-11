@@ -2,14 +2,12 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JetBrains\PhpStorm\Pure;
 
-#[ApiResource()]
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: "`order`")]
 class Order
@@ -25,7 +23,7 @@ class Order
     private $id;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "orders")]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true, onDelete: "set null")]
     private ?User $customer;
 
     #[ORM\ManyToOne(targetEntity: Address::class)]

@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Brand;
 use App\Entity\Discount;
+use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +19,31 @@ class DiscountRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Discount::class);
+    }
+
+    public function findAllWithProducts()
+    {
+        $discounts = $this->findBy([], ['startingDate' => 'ASC']);
+
+        foreach ($discounts as $k => $v)
+        {
+            $query = $this->createQueryBuilder('d')
+                ->from(Product::class, 'p')
+                ->addSelect('p.id')
+                ->addSelect('b.name as brandName')
+                ->addSelect('p.name as productName')
+                ->innerJoin(Brand::class, 'b')
+                ->where('p.discount = :discount')
+                ->andWhere('p.brand = b.id')
+                ->addOrderBy('brandName')
+                ->addOrderBy('productName')
+                ->setParameter(':discount', $v->getId())
+            ;
+            $results = $query->getQuery()->getResult();
+            dump($results);
+        }
+
+        return $discounts;
     }
 
     // /**

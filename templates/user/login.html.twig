@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block pretitle %}CONNEXION{% endblock %}
+
+{% block body %}
+    <main id="connexion">
+        <div id="connexion_header">
+            <h3>CONNEXION</h3>
+            <h4>Vous n'êtes pas encore inscrit ? <a href="{{ path('user_register') }}">INSCRIPTION</a></h4>
+        </div>
+
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="success">{{ flashMessage }}</div>
+        {% endfor %}
+
+        <form method="post">
+            {% if error %}
+                <div class="alert alert-error">{{ "connexion.error"|trans({}, 'messages') }}</div>
+            {% endif %}
+            <label for="inputEmail">Adresse mail</label>
+            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus>
+            <label for="inputPassword">Mot de passe</label>
+            <input type="password" name="password" id="inputPassword" autocomplete="current-password" required>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+            <label for="checkboxRemember">
+                Rester connecter
+                <input type="checkbox" name="_remember_me" id="checkboxRemember">
+            </label>
+            <input type="submit" value="Valider">
+        </form>
+    </main>
+
+</form>
+{% endblock %}

@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\IPsRepository;
+use App\Repository\IPRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: IPsRepository::class)]
-class IPs
+#[ORM\Entity(repositoryClass: IPRepository::class)]
+class IP
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,7 +16,7 @@ class IPs
     #[ORM\Column(type: "string", length: 20)]
     private ?string $address;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "IPs")]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "IP")]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user;
 

@@ -19,6 +19,9 @@ class ProductController extends AbstractController
      * Affiche tous les produits disponibles
      *
      * @Route("/products", name="show_products_all")
+     *
+     * @param Request $request
+     * @return Response
      */
     public function showProductsIndex(Request $request): Response
     {

@@ -2,23 +2,20 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Exceptions\InvalidEmailException;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use http\Exception\InvalidArgumentException;
-use JetBrains\PhpStorm\Pure;
+use Rollerworks\Component\PasswordStrength\Validator\Constraints\PasswordStrength;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ApiResource(denormalizationContext: ["disable_type_enforcement" => true])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+class User implements UserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -34,38 +31,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     #[ORM\Column(type: "string")]
+    #[PasswordStrength(minStrength: 4, minLength: 8)]
     private string $password;
 
     #[ORM\Column(type: "string", length: 155)]
     #[Assert\NotBlank(message: "Le champ du nom de famille est obligatoire.")]
     #[Assert\Type(type: "string", message: "Le nom doit être une chaine de caractères valides.")]
-    #[Assert\Length(max: 155, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
+    #[Assert\Length(max: 33, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
     #[Assert\Regex(pattern: "/^[a-z ,.'-]+$/i", message: "Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
     private ?string $lastName;
 
     #[ORM\Column(type: "string", length: 155)]
     #[Assert\NotBlank(message: "Le champ du prénom est obligatoire.")]
     #[Assert\Type(type: "string", message: "Le nom doit être une chaine de caractères valides.")]
-    #[Assert\Length(max: 155, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
+    #[Assert\Length(max: 33, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
     #[Assert\Regex(pattern: "/^[a-z ,.'-]+$/i", message: "Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
     private ?string $firstName;
 
-    #[ORM\Column(type: "integer", length: 20)]
+    #[ORM\Column(type: "string", length: 20)]
     #[Assert\NotBlank(message: "Le champ du numéro de téléphone est obligatoire.")]
-    #[Assert\Type(type: "numeric", message: "Le numéro {{ value }} n'est pas valide, il ne doit contenir que des chiffres.")]
     #[Assert\Length(
         min: 10, max: 10,
         minMessage: "Le numéro de téléphone doit contenir exactement {{ limit }} caractères.",
         maxMessage: "Le numéro de téléphone doit contenir exactement {{ limit }} caractères."
     )]
-    private ?int $phone;
+    private ?string $phone;
 
     #[ORM\Column(type: "date")]
     #[Assert\NotBlank(message: "Le champ de la date de création est obligatoire.")]
     private ?\DateTimeInterface $creationDate;
 
-    #[ORM\OneToMany(mappedBy: "user", targetEntity: IPs::class, orphanRemoval: true)]
-    private Collection $IPs;
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: IP::class, orphanRemoval: true)]
+    private Collection $IP;
 
     #[ORM\OneToMany(mappedBy: "customer", targetEntity: Address::class, orphanRemoval: true)]
     private Collection $addresses;
@@ -73,12 +70,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: "customer", targetEntity: Order::class)]
     private Collection $orders;
 
-    #[Pure]
+    #[ORM\Column(type: 'boolean')]
+    private bool $isVerified = false;
+
     public function __construct()
     {
-        $this->IPs = new ArrayCollection();
-        $this->addresses = new ArrayCollection();
-        $this->orders = new ArrayCollection();
+        $this->creationDate = new \DateTime('today');
+        $this->roles        = ['ROLE_USER'];
+        $this->IP           = new ArrayCollection();
+        $this->addresses    = new ArrayCollection();
+        $this->orders       = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -127,8 +128,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
@@ -235,24 +234,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection
      */
-    public function getIPs(): Collection
+    public function getIP(): Collection
     {
-        return $this->IPs;
+        return $this->IP;
     }
 
-    public function addIP(IPs $iP): self
+    public function addIP(IP $iP): self
     {
-        if (!$this->IPs->contains($iP)) {
-            $this->IPs[] = $iP;
+        if (!$this->IP->contains($iP)) {
+            $this->IP[] = $iP;
             $iP->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeIP(IPs $iP): self
+    public function removeIP(IP $iP): self
     {
-        if ($this->IPs->removeElement($iP)) {
+        if ($this->IP->removeElement($iP)) {
             // set the owning side to null (unless already changed)
             if ($iP->getUser() === $this) {
                 $iP->setUser(null);
@@ -318,6 +317,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $order->setCustomer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

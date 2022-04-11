@@ -1,0 +1,15 @@
+Cahier des charges
+	-> Retirer les mentions d'API
+	-> Préciser les technologies
+	-> Renforcer la partie sécurité
+	-> Terminer IV. E, IV. F, V. A, V. B, VI.
+	-> Ajouter en VI. les maquettes et schémas
+
+Sécurité.pdf 
+	-> Ajouter des les zones à tester et comment
+
+Spécifications fonctionnelles.pdf
+	-> Ajouter des maquettes
+
+Spécifications techniques.pdf
+	-> OK ( Pour API )

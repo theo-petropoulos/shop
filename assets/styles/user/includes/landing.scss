@@ -1,0 +1,42 @@
+@use '../../variables' as *;
+
+#landing{
+  display:flex;
+  flex-direction: column;
+  padding:2%;
+  border:1px solid black;
+  text-align: center;
+  min-width: max-content;
+  #landing_titles{
+    border-bottom:1px solid black;
+    padding:1%;
+    a{
+      text-decoration: none;
+      color:$orange;
+      &:hover{
+        color:$orange_light;
+        transition:all 0.3s;
+      }
+    }
+  }
+  #landing_content{
+    display:flex;
+    flex-direction: column;
+    padding:1%;
+    min-width: max-content;
+    a{
+      text-decoration: none;
+      color:$orange;
+      &:hover{
+        color:$orange_light;
+        transition:all 0.3s;
+      }
+    }
+  }
+}
+
+@media screen and (max-width:499px){
+  #landing{
+    width:90%;
+  }
+}

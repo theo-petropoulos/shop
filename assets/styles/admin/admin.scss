@@ -1,0 +1,70 @@
+@use 'assets/styles/variables' as *;
+
+// Import user's CSS requirements
+@use './includes/landing.scss';
+
+#admin{
+  display:flex;
+  width: 100%;
+  position:relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: $font;
+  form{
+    width:65%;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding:2%;
+    border:1px solid black;
+    input{
+      margin:1%;
+      width:70%;
+      text-align: center;
+      &[type=submit]{
+        margin:2%;
+        background:$grey;
+        color:white;
+        font-family: $font;
+        outline:0;
+        border:1px solid black;
+        border-radius: none;
+        padding:1% 0;
+        font-size:calc(10px + 0.5vw);
+        line-height:calc(10px + 0.5vw);
+        &:hover{
+          background:$grey_light;
+          transition:all 0.3s;
+          cursor:pointer;
+          font-size:calc(13px + 0.5vw);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width:499px){
+  #admin{
+    form{
+      width:80%;
+    }
+  }
+}
+
+a#back_btn{
+  font-family: $font;
+  background:white;
+  padding:1% 2%;
+  border:1px solid black;
+  text-decoration: none;
+  margin:2%;
+  text-align: center;
+  width:max-content;
+  color:black;
+  &:hover{
+    background:rgb(195, 195, 195);
+    transition:all 0.3s;
+  }
+}

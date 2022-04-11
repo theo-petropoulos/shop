@@ -1,0 +1,53 @@
+$font   :'Yantramanav';
+$white  :rgb(255,255,255);
+$black  :rgb(0,0,0);
+$grey   :rgb(45,45,45);
+$grey_light:rgb(115, 115, 115);
+$orange :rgb(240, 95, 0);
+$orange_light:rgb(240, 175, 0);
+
+@mixin login-register{
+  font-family: $font;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width:100%;
+  background:white;
+  #inscription_header, #connexion_header, #modify_password_header{
+    text-align:center;
+    h3{
+      font-size: calc(14px + 1vw);
+    }
+    h4{
+      font-size:calc(12px + 0.5vw);
+      a{
+        text-decoration: none;
+        color:$orange;
+        &:hover{
+          color:$orange_light;
+          transition:color 0.3s;
+        }
+      }
+    }
+  }
+}
+
+@mixin submit-button{
+  margin:2%;
+  background:$grey;
+  color:white;
+  font-family: $font;
+  outline:0;
+  border:1px solid black;
+  border-radius: unset;
+  padding:1% 0;
+  font-size:calc(10px + 0.5vw);
+  line-height:calc(10px + 0.5vw);
+  &:hover{
+    background:$grey_light;
+    transition:all 0.3s;
+    cursor:pointer;
+    font-size:calc(13px + 0.5vw);
+  }
+}

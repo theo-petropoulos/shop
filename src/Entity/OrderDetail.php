@@ -2,11 +2,9 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\OrderDetailRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ApiResource()]
 #[ORM\Entity(repositoryClass: OrderDetailRepository::class)]
 class OrderDetail
 {
@@ -16,10 +14,10 @@ class OrderDetail
     private $id;
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: "orderDetails")]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(unique: false, nullable: false)]
     private ?Order $order;
 
-    #[ORM\OneToOne(targetEntity: Product::class, cascade: ["persist", "remove"])]
+    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "orderDetails")]
     #[ORM\JoinColumn(unique: false, nullable: false)]
     private ?Product $product;
 

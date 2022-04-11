@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\IPs;
+use App\Entity\IP;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method IPs|null find($id, $lockMode = null, $lockVersion = null)
- * @method IPs|null findOneBy(array $criteria, array $orderBy = null)
- * @method IPs[]    findAll()
- * @method IPs[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method IP|null find($id, $lockMode = null, $lockVersion = null)
+ * @method IP|null findOneBy(array $criteria, array $orderBy = null)
+ * @method IP[]    findAll()
+ * @method IP[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class IPsRepository extends ServiceEntityRepository
+class IPRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, IPs::class);
+        parent::__construct($registry, IP::class);
     }
 
     // /**
-    //  * @return IPs[] Returns an array of IPs objects
+    //  * @return IP[] Returns an array of IP objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class IPsRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?IPs
+    public function findOneBySomeField($value): ?IP
     {
         return $this->createQueryBuilder('i')
             ->andWhere('i.exampleField = :val')
