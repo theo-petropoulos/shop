@@ -20,7 +20,7 @@ class User implements UserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private $id;
+    protected ?int $id;
 
     #[ORM\Column(type: "string", length: 180, unique: true)]
     #[Assert\NotBlank(message: "Le champ email est obligatoire.")]

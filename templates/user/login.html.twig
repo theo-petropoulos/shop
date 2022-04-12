@@ -13,12 +13,16 @@
             <div class="success">{{ flashMessage }}</div>
         {% endfor %}
 
+        {% for flashMessage in app.session.flashbag.get('warning') %}
+            <div class="warning">{{ flashMessage }}</div>
+        {% endfor %}
+
         <form method="post">
-            {% if error %}
+            {% if error is defined and error %}
                 <div class="alert alert-error">{{ "connexion.error"|trans({}, 'messages') }}</div>
             {% endif %}
             <label for="inputEmail">Adresse mail</label>
-            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" autocomplete="email" required autofocus>
+            <input type="email" value="{{ last_username ?? null }}" name="email" id="inputEmail" autocomplete="email" required autofocus>
             <label for="inputPassword">Mot de passe</label>
             <input type="password" name="password" id="inputPassword" autocomplete="current-password" required>
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">

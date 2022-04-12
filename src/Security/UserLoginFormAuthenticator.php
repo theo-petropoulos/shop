@@ -3,14 +3,18 @@
 namespace App\Security;
 
 use App\Entity\IP;
-use App\Entity\User;
 use App\Repository\IPRepository;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
@@ -28,11 +32,17 @@ class UserLoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     private UrlGeneratorInterface $urlGenerator;
     private EntityManagerInterface $entityManager;
+    private TokenStorageInterface $tokenStorage;
+    private SessionInterface $session;
+    private EmailVerifier $emailVerifier;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $entityManager)
+    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage, SessionInterface $session, EmailVerifier $emailVerifier)
     {
-        $this->urlGenerator = $urlGenerator;
-        $this->entityManager = $entityManager;
+        $this->urlGenerator     = $urlGenerator;
+        $this->entityManager    = $entityManager;
+        $this->tokenStorage     = $tokenStorage;
+        $this->session          = $session;
+        $this->emailVerifier    = $emailVerifier;
     }
 
     public function authenticate(Request $request): Passport
@@ -50,31 +60,55 @@ class UserLoginFormAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    /**
+     * @throws Exception|TransportExceptionInterface
+     */
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response
     {
         /** @var IPRepository $IPRepository */
         $IPRepository   = $this->entityManager->getRepository(IP::class);
-        /** @var UserRepository $userRepository */
-        $userRepository = $this->entityManager->getRepository(User::class);
 
         $currentIP  = $IPRepository->findOneBy(['address' => $request->getClientIp()]) ?? (new IP())->setAddress($request->getClientIp());
         $user       = $token->getUser();
         $knownIPs   = $user->getIP();
 
         // If the User is logging in for the first time, set the current IP as one of his
-        if ($knownIPs->isEmpty()) {
+        if ($knownIPs->isEmpty() && !$currentIP->getUser()) {
             $currentIP->setUser($user);
             $this->entityManager->persist($currentIP);
             $this->entityManager->flush();
         }
-
         else {
-            $IPVerifier = new IPVerifier($IPRepository, $userRepository);
-            if ($IPVerifier->belongsToUser($currentIP, $user)) {
-
+            // If the IP address is linked to the User
+            if ($currentIP->belongsToUser($user)) {
+                if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+                    return new RedirectResponse($targetPath);
+                }
             }
-            if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-                return new RedirectResponse($targetPath);
+            // If the IP is set for another User or if the IP doesn't match one of the User's
+            else {
+                $this->entityManager->persist($currentIP);
+                $this->entityManager->flush();
+                try{
+                    $extraParams = ['id' => $user->getId(), 'ip' => $currentIP->getId()];
+                    $this->emailVerifier->sendEmailConfirmation(
+                        'login_verify_ip',
+                        $user,
+                        (new TemplatedEmail())
+                            ->from(new Address('okko.network@gmail.com', 'Stripe Shop'))
+                            ->to($user->getEmail())
+                            ->subject('Connexion depuis un nouvel appareil')
+                            ->htmlTemplate('email/login/confirmation_ip.html.twig'),
+                        $extraParams
+                    );
+                } catch (Exception $e) {
+                    throw new Exception($e->getMessage());
+                }
+                $this->tokenStorage->setToken();
+                $this->session->invalidate();
+                $this->session->getFlashBag()->add('warning', 'Vous venez de vous connecter depuis un nouvel appareil. Un e-mail de confirmation vient de vous être envoyé.');
+
+                return new RedirectResponse($this->urlGenerator->generate('user_login'));
             }
         }
 
