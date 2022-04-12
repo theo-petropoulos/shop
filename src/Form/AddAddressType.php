@@ -53,8 +53,8 @@ class AddAddressType extends AbstractType
                 'label'     => 'Code postal',
                 'required'  => true,
                 'attr'      => [
-                    'min'   => 1000,
-                    'max'   => 99999
+                    'minlength' => 4,
+                    'maxlength' => 5
                 ]
             ])
             ->add('city', TextType::class, [

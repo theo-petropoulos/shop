@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -71,23 +72,35 @@ class UserController extends AbstractController
     {
         $addresses  = $addressRepository->findBy(['customer' => $user], ['id' => 'ASC']);
         $address    = new Address($user);
+        /** @var Form $form */
         $form       = $this->createForm(AddAddressType::class, $address);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
+        $errors = [];
+
+        if ($form->isSubmitted())
         {
-            $entityManager->persist($address);
-            $entityManager->flush();
+            if ($form->isValid()) {
+                $entityManager->persist($address);
+                $entityManager->flush();
 
-            $this->addFlash('success', 'L\'adresse a été ajoutée avec succès.');
+                $this->addFlash('success', 'L\'adresse a été ajoutée avec succès.');
 
-            return $this->redirectToRoute('user_show_addresses');
+                return $this->redirectToRoute('user_show_addresses');
+            }
+            else {
+                foreach ($form->getErrors(true) as $key => $error)
+                    $errors[$key] = $error->getMessage();
+
+                $form->clearErrors(true);
+            }
         }
 
         return $this->renderForm('user/address/index.html.twig', [
             'user'      => $user,
             'addresses' => $addresses,
-            'form'      => $form
+            'form'      => $form,
+            'errors'    => $errors
         ]);
     }
 
@@ -101,7 +114,7 @@ class UserController extends AbstractController
         if (!$address)
             throw $this->createNotFoundException();
 
-        $form       = $this->createForm(EditAddressType::class, $address);
+        $form       = $this->createForm(AddAddressType::class, $address);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {

@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Exceptions\InvalidSizeException;
 use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Column;
@@ -14,7 +13,7 @@ class Address
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private $id;
+    protected ?int $id;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "addresses")]
     #[ORM\JoinColumn(nullable: true, onDelete: "set null")]
@@ -24,49 +23,45 @@ class Address
     #[ORM\Column(type: "string", length: 155)]
     #[Assert\NotBlank(message: "Le champ du nom de famille est obligatoire")]
     #[Assert\Type(type: "string", message: "Le nom doit être une chaine de caractères valides.")]
-    #[Assert\Length(max: 33, maxMessage: "Le nom ne doit pas excéder {{limit}} caractères.")]
-    #[Assert\Regex(pattern: "/^[\p{L}\s'-]+$/", message: "Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
+    #[Assert\Length(max: 33, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
+    #[Assert\Regex(pattern: "/^[\p{L}\s'-]+$/u", message: "Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
     private ?string $lastName;
 
     #[ORM\Column(type: "string", length: 155)]
     #[Assert\NotBlank(message: "Le champ du prénom est obligatoire.")]
-    #[Assert\Type(type: "string", message: "Le nom doit être une chaine de caractères valide.")]
-    #[Assert\Length(max: 33, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
-    #[Assert\Regex(pattern: "/^[\p{L}\s'-]+$/", message: "Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
+    #[Assert\Type(type: "string", message: "Le prénom doit être une chaine de caractères valide.")]
+    #[Assert\Length(max: 33, maxMessage: "Le prénom ne doit pas excéder {{ limit }} caractères.")]
+    #[Assert\Regex(pattern: "/^[\p{L}\s'-]+$/u", message: "Le prénom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
     private ?string $firstName;
 
     #[ORM\Column(type: "string", length: 15, nullable: true)]
     #[Assert\Length(max: 10, maxMessage: "Le numéro d'adresse ne peut pas excéder {{ limit }} caractères.")]
-    #[Assert\Regex(pattern: "/^[\p{L}\p{N}\s,.']+$/",message: "Le numéro d'adresse ne peut contenir que des lettres et des chiffres.")]
+    #[Assert\Regex(pattern: "/^[\p{L}\p{N}\s,.']+$/u",message: "Le numéro d'adresse ne peut contenir que des lettres et des chiffres.")]
     private ?string $streetNumber;
 
     #[ORM\Column(type: "string", length: 255)]
     #[Assert\NotBlank(message: "Le champ de l'adresse est obligatoire.")]
-    #[Assert\Length(
-        min: 8, max:255,
-        minMessage: "L'adresse doit comporter au moins {{ limit }} caractères.",
-        maxMessage: "L'adresse doit ne doit pas excéder {{ limit }} caractères."
-    )]
-    #[Assert\Regex(pattern:"/^[\p{L}\p{N}\s,.'-]+$/", message: "L'adresse ne peut contenir que des lettres, des chiffres, des apostrophes, des points et des tirets.")]
+    #[Assert\Length(min: 8, max:255, minMessage: "L'adresse doit comporter au moins {{ limit }} caractères.", maxMessage: "L'adresse doit ne doit pas excéder {{ limit }} caractères.")]
+    #[Assert\Regex(pattern:"/^[\p{L}\p{N}\s,.'-]+$/u", message: "L'adresse ne peut contenir que des lettres, des chiffres, des apostrophes, des points et des tirets.")]
     private ?string $streetName;
 
     #[ORM\Column(type: "string", length: 255, nullable: true)]
     #[Assert\Type(type: "string", message: "Le complément d'adresse doit être une chaine de caractères valides.")]
-    #[Assert\Regex(pattern: "/^[a-z0-9 ,.'-]+$/i", message: "Le complément d'adresse ne peut contenir que des lettres, des chiffres, des apostrophes, des points et des tirets.")]
+    #[Assert\Regex(pattern: "/^[\p{L}\p{N}\s,.'-]+$/ui", message: "Le complément d'adresse ne peut contenir que des lettres, des chiffres, des apostrophes, des points et des tirets.")]
     private ?string $streetAddition;
 
     #[Column(type: "integer", length: 5)]
     #[Assert\NotBlank(message: 'Le champ du code postal est obligatoire.')]
-    #[Assert\Type(type: 'numeric',message: 'Le code postal ne doit contenir que des chiffres.')]
-    #[Assert\Length(min: 4, max: 5, minMessage: 'Le code postal doit contenir exactement {{limit}} caractères. Pour un département étranger, utilisez le code 99999', maxMessage: 'Le code postal doit contenir exactement {{limit}} caractères. Pour un département étranger, utilisez le code 99999')]
-    #[Assert\Range(notInRangeMessage: 'Le code postal doit être compris entre {{ min }} et {{ max }.', min: 1000, max: 99999)]
+    #[Assert\Type(type: 'numeric', message: 'Le code postal ne doit contenir que des chiffres.')]
+    #[Assert\Length(min: 4, max: 5, minMessage: 'Le code postal doit contenir exactement {{ limit }} caractères. Pour un département étranger, utilisez le code 99999', maxMessage: 'Le code postal doit contenir exactement {{ limit }} caractères. Pour un département étranger, utilisez le code 99999')]
+    #[Assert\Range(notInRangeMessage: 'Le code postal doit être compris entre {{ min }} et {{ max }}.', min: 1000, max: 99999)]
     private ?int $postalCode;
 
     #[ORM\Column(type: "string", length: 80)]
     #[Assert\NotBlank(message: "Le champ de la ville est obligatoire.")]
     #[Assert\Type(type: "string",message: "La ville doit être une chaine de caractères valides.")]
-    #[Assert\Length(min: 3, max: 80, minMessage: "La ville doit contneir au moins {{ limit }} caractères.", maxMessage: "La ville ne doit pas excéder {{ limit }} caractères.")]
-    #[Assert\Regex(pattern: "/^[\p{L}\s'-]+$/i", message: "La ville ne peut contenir que des lettres, des apostrophes et des tirets.")]
+    #[Assert\Length(min: 3, max: 80, minMessage: "La ville doit contenir au moins {{ limit }} caractères.", maxMessage: "La ville ne doit pas excéder {{ limit }} caractères.")]
+    #[Assert\Regex(pattern: "/^[\p{L}\s'-]+$/ui", message: "La ville ne peut contenir que des lettres, des apostrophes et des tirets.")]
     private ?string $city;
 
     #[ORM\Column(type: "boolean", nullable: true)]
@@ -206,18 +201,13 @@ class Address
     }
 
     /**
-     * @param int
+     * @param int|string
      * @return self
-     * @throws InvalidSizeException
      */
-    public function setPostalCode(int $postalCode): self
+    public function setPostalCode(mixed $postalCode): self
     {
-        if (strlen((string) $postalCode) > 5 || strlen((string) $postalCode) < 4)
-            throw new InvalidSizeException("Le champ du code postal ne peut contenir que 4 ou 5 caractères");
-        else {
-            $this->postalCode = $postalCode;
-            return $this;
-        }
+        $this->postalCode = $postalCode;
+        return $this;
     }
 
     /**
