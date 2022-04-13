@@ -3,6 +3,10 @@
 {% block pretitle %}ACCUEIL{% endblock %}
 
 {% block body %}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="success">{{ flashMessage }}</div>
+    {% endfor %}
+
     Ici l'accueil.
 {% endblock body %}
 

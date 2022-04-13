@@ -5,7 +5,7 @@ $(function (){
         let href = $(this).attr('href')
         Swal.fire({
             title: 'Supprimer votre compte',
-            html: "Vous êtes sur le point de supprimer votre compte. Cette action est irréversible.<br><br>Afin de conserver un historique de votre activité, votre adresse mail sera conservée dans notre base de données pour une durée de 2 ans. Vous pouvez vous opposer à ce traitement en envoyant un e-mail à l\'adresse dpo@shop.com.<br><br>Confirmez-vous cette action ?",
+            html: "Vous êtes sur le point de <strong>supprimer</strong> votre compte. Cette action est <strong>irréversible</strong>.<br><br>Afin de conserver une traçabilité de vos achats, vos adresses seront conservées dans notre base de données <strong>pour une durée de 2 ans</strong>. Vous pouvez vous opposer à ce traitement en envoyant un e-mail à l\'adresse <a href='mailto:dpo@shop.com'>dpo@shop.com</a>.<br><br>Confirmez-vous cette action ?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',

@@ -181,6 +181,8 @@ class UserController extends AbstractController
         $tokenStorage->setToken();
         $request->getSession()->invalidate();
 
+        $this->addFlash('success', 'Votre compte a bien été supprimé.');
+
         return $this->redirectToRoute('home');
     }
 }
