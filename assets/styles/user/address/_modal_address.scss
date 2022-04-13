@@ -1,0 +1,41 @@
+@use '../../variables' as *;
+
+#main_modal_container{
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: $grey_transparent;
+  #main_modal{
+    position: relative;
+    width: 50%;
+    min-width: 300px;
+    background: $white;
+    border: 1px solid black;
+    padding: 3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    @include address-form;
+    form{
+      width: 90%;
+    }
+    .modal_buttons{
+      width: 100%;
+      display:flex;
+      justify-content: flex-end;
+      .close-modal{
+        padding: 1%;
+        &:hover{
+          background: $grey_light;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+      }
+    }
+  }
+}

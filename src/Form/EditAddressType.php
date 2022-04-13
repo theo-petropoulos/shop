@@ -9,7 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class AddAddressType extends AbstractType
+class EditAddressType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -53,8 +53,8 @@ class AddAddressType extends AbstractType
                 'label'     => 'Code postal',
                 'required'  => true,
                 'attr'      => [
-                    'minlength' => 4,
-                    'maxlength' => 5
+                    'min'   => 1000,
+                    'max'   => 99999
                 ]
             ])
             ->add('city', TextType::class, [
