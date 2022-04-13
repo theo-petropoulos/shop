@@ -31,7 +31,7 @@ main{
   min-height:85vh;
 }
 
-.success, .failure{
+.success, .failure, .warning{
   position:absolute;
   z-index:9;
   top:20%;
@@ -42,6 +42,8 @@ main{
   border:1px solid black;
   padding:1.5%;
   animation: disappear 0.5s ease-in 3s forwards;
+  &.warning{
+    color: $orange_light;
   &.success{
     color: $green;
   }
