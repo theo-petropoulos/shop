@@ -72,6 +72,7 @@ class UserController extends AbstractController
     {
         $addresses  = $addressRepository->findBy(['customer' => $user], ['id' => 'ASC']);
         $address    = new Address($user);
+
         /** @var Form $form */
         $form       = $this->createForm(AddAddressType::class, $address);
         $form->handleRequest($request);
@@ -106,14 +107,10 @@ class UserController extends AbstractController
 
     # Modification d'une adresse
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
-    #[Route(path: '/user/profile/addresses/edit/{addressId}', name: 'user_edit_address')]
-    public function userEditAddress(Request $request, UserInterface $user, AddressRepository $addressRepository, EntityManagerInterface $entityManager, int $addressId): Response
+    #[IsGranted('CAN_EDIT', 'address', 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/user/profile/addresses/edit/{id}', name: 'user_edit_address')]
+    public function userEditAddress(Request $request, UserInterface $user, Address $address, EntityManagerInterface $entityManager): Response
     {
-        $address    = $addressRepository->findOneBy(['id' => $addressId]);
-
-        if (!$address)
-            throw $this->createNotFoundException();
-
         $form       = $this->createForm(AddAddressType::class, $address);
         $form->handleRequest($request);
 
@@ -127,7 +124,8 @@ class UserController extends AbstractController
 
                 $this->addFlash('success', 'L\'adresse a été modifiée avec succès.');
             }
-            else $this->addFlash('failure', 'Votre saisie comporte un ou plusieurs caractères interdits. Veuillez réessayer.');
+            else
+                $this->addFlash('failure', 'Votre saisie comporte un ou plusieurs caractères interdits. Veuillez réessayer.');
 
             return $this->redirectToRoute('user_show_addresses');
         }
@@ -141,14 +139,10 @@ class UserController extends AbstractController
 
     # Suppression d'une adresse
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
-    #[Route(path: '/user/profile/addresses/delete/{addressId}', name: 'user_delete_address')]
-    public function userDeleteAddress(Request $request, UserInterface $user, AddressRepository $addressRepository, EntityManagerInterface $entityManager, int $addressId): Response
+    #[IsGranted('CAN_DELETE', 'address', 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/user/profile/addresses/delete/{id}', name: 'user_delete_address')]
+    public function userDeleteAddress(Request $request, Address $address, EntityManagerInterface $entityManager): Response
     {
-        $address    = $addressRepository->findOneBy(['id' => $addressId]);
-
-        if (!$address)
-            throw $this->createNotFoundException();
-
         $entityManager->remove($address);
         $entityManager->flush();
 
