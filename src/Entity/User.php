@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Un utilisateur est déjà enregistré avec cette adresse mail')]
 class User implements UserInterface
 {
     #[ORM\Id]
@@ -61,13 +61,13 @@ class User implements UserInterface
     #[Assert\NotBlank(message: "Le champ de la date de création est obligatoire.")]
     private ?\DateTimeInterface $creationDate;
 
-    #[ORM\OneToMany(mappedBy: "user", targetEntity: IP::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: "user", targetEntity: IP::class, fetch: "EAGER", orphanRemoval: false)]
     private Collection $IP;
 
-    #[ORM\OneToMany(mappedBy: "customer", targetEntity: Address::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: "customer", targetEntity: Address::class, fetch: "EAGER", orphanRemoval: false)]
     private Collection $addresses;
 
-    #[ORM\OneToMany(mappedBy: "customer", targetEntity: Order::class)]
+    #[ORM\OneToMany(mappedBy: "customer", targetEntity: Order::class, fetch: "EAGER", orphanRemoval: false)]
     private Collection $orders;
 
     #[ORM\Column(type: 'boolean')]
@@ -181,12 +181,8 @@ class User implements UserInterface
 
     public function setLastName(string $lastName): self
     {
-        if (!preg_match("/^[a-z ,.'-]+$/i", $lastName))
-            throw new \InvalidArgumentException("Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.");
-        else {
-            $this->lastName = $lastName;
-            return $this;
-        }
+        $this->lastName = $lastName;
+        return $this;
     }
 
     public function getFirstName(): ?string
@@ -196,12 +192,8 @@ class User implements UserInterface
 
     public function setFirstName(string $firstName): self
     {
-        if (!preg_match("/^[a-z ,.'-]+$/i", $firstName))
-            throw new \InvalidArgumentException("Le prénom ne peut contenir que des lettres, des apostrophes, des points et des tirets.");
-        else {
-            $this->firstName = $firstName;
-            return $this;
-        }
+        $this->firstName = $firstName;
+        return $this;
     }
 
     public function getPhone(): ?string
@@ -211,12 +203,8 @@ class User implements UserInterface
 
     public function setPhone(string $phone): self
     {
-        if (!preg_match("/^[0-9 .-]+$/i", $phone))
-            throw new \InvalidArgumentException("Le numéro de téléphone ne peut contenir que des nombres et si besoin des espaces, points, tirets.");
-        else{
-            $this->phone = str_replace([' ', '-', ',', '.'], '', $phone);
-            return $this;
-        }
+        $this->phone = str_replace([' ', '-', ',', '.'], '', $phone);
+        return $this;
     }
 
     public function getCreationDate(): ?\DateTimeInterface
