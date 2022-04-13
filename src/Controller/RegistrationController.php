@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -38,42 +39,56 @@ class RegistrationController extends AbstractController
     #[Route(path: '/user/register', name: 'user_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $user   = new User();
+        $errors = [];
+
+        /** @var Form $form */
+        $form   = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data           = $form->getData();
-            $hashedPassword = $userPasswordHasher->hashPassword(
-                $user,
-                $data->getPassword()
-            );
-            $user->setPassword($hashedPassword);
 
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            try{
-                $extraParams = ['id' => $user->getId()];
-                $this->emailVerifier->sendEmailConfirmation(
-                    'register_verify_email',
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $hashedPassword = $userPasswordHasher->hashPassword(
                     $user,
-                    (new TemplatedEmail())
-                        ->from(new Address('okko.network@gmail.com', 'Stripe Shop'))
-                        ->to($user->getEmail())
-                        ->subject('Confirmez votre e-mail')
-                        ->htmlTemplate('email/registration/confirmation_register.html.twig'),
-                    $extraParams
+                    $data->getPassword()
                 );
-            } catch (TransportExceptionInterface $e) {
-                throw new Exception($e->getMessage());
-            }
+                $user->setPassword($hashedPassword);
 
-            $this->addFlash('success', 'Votre inscription a été prise en compte, un mail de confirmation vient de vous être envoyé.');
-            return $this->redirectToRoute('user_login');
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                try {
+                    $extraParams = ['id' => $user->getId()];
+                    $this->emailVerifier->sendEmailConfirmation(
+                        'register_verify_email',
+                        $user,
+                        (new TemplatedEmail())
+                            ->from(new Address('okko.network@gmail.com', 'Stripe Shop'))
+                            ->to($user->getEmail())
+                            ->subject('Confirmez votre e-mail')
+                            ->htmlTemplate('email/registration/confirmation_register.html.twig'),
+                        $extraParams
+                    );
+                } catch (TransportExceptionInterface $e) {
+                    throw new Exception($e->getMessage());
+                }
+
+                $this->addFlash('success', 'Votre inscription a été prise en compte, un mail de confirmation vient de vous être envoyé.');
+
+                return $this->redirectToRoute('user_login');
+            }
+            else {
+                foreach ($form->getErrors(true) as $key => $error)
+                    $errors[$key] = $error->getMessage();
+
+                $form->clearErrors(true);
+            }
         }
 
         return $this->renderForm('user/register.html.twig', [
             'form'      => $form,
+            'errors'    => $errors
         ]);
     }
 

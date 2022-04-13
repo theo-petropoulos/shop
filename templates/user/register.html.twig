@@ -9,6 +9,16 @@
             <h4>Déjà inscrit ? <a href="{{ path('user_login') }}">CONNEXION</a></h4>
         </div>
 
+        {% if errors %}
+            <div class="form-errors">
+                {% for error in errors %}
+                    <div class="form-error">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {{ form_start(form) }}
             {{ form_widget(form) }}
             <input type="submit" value="Valider">
