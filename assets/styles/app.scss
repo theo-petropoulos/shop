@@ -31,7 +31,7 @@ main{
   min-height:85vh;
 }
 
-.success, .warning{
+.success, .failure, .warning{
   position:absolute;
   z-index:9;
   top:20%;
@@ -44,6 +44,11 @@ main{
   animation: disappear 0.5s ease-in 3s forwards;
   &.warning{
     color: $orange_light;
+  &.success{
+    color: $green;
+  }
+  &.failure{
+    color: $red;
   }
 }
 
@@ -60,6 +65,30 @@ main{
   }
 }
 
+.swal2-popup{
+  font-family: $font !important;
+}
+
 .str{
   font-weight: bold;
+}
+
+.close-modal{
+  width: max-content;
+  background: white;
+  border: 1px solid black;
+  right: 5%;
+  top: 5%;
+}
+
+.form-errors{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid $red;
+  padding: 1%;
+  background: $white;
+  color: $red;
 }

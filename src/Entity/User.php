@@ -43,9 +43,9 @@ class User implements UserInterface
 
     #[ORM\Column(type: "string", length: 155)]
     #[Assert\NotBlank(message: "Le champ du prénom est obligatoire.")]
-    #[Assert\Type(type: "string", message: "Le nom doit être une chaine de caractères valides.")]
-    #[Assert\Length(max: 33, maxMessage: "Le nom ne doit pas excéder {{ limit }} caractères.")]
-    #[Assert\Regex(pattern: "/^[a-z ,.'-]+$/i", message: "Le nom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
+    #[Assert\Type(type: "string", message: "Le prénom doit être une chaine de caractères valides.")]
+    #[Assert\Length(max: 33, maxMessage: "Le prénom ne doit pas excéder {{ limit }} caractères.")]
+    #[Assert\Regex(pattern: "/^[a-z ,.'-]+$/i", message: "Le prénom ne peut contenir que des lettres, des apostrophes, des points et des tirets.")]
     private ?string $firstName;
 
     #[ORM\Column(type: "string", length: 20)]

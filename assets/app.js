@@ -11,5 +11,10 @@ import './styles/app.scss';
 // start the Stimulus application
 import './bootstrap';
 
-// loads the jquery package from node_modules
-import $ from 'jquery';
+// loads the jquery
+const $ = require('jquery');
+global.$ = global.jQuery = $;
+
+// loads sweet alert
+const Swal = require("sweetalert2");
+global.Swal = Swal;
