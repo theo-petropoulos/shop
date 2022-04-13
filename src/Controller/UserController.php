@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Address;
 use App\Entity\User;
 use App\Form\AddAddressType;
+use App\Form\EditAddressType;
 use App\Form\ModifyPasswordType;
 use App\Repository\AddressRepository;
 use Doctrine\ORM\EntityManager;
@@ -12,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -22,7 +24,7 @@ use JetBrains\PhpStorm\Pure;
 class UserController extends AbstractController
 {
     #[Pure]
-    public function __construct(private ManagerRegistry $doctrine) {}
+    public function __construct(protected ManagerRegistry $doctrine) {}
 
     # Affiche le profil de l'utilisateur
     #[Route(path: '/user/profile/', name: 'user_show_profile')]
@@ -70,23 +72,87 @@ class UserController extends AbstractController
     {
         $addresses  = $addressRepository->findBy(['customer' => $user], ['id' => 'ASC']);
         $address    = new Address($user);
+        /** @var Form $form */
         $form       = $this->createForm(AddAddressType::class, $address);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
+        $errors = [];
+
+        if ($form->isSubmitted())
         {
-            $entityManager->persist($address);
-            $entityManager->flush();
-            $this->addFlash('success', 'L\'adresse a été ajoutée avec succès.');
+            if ($form->isValid()) {
+                $entityManager->persist($address);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'L\'adresse a été ajoutée avec succès.');
+
+                return $this->redirectToRoute('user_show_addresses');
+            }
+            else {
+                foreach ($form->getErrors(true) as $key => $error)
+                    $errors[$key] = $error->getMessage();
+
+                $form->clearErrors(true);
+            }
+        }
+
+        return $this->renderForm('user/address/index.html.twig', [
+            'user'      => $user,
+            'addresses' => $addresses,
+            'form'      => $form,
+            'errors'    => $errors
+        ]);
+    }
+
+    # Modification d'une adresse
+    #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/user/profile/addresses/edit/{addressId}', name: 'user_edit_address')]
+    public function userEditAddress(Request $request, UserInterface $user, AddressRepository $addressRepository, EntityManagerInterface $entityManager, int $addressId): Response
+    {
+        $address    = $addressRepository->findOneBy(['id' => $addressId]);
+
+        if (!$address)
+            throw $this->createNotFoundException();
+
+        $form       = $this->createForm(AddAddressType::class, $address);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                /** @var Address $address */
+                $address = $form->getData();
+
+                $entityManager->persist($address);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'L\'adresse a été modifiée avec succès.');
+            }
+            else $this->addFlash('failure', 'Votre saisie comporte un ou plusieurs caractères interdits. Veuillez réessayer.');
 
             return $this->redirectToRoute('user_show_addresses');
         }
 
-        return $this->renderForm('user/includes/show_addresses.html.twig', [
+        return $this->renderForm('user/address/_modal_edit_address.html.twig', [
+            'address'   => $address,
             'user'      => $user,
-            'addresses' => $addresses,
             'form'      => $form
         ]);
+    }
+
+    # Suppression d'une adresse
+    #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/user/profile/addresses/delete/{addressId}', name: 'user_delete_address')]
+    public function userDeleteAddress(Request $request, UserInterface $user, AddressRepository $addressRepository, EntityManagerInterface $entityManager, int $addressId): Response
+    {
+        $address    = $addressRepository->findOneBy(['id' => $addressId]);
+
+        if (!$address)
+            throw $this->createNotFoundException();
+
+        $entityManager->remove($address);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('user_show_addresses');
     }
 
     # Commandes de l'utilisateur

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\IPRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 #[ORM\Entity(repositoryClass: IPRepository::class)]
 class IP
@@ -11,16 +12,22 @@ class IP
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private $id;
+    protected ?int $id;
 
-    #[ORM\Column(type: "string", length: 20)]
+    #[ORM\Column(type: "string", length: 20, unique: true)]
     private ?string $address;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "IP")]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $user = null;
 
-    #[ORM\Column(type: "boolean", nullable: true)]
+    #[ORM\Column(name: "failed_logins", type: "integer", nullable: true)]
+    private ?int $failedLogins;
+
+    #[ORM\Column(name: "count_users", type: "integer", nullable: true)]
+    private ?int $countUsers;
+
+    #[ORM\Column(name: "blacklist", type: "boolean", nullable: true)]
     private ?bool $blacklist;
 
     public function getId(): ?int
@@ -52,6 +59,30 @@ class IP
         return $this;
     }
 
+    public function getFailedLogins(): ?int
+    {
+        return $this->failedLogins;
+    }
+
+    public function setFailedLogins(?int $failedLogins): self
+    {
+        $this->failedLogins = $failedLogins;
+
+        return $this;
+    }
+
+    public function getCountUsers(): ?int
+    {
+        return $this->countUsers;
+    }
+
+    public function setCountUsers(?int $countUsers): self
+    {
+        $this->countUsers = $countUsers;
+
+        return $this;
+    }
+
     public function getBlacklist(): ?bool
     {
         return $this->blacklist;
@@ -62,5 +93,11 @@ class IP
         $this->blacklist = $blacklist;
 
         return $this;
+    }
+
+    #[Pure]
+    public function belongsToUser(User $user): bool
+    {
+        return $this->getUser() === $user;
     }
 }

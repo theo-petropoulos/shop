@@ -13,6 +13,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -52,14 +53,18 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             try{
-                $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+                $extraParams = ['id' => $user->getId()];
+                $this->emailVerifier->sendEmailConfirmation(
+                    'register_verify_email',
+                    $user,
                     (new TemplatedEmail())
                         ->from(new Address('okko.network@gmail.com', 'Stripe Shop'))
                         ->to($user->getEmail())
-                        ->subject('Please Confirm your Email')
-                        ->htmlTemplate('registration/confirmation_email.html.twig')
+                        ->subject('Confirmez votre e-mail')
+                        ->htmlTemplate('email/registration/confirmation_register.html.twig'),
+                    $extraParams
                 );
-            } catch (Exception $e) {
+            } catch (TransportExceptionInterface $e) {
                 throw new Exception($e->getMessage());
             }
 
@@ -72,7 +77,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/verify/email', name: 'app_verify_email')]
+    #[Route(path: '/verify/register/email', name: 'register_verify_email')]
     public function verifyUserEmail(Request $request, TranslatorInterface $translator, UserRepository $userRepository): Response
     {
         $id = $request->get('id');

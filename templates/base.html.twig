@@ -6,10 +6,11 @@
                 {% block pretitle %}{% endblock %} | MINIMAL SHOP
             {% endblock %}
         </title>
-    </head>
+</head>
     <body>
         {% include 'includes/header.html.twig' %}
         {% block body %}{% endblock %}
         {% include 'includes/footer.html.twig' %}
+        {% block javascripts %}{% endblock %}
     </body>
 <html>

@@ -10,11 +10,18 @@
             <div class="success">{{ flashMessage }}</div>
         {% endfor %}
 
+        {% for flashMessage in app.session.flashbag.get('failure') %}
+            <div class="failure">{{ flashMessage }}</div>
+        {% endfor %}
+
         <section id="registered_addresses">
             {% if addresses is not empty %}
                 {% for address in addresses %}
-                    <div id="address_{{ address.id }}">
-                        <button class="delete_address">X</button>
+                    <div class="address_container" id="address_{{ address.id }}">
+                        <span class="modal_buttons">
+                            <button href="{{ path('user_edit_address', {addressId: address.id}) }}" class="edit_address"><i class="fa fa-solid fa-pen"></i></button>
+                            <button href="{{ path('user_delete_address', {addressId: address.id}) }}" class="delete_address"><i class="fa fa-solid fa-trash"></i></button>
+                        </span>
                         <p class="str">{{ address.lastName }} {{ address.firstName }}</p>
                         <p>{{ address.streetNumber ~ " " ~ address.streetName }}</p>
                         <p>{{ address.streetAddition }}</p>
@@ -26,10 +33,27 @@
                     <p>Vous n'avez pas encore enregistré d'adresse.</p>
             {% endif %}
         </section>
+
+        {% if errors %}
+            <div class="form-errors">
+                {% for error in errors %}
+                    <div class="form-error">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
         {{ form_start(form) }}
             {{ form_widget(form) }}
             <input type="submit" value="Ajouter">
         {{ form_end(form) }}
+
         <a class="back-btn" href="{{ path('user_show_profile') }}">Retour</a>
+
     </main>
-{% endblock body %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('edit_delete_address') }}
+{% endblock %}

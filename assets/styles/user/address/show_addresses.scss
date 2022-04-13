@@ -1,0 +1,81 @@
+@use '../../variables' as *;
+
+#addresses{
+  font-family: $font;
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width:100%;
+  background:white;
+  h2{
+    font-size: calc(14px + 1vw);
+  }
+  a{
+    text-decoration: none;
+    padding:1% 2%;
+    border:1px solid black;
+    background:white;
+    color:black;
+    margin:calc(max(2%, 20px));
+    &:hover{
+      background:rgb(195, 195, 195);
+      transition: all 0.3s;
+    }
+  }
+  @include address-form;
+  #registered_addresses{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width:90%;
+    position:relative;
+    div{
+      display:flex;
+      flex-direction: column;
+      width:25%;
+      min-width: 175px;
+      position:relative;
+      border:1px solid black;
+      margin:2%;
+      padding:1% 2%;
+      .modal_buttons{
+        position:absolute;
+        top:3%;
+        right:3%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        width: 10%;
+        button{
+          width: 45%;
+          background:white;
+          border-radius: unset;
+          outline: none;
+          border: 1px solid black;
+          padding: 5%;
+          margin: 1%;
+          &:hover{
+            background:rgb(209, 209, 209);
+            cursor:pointer;
+            transition:all 0.3s;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and(max-width:499px){
+  #addresses{
+    form{
+      width:95%;
+    }
+    #registered_addresses{
+      div{
+        flex-grow: 1;
+      }
+    }
+  }
+}

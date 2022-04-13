@@ -14,10 +14,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Alumni+Sans:wght@100&family=DotGothic16&family=Yantramanav:wght@100;300&display=swap" rel="stylesheet">
 {% endblock %}
 
-{% block javascripts %}
-    <script src="https://kit.fontawesome.com/9ddb75d515.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
-
+{% block javascripts_base %}
     {# Load global scripts #}
     {{ encore_entry_script_tags('app') }}
+    <script src="https://kit.fontawesome.com/9ddb75d515.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js" defer></script>
 {% endblock %}
