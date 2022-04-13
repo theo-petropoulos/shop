@@ -65,7 +65,7 @@ class AdminController extends AbstractController
         $products   = $productRepository->findAllSortedByBrands();
         $discounts  = $discountRepository->findAllWithProducts();
 
-        dd($discounts);
+        dd($products);
 
         return $this->render('admin/includes/show_products.html.twig', [
             'brands'        => $brands,
