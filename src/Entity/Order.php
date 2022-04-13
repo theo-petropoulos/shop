@@ -20,7 +20,7 @@ class Order
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private $id;
+    protected ?int $id;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "orders")]
     #[ORM\JoinColumn(nullable: true, onDelete: "set null")]
