@@ -17,6 +17,10 @@
             <div class="warning">{{ flashMessage }}</div>
         {% endfor %}
 
+        {% for flashMessage in app.session.flashbag.get('failure') %}
+            <div class="failure">{{ flashMessage }}</div>
+        {% endfor %}
+
         {% if error is defined and error %}
             <div class="failure">{{ "connexion.error"|trans({}, 'messages') }}</div>
         {% endif %}
