@@ -12,11 +12,14 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private $id;
+    protected ?int $id;
 
     #[ORM\ManyToOne(targetEntity: Brand::class, inversedBy: "products")]
     #[ORM\JoinColumn(nullable: false)]
     private ?Brand $brand;
+
+    #[ORM\ManyToOne(targetEntity: Discount::class, inversedBy: "products")]
+    private ?Discount $discount;
 
     #[ORM\Column(type: "string", length: 155)]
     #[Assert\NotBlank(message: "Le champ du nom est obligatoire.")]
@@ -49,9 +52,6 @@ class Product
     #[ORM\Column(type:"boolean", nullable: true)]
     #[Assert\Type(type: "bool", message: "La valeur active doit être de type {{ type }}.")]
     private ?bool $active;
-
-    #[ORM\ManyToOne(targetEntity: Discount::class, inversedBy: "product")]
-    private ?Discount $discount;
 
     public function getId(): ?int
     {

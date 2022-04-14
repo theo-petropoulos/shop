@@ -56,22 +56,27 @@ class AdminController extends AbstractController
     }
 
     # Administration des produits
-    #[NoReturn]
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/products', name: 'admin_show_products')]
     public function adminShowProducts(Request $request, BrandRepository $brandRepository, ProductRepository $productRepository, DiscountRepository $discountRepository): Response
     {
         $brands     = $brandRepository->findBy([], ['active' => 'DESC']);
-        $products   = $productRepository->findAllSortedByBrands();
-        $discounts  = $discountRepository->findAllWithProducts();
-
-        dd($products);
+        $products   = $productRepository->findBy([], ['active' => 'DESC']);
+        $discounts  = $discountRepository->findBy([], ['startingDate' => 'ASC']);
 
         return $this->render('admin/includes/show_products.html.twig', [
             'brands'        => $brands,
             'products'      => $products,
             'discounts'     => $discounts
         ]);
+    }
+
+    # Suppression d'une promotion
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/products/discount/delete/{id}', name: 'admin_delete_discount')]
+    public function adminDeleteDiscount(Request $request, Discount $discount)
+    {
+
     }
 
     # Administration des produits

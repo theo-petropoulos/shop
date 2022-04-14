@@ -15,10 +15,10 @@ class Discount
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private $id;
+    protected ?int $id;
 
-    #[ORM\OneToMany(mappedBy: "product", targetEntity: Product::class)]
-    private $product;
+    #[ORM\OneToMany(mappedBy: "discount", targetEntity: Product::class, fetch: "EAGER")]
+    private Collection $products;
 
     #[ORM\Column(type: "string", length: 155)]
     #[Assert\NotBlank(message: "Le champ du nom est obligatoire.")]
@@ -54,15 +54,15 @@ class Discount
         return $this->id;
     }
 
-    public function getProduct(): Collection
+    public function getProducts(): Collection
     {
-        return $this->product;
+        return $this->products;
     }
 
     public function addProduct(Product $product): self
     {
-        if (!$this->product->contains($product)) {
-            $this->product[] = $product;
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
             $product->setDiscount($this);
         }
 
@@ -71,7 +71,7 @@ class Discount
 
     public function removeProduct(Product $product): self
     {
-        if ($this->product->removeElement($product)) {
+        if ($this->products->removeElement($product)) {
             // set the owning side to null (unless already changed)
             if ($product->getDiscount() === $this) {
                 $product->setDiscount(null);
