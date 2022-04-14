@@ -5,13 +5,13 @@
 {% block body %}
     <main id="admin_alt">
         <div id="adm_search_container">
-            <section id="adm_search_marques">
+            <section id="adm_search_brand">
                 <button type="submit" class="trigger_adm_search">Rechercher une marque</button>
             </section>
-            <section id="adm_search_produits">
+            <section id="adm_search_product">
                 <button type="submit" class="trigger_adm_search">Rechercher un produit</button>
             </section>
-            <section id="adm_search_promotions">
+            <section id="adm_search_discount">
                 <button type="submit" class="trigger_adm_search">Rechercher une promotion</button>
             </section>
         </div>
@@ -192,3 +192,10 @@
         <a href="{{ path('admin') }}" id="back_btn">Retour</a>
     </main>
 {% endblock body %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        window.searchPath = "{{ path('admin_product_search') }}"
+    </script>
+    {{ encore_entry_script_tags('admin_products_searchbar') }}
+{% endblock %}

@@ -22,6 +22,7 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('edit_delete_address', './assets/js/user/addresses/edit_delete_address.js')
+    .addEntry('admin_products_searchbar', './assets/js/admin/products/searchbar.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

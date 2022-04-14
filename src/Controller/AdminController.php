@@ -2,26 +2,31 @@
 
 namespace App\Controller;
 
-use App\Entity\Brand;
 use App\Entity\Discount;
-use App\Entity\Product;
+use App\QueryBuilder\AdminSearch;
 use App\Repository\BrandRepository;
 use App\Repository\DiscountRepository;
 use App\Repository\ProductRepository;
-use Doctrine\Persistence\ManagerRegistry;
-use JetBrains\PhpStorm\NoReturn;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Join;
+use http\Exception\InvalidArgumentException;
 use JetBrains\PhpStorm\Pure;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
 {
+    private EntityManagerInterface $em;
+
     #[Pure]
-    public function __construct(private ManagerRegistry $doctrine) {}
+    public function __construct(EntityManagerInterface $entityManager) {
+        $this->em = $entityManager;
+    }
 
     # Accueil Admin
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
@@ -69,6 +74,22 @@ class AdminController extends AbstractController
             'products'      => $products,
             'discounts'     => $discounts
         ]);
+    }
+
+    # Recherche de l'Administration des produits
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/products/search', name: 'admin_product_search')]
+    public function adminProductsSearch(Request $request): JsonResponse
+    {
+        $search     = $request->get('search');
+        $entity     = $request->get('table');
+
+        $qb         = $this->em->createQueryBuilder();
+        $qbSearch   = new AdminSearch($qb, $entity, $search);
+
+        $results    = $qbSearch->getResults();
+
+        return new JsonResponse(json_encode($results));
     }
 
     # Suppression d'une promotion
