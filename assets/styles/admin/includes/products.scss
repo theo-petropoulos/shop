@@ -267,20 +267,20 @@
             min-width:120px;
           }
           button{
-            outline:0;
-            border:1px solid black;
-            padding:2px 5px;
+            outline: 0;
+            border: 1px solid $orange_light;
+            padding: 2px 5px;
             border-radius: unset;
             font-family: $font;
-            background: $orange_light;
-            color:black;
-            width:max-content;
+            background: $white;
+            color: black;
+            width: max-content;
             align-self: center;
             font-size: initial;
             &:hover{
-              cursor:pointer;
-              background:$green;
-              transition:all 0.3s;
+              cursor: pointer;
+              background: $orange_light;
+              transition: all 0.3s;
             }
           }
           p{

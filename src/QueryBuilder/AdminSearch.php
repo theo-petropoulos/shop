@@ -37,16 +37,16 @@ class AdminSearch
                 ->orderBy('product_name, brand_name')
                 ->getQuery(),
             'brand'     => $this->queryBuilder
-                ->select('b.id, b.name, b.description, b.active')
+                ->select('b.id, b.name as brand_name, b.description, b.active')
                 ->from(Brand::class, 'b')
                 ->where('b.name LIKE :search1 OR b.name LIKE :search2')
                 ->orderBy('b.name', 'ASC')
                 ->getQuery(),
             'discount'  => $this->queryBuilder
-                ->select('d.id, d.name AS discount_name, p.name AS product_name, b.name AS brand_name, d.percentage, d.starting_date, d.ending_date')
+                ->select('d.id, d.name AS discount_name, p.name AS product_name, b.name AS brand_name, d.percentage, d.startingDate, d.endingDate')
                 ->from(Discount::class, 'd')
-                ->innerJoin(Product::class, 'p', Join::ON, 'p.discount_id = d.id')
-                ->innerJoin(Brand::class, 'b', Join::ON, 'b.id = p.brand_id')
+                ->innerJoin(Product::class, 'p', Join::WITH, 'p.discount = d.id')
+                ->innerJoin(Brand::class, 'b', Join::WITH, 'b.id = p.brand')
                 ->where('d.name LIKE :search1 OR d.name LIKE :search2 OR p.name LIKE :search1 OR p.name LIKE :search2')
                 ->orderBy('d.name, p.name')
                 ->getQuery(),

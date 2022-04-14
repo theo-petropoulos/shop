@@ -94,7 +94,7 @@ $blue_light: rgb(90, 190, 255);
   position:relative;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: stretch;
   margin:calc(max(1%, 15px)) 0;
   padding:1%;
   border-bottom:1px solid black;

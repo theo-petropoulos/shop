@@ -90,7 +90,7 @@
                                 <h3>Statut :</h3>
                                 <button class="adm_modify_button">{{ brand.active ? 'Désactiver' : 'Activer' }}</button>
                             </div>
-                            <a href="admin_marques_show_products" id="{{ brand.id ~ '_link'}}">Afficher les produits</a>
+                            <a href="#" id="{{ brand.id ~ '_link'}}" class="show_products_by_brand">Afficher les produits</a>
                         </div>
                     {% endfor %}
                 {% endif %}
