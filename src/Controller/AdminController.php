@@ -2,18 +2,23 @@
 
 namespace App\Controller;
 
+use App\Entity\Brand;
 use App\Entity\Discount;
+use App\Entity\Product;
+use App\Form\Admin\AddBrandType;
+use App\Form\Admin\AddDiscountType;
+use App\Form\Admin\AddProductType;
 use App\QueryBuilder\AdminSearch;
 use App\Repository\BrandRepository;
 use App\Repository\DiscountRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\Expr\Join;
-use http\Exception\InvalidArgumentException;
+use Doctrine\ORM\EntityNotFoundException;
 use JetBrains\PhpStorm\Pure;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -69,7 +74,7 @@ class AdminController extends AbstractController
         $products   = $productRepository->findBy([], ['active' => 'DESC']);
         $discounts  = $discountRepository->findBy([], ['startingDate' => 'ASC']);
 
-        return $this->render('admin/includes/show_products.html.twig', [
+        return $this->render('admin/includes/products/show_products.html.twig', [
             'brands'        => $brands,
             'products'      => $products,
             'discounts'     => $discounts
@@ -90,6 +95,40 @@ class AdminController extends AbstractController
         $results    = $qbSearch->getResults();
 
         return new JsonResponse(json_encode($results));
+    }
+
+    # Formulaire d'ajout d'un produit / marque / promotion
+
+    /** @throws EntityNotFoundException */
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/products/add/{entity}', name: 'admin_add_item')]
+    public function adminAddItem(Request $request): Response
+    {
+        $entity = $request->get('entity');
+
+        /** @var Form $form */
+        switch ($entity) {
+            case 'brand':
+                $brand      = new Brand();
+                $form       = $this->createForm(AddBrandType::class, $brand);
+                break;
+            case 'product':
+                $product    = new Product();
+                $form       = $this->createForm(AddProductType::class, $product);
+                break;
+            case 'discount':
+                $discount   = new Discount();
+                $form       = $this->createForm(AddDiscountType::class, $discount);
+                break;
+            default:
+                throw new EntityNotFoundException("L'entité spécifiée n'a pas été trouvée.");
+        }
+
+        $form->handleRequest($request);
+
+        return $this->renderForm('admin/includes/products/_modal_add_item.html.twig', [
+            'form'  => $form
+        ]);
     }
 
     # Suppression d'une promotion
