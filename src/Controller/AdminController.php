@@ -102,7 +102,7 @@ class AdminController extends AbstractController
     /** @throws EntityNotFoundException */
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/products/add/{entity}', name: 'admin_add_item')]
-    public function adminAddItem(Request $request): Response
+    public function adminAddItem(Request $request, ProductRepository $productRepository, BrandRepository $brandRepository): Response
     {
         $entity = $request->get('entity');
         $errors = [];
@@ -119,7 +119,19 @@ class AdminController extends AbstractController
                 break;
             case 'discount':
                 $item       = new Discount();
-                $form       = $this->createForm(AddDiscountType::class, $item);
+
+                $options    = ['products' => [], 'brands' => []];
+
+                $products   = $productRepository->findBy([], ['name' => 'ASC']);
+                $brands     = $brandRepository->findBy([], ['name' => 'ASC']);
+
+                foreach ($products as $product)
+                    $options['products'][ucfirst($product->getName())] = $product->getId();
+
+                foreach ($brands as $brand)
+                    $options['brands'][ucfirst($brand->getName())] = $brand->getId();
+
+                $form       = $this->createForm(AddDiscountType::class, $item, $options);
                 break;
             default:
                 throw new EntityNotFoundException("L'entité spécifiée n'a pas été trouvée.");

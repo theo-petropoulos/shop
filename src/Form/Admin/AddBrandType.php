@@ -2,7 +2,6 @@
 
 namespace App\Form\Admin;
 
-use App\Entity\Address;
 use App\Entity\Brand;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
