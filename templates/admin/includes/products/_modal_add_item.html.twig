@@ -1,8 +1,12 @@
 {% extends '_modal.html.twig' %}
 
+{% block class %}
+    admin_add_item
+{% endblock %}
+
 {% block modal %}
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input type="submit" value="Ajouter">
-{{ form_end(form) }}
+    {{ form_start(form, {'action': path('admin_add_item', {entity: 'brand'})}) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="Ajouter">
+    {{ form_end(form) }}
 {% endblock %}

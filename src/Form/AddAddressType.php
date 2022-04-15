@@ -18,7 +18,7 @@ class AddAddressType extends AbstractType
                 'label'     => 'Nom',
                 'required'  => true,
                 'attr'      => [
-                    'maxlength' => 33
+                    'maxlength' => 155
                 ]
             ])
             ->add('firstName', TextType::class, [

@@ -23,7 +23,7 @@
       transition: all 0.3s;
     }
   }
-  @include address-form;
+  @include standard-form;
   #registered_addresses{
     display:flex;
     flex-direction: row;

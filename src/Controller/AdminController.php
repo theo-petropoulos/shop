@@ -105,20 +105,21 @@ class AdminController extends AbstractController
     public function adminAddItem(Request $request): Response
     {
         $entity = $request->get('entity');
+        $errors = [];
 
         /** @var Form $form */
         switch ($entity) {
             case 'brand':
-                $brand      = new Brand();
-                $form       = $this->createForm(AddBrandType::class, $brand);
+                $item       = new Brand();
+                $form       = $this->createForm(AddBrandType::class, $item);
                 break;
             case 'product':
-                $product    = new Product();
-                $form       = $this->createForm(AddProductType::class, $product);
+                $item       = new Product();
+                $form       = $this->createForm(AddProductType::class, $item);
                 break;
             case 'discount':
-                $discount   = new Discount();
-                $form       = $this->createForm(AddDiscountType::class, $discount);
+                $item       = new Discount();
+                $form       = $this->createForm(AddDiscountType::class, $item);
                 break;
             default:
                 throw new EntityNotFoundException("L'entité spécifiée n'a pas été trouvée.");
@@ -126,8 +127,29 @@ class AdminController extends AbstractController
 
         $form->handleRequest($request);
 
+        if ($form->isSubmitted())
+        {
+            if ($form->isValid()) {
+                $this->em->persist($item);
+                $this->em->flush();
+
+                $this->addFlash('success', 'L\'ajout a été effectué avec succès.');
+
+                return $this->redirectToRoute('admin_show_products');
+            }
+            else {
+                foreach ($form->getErrors(true) as $key => $error)
+                    $errors[$key] = $error->getMessage();
+
+                $form->clearErrors(true);
+
+                $this->addFlash('failure', 'Une erreur est survenue.');
+            }
+        }
+
         return $this->renderForm('admin/includes/products/_modal_add_item.html.twig', [
-            'form'  => $form
+            'form'      => $form,
+            'errors'    => $errors
         ]);
     }
 

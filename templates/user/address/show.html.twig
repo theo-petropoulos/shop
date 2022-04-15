@@ -45,7 +45,7 @@
         {% endif %}
 
         {{ form_start(form) }}
-            {{ form_widget(form) }}
+            {{ form_widget(form, {'attr': {'class': 'user_add_address'}}) }}
             <input type="submit" value="Ajouter">
         {{ form_end(form) }}
 
@@ -56,4 +56,5 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('edit_delete_address') }}
+    {{ encore_entry_script_tags('modal') }}
 {% endblock %}
