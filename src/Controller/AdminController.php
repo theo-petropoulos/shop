@@ -52,10 +52,9 @@ class AdminController extends AbstractController
     # Administration des clients
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/customers', name: 'admin_show_customers')]
-    public function adminShowCustomers(Request $request): Response
+    public function adminShowCustomers(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $em         = $this->doctrine->getManager();
-        $users      = $em->getRepository(User::class)->findAll();
+        $users      = $entityManager->getRepository(User::class)->findAll();
         foreach ($users as $k => $user)
             if (in_array('ROLE_ADMIN', $user->getRoles()))
                 unset($users[$k]);
@@ -125,13 +124,12 @@ class AdminController extends AbstractController
                 $products   = $productRepository->findBy([], ['name' => 'ASC']);
                 $brands     = $brandRepository->findBy([], ['name' => 'ASC']);
 
-                foreach ($products as $product)
-                    $options['products'][ucfirst($product->getName())] = $product->getId();
+                $options['brands']['Toutes les marques']    = 999999;
 
                 foreach ($brands as $brand)
                     $options['brands'][ucfirst($brand->getName())] = $brand->getId();
 
-                $form       = $this->createForm(AddDiscountType::class, $item, $options);
+                $form = $this->createForm(AddDiscountType::class, $item, $options);
                 break;
             default:
                 throw new EntityNotFoundException("L'entité spécifiée n'a pas été trouvée.");
@@ -163,6 +161,29 @@ class AdminController extends AbstractController
             'form'      => $form,
             'errors'    => $errors
         ]);
+    }
+
+    # Récupère les produits du catalogue dépendamment de la marque
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/products/fetch', name: 'admin_fetch_products')]
+    public function adminFetchProductsByBrand(Request $request, ProductRepository $productRepository, BrandRepository $brandRepository): Response
+    {
+        $brandId    = $request->get('brand');
+        $return     = [];
+
+        if ($brandId !== '999999') {
+            $brand      = $brandRepository->findOneBy(['id' => $brandId]);
+            $products   = $productRepository->findBy(['brand' => $brand]);
+        }
+        else {
+            $products                       = $productRepository->findBy([], ['name' => 'ASC']);
+        }
+
+        foreach ($products as $product) {
+            $return[$product->getName()] = $product->getId();
+        }
+
+        return new JsonResponse(json_encode($return));
     }
 
     # Suppression d'une promotion

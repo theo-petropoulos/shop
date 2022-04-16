@@ -5,8 +5,17 @@
 {% endblock %}
 
 {% block modal %}
-    {{ form_start(form, {'action': path('admin_add_item', {entity: 'discount'})}) }}
+    {{ form_start(form, {'action': path('admin_add_item', {entity: form.vars.full_name|replace({'add_': ''})})}) }}
         {{ form_widget(form) }}
-        <input type="submit" value="Ajouter">
+        <input id="add_item_submit" type="submit" value="Ajouter">
     {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        window.fetchPath = "{{ path('admin_fetch_products') }}"
+    </script>
+
+    {# Various Form verifications and modifyers #}
+    {{ encore_entry_script_tags('admin_dynamic_form') }}
 {% endblock %}

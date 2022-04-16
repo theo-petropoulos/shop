@@ -53,14 +53,12 @@ class AddDiscountType extends AbstractType
                 'required'      => false,
                 'mapped'        => false,
                 'choices'       => $options['brands'],
-                'choice_value'  => 'name',
             ])
             ->add('product', ChoiceType::class, [
                 'label'         => 'Produit',
                 'required'      => false,
                 'mapped'        => false,
-                'choices'       => $options['products'],
-                'choice_value'  => 'name',
+                'disabled'      => true
             ])
         ;
     }
