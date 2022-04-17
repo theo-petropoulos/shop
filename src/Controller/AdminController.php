@@ -118,10 +118,7 @@ class AdminController extends AbstractController
                 break;
             case 'discount':
                 $item       = new Discount();
-
-                $options    = ['products' => [], 'brands' => []];
-
-                $products   = $productRepository->findBy([], ['name' => 'ASC']);
+                $options    = ['brands' => []];
                 $brands     = $brandRepository->findBy([], ['name' => 'ASC']);
 
                 $options['brands']['Toutes les marques']    = 999999;
@@ -140,10 +137,52 @@ class AdminController extends AbstractController
         if ($form->isSubmitted())
         {
             if ($form->isValid()) {
-                $this->em->persist($item);
-                $this->em->flush();
 
-                $this->addFlash('success', 'L\'ajout a été effectué avec succès.');
+                switch ($entity) {
+                    case 'brand':
+                        $this->em->persist($item);
+                        $this->em->flush();
+
+                        $this->addFlash('success', 'La marque a été ajoutée avec succès.');
+                        break;
+                    case 'product':
+                        $this->em->persist($item);
+                        $this->em->flush();
+
+                        $this->addFlash('success', 'Le produit a été ajouté avec succès.');
+                        break;
+                    case 'discount':
+                        $productId  = $form->get('product')->getData();
+
+                        if ($productId == '999999')
+                            $isDiscounted = $productRepository->findAll();
+                        elseif (is_numeric($productId))
+                            $isDiscounted = $productRepository->findOneBy(['id' => $productId]);
+
+                        $this->em->persist($item);
+
+                        if (!empty($isDiscounted)) {
+                            if (is_iterable($isDiscounted)) {
+                                /** @var Product $product */
+                                foreach ($isDiscounted as $product) {
+                                    $product->setDiscount($item);
+                                    $this->em->persist($product);
+                                }
+                            }
+                            else {
+                                /** @var Product $isDiscounted */
+                                $isDiscounted->setDiscount($item);
+                                $this->em->persist($isDiscounted);
+                            }
+                        }
+
+                        $this->em->flush();
+
+                        $this->addFlash('success', 'La promotion a été ajoutée avec succès.');
+                        break;
+                    default:
+                        throw new EntityNotFoundException("L'entité spécifiée n'a pas été trouvée.");
+                }
 
                 return $this->redirectToRoute('admin_show_products');
             }
@@ -154,6 +193,8 @@ class AdminController extends AbstractController
                 $form->clearErrors(true);
 
                 $this->addFlash('failure', 'Une erreur est survenue.');
+
+                return $this->redirectToRoute('admin_show_products');
             }
         }
 
@@ -176,11 +217,11 @@ class AdminController extends AbstractController
             $products   = $productRepository->findBy(['brand' => $brand]);
         }
         else {
-            $products                       = $productRepository->findBy([], ['name' => 'ASC']);
+            $products = $productRepository->findBy([], ['name' => 'ASC']);
         }
 
         foreach ($products as $product) {
-            $return[$product->getName()] = $product->getId();
+            $return[ucfirst($product->getName())] = $product->getId();
         }
 
         return new JsonResponse(json_encode($return));

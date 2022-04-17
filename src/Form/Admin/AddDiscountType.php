@@ -10,6 +10,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AddDiscountType extends AbstractType
@@ -60,14 +62,27 @@ class AddDiscountType extends AbstractType
                 'mapped'        => false,
                 'disabled'      => true
             ])
+            ->addEventListener(FormEvents::PRE_SUBMIT, [$this, 'onSubmit'])
         ;
+    }
+
+    public function onSubmit(FormEvent $event): void
+    {
+        $data = $event->getData();
+        $form = $event->getForm();
+
+        if ($data['product']) {
+            $form->add('product', TextType::class, [
+                'mapped'    => false,
+                'data'      => $data['product']
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class'    => Discount::class,
-            'products'      => array(),
             'brands'        => array()
         ]);
     }

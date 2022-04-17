@@ -164,10 +164,20 @@
         div{
           display:flex;
           flex-direction: row;
+          flex-wrap: wrap;
+          width: 100%;
+          position: relative;
           .div_det{
-            width:25%;
+            width: 23%;
+            position: relative;
             border: 1px solid black;
-            margin:calc(max(10px, 1%));
+            margin: calc(max(10px, 1%));
+            .adm_delete_btn{
+              position: absolute;
+              top: 1%;
+              left: 1%;
+              z-index: 3;
+            }
             div{
               flex-direction: column;
             }
@@ -177,10 +187,10 @@
     }
   }
   #add_discount_brand_product{
-    display:flex;
+    display: flex;
     flex-direction: row;
     justify-content: space-around;
-    width:90%;
+    width: 90%;
     position:relative;
     .add_container{
       width:25%;

@@ -39,14 +39,14 @@ class Discount
     #[Assert\Type("DateTime")]
     private ?\DateTimeInterface $startingDate;
 
-    #[ORM\Column(type: "date")]
+    #[ORM\Column(type: "date", nullable: true)]
     #[Assert\Type("DateTime")]
     private ?\DateTimeInterface $endingDate;
 
     #[Pure]
     public function __construct()
     {
-        $this->product = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -122,7 +122,7 @@ class Discount
         return $this->endingDate;
     }
 
-    public function setEndingDate(\DateTimeInterface $endingDate): self
+    public function setEndingDate(?\DateTimeInterface $endingDate): self
     {
         $this->endingDate = $endingDate;
 
