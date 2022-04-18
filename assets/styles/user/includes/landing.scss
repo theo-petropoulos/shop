@@ -20,7 +20,8 @@
     }
   }
   #landing_content{
-    display:flex;
+    display: flex;
+    position: relative;
     flex-direction: column;
     padding:1%;
     min-width: max-content;
@@ -30,6 +31,13 @@
       &:hover{
         color:$orange_light;
         transition:all 0.3s;
+      }
+      &:last-of-type{
+        color: $red;
+        border-top: 1px solid black;
+        &:hover{
+          color:$red_strong;
+        }
       }
     }
   }

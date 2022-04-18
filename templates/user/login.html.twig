@@ -17,10 +17,15 @@
             <div class="warning">{{ flashMessage }}</div>
         {% endfor %}
 
+        {% for flashMessage in app.session.flashbag.get('failure') %}
+            <div class="failure">{{ flashMessage }}</div>
+        {% endfor %}
+
+        {% if error is defined and error %}
+            <div class="failure">{{ "connexion.error"|trans({}, 'messages') }}</div>
+        {% endif %}
+
         <form method="post">
-            {% if error is defined and error %}
-                <div class="alert alert-error">{{ "connexion.error"|trans({}, 'messages') }}</div>
-            {% endif %}
             <label for="inputEmail">Adresse mail</label>
             <input type="email" value="{{ last_username ?? null }}" name="email" id="inputEmail" autocomplete="email" required autofocus>
             <label for="inputPassword">Mot de passe</label>

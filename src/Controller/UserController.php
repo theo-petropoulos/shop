@@ -5,10 +5,8 @@ namespace App\Controller;
 use App\Entity\Address;
 use App\Entity\User;
 use App\Form\AddAddressType;
-use App\Form\EditAddressType;
 use App\Form\ModifyPasswordType;
 use App\Repository\AddressRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -18,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use JetBrains\PhpStorm\Pure;
 
@@ -42,17 +41,21 @@ class UserController extends AbstractController
     {
         $form = $this->createForm(ModifyPasswordType::class, $user);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->refresh($user);
             $oldPassword = $form->get('old_password')->getData();
+
             if ($userPasswordHasher->isPasswordValid($user, $oldPassword)) {
                 $hashedPassword = $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('password')->getData()
                 );
                 $user->setPassword($hashedPassword);
+
                 $entityManager->persist($user);
                 $entityManager->flush();
+
                 $this->addFlash('success', 'Le mot de passe a été modifié avec succès.');
             }
             else
@@ -72,6 +75,7 @@ class UserController extends AbstractController
     {
         $addresses  = $addressRepository->findBy(['customer' => $user], ['id' => 'ASC']);
         $address    = new Address($user);
+
         /** @var Form $form */
         $form       = $this->createForm(AddAddressType::class, $address);
         $form->handleRequest($request);
@@ -96,7 +100,7 @@ class UserController extends AbstractController
             }
         }
 
-        return $this->renderForm('user/address/index.html.twig', [
+        return $this->renderForm('user/address/show.html.twig', [
             'user'      => $user,
             'addresses' => $addresses,
             'form'      => $form,
@@ -106,14 +110,10 @@ class UserController extends AbstractController
 
     # Modification d'une adresse
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
-    #[Route(path: '/user/profile/addresses/edit/{addressId}', name: 'user_edit_address')]
-    public function userEditAddress(Request $request, UserInterface $user, AddressRepository $addressRepository, EntityManagerInterface $entityManager, int $addressId): Response
+    #[IsGranted('CAN_EDIT', 'address', 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/user/profile/addresses/edit/{id}', name: 'user_edit_address')]
+    public function userEditAddress(Request $request, UserInterface $user, Address $address, EntityManagerInterface $entityManager): Response
     {
-        $address    = $addressRepository->findOneBy(['id' => $addressId]);
-
-        if (!$address)
-            throw $this->createNotFoundException();
-
         $form       = $this->createForm(AddAddressType::class, $address);
         $form->handleRequest($request);
 
@@ -127,7 +127,8 @@ class UserController extends AbstractController
 
                 $this->addFlash('success', 'L\'adresse a été modifiée avec succès.');
             }
-            else $this->addFlash('failure', 'Votre saisie comporte un ou plusieurs caractères interdits. Veuillez réessayer.');
+            else
+                $this->addFlash('failure', 'Votre saisie comporte un ou plusieurs caractères interdits. Veuillez réessayer.');
 
             return $this->redirectToRoute('user_show_addresses');
         }
@@ -141,14 +142,10 @@ class UserController extends AbstractController
 
     # Suppression d'une adresse
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
-    #[Route(path: '/user/profile/addresses/delete/{addressId}', name: 'user_delete_address')]
-    public function userDeleteAddress(Request $request, UserInterface $user, AddressRepository $addressRepository, EntityManagerInterface $entityManager, int $addressId): Response
+    #[IsGranted('CAN_DELETE', 'address', 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/user/profile/addresses/delete/{id}', name: 'user_delete_address')]
+    public function userDeleteAddress(Request $request, Address $address, EntityManagerInterface $entityManager): Response
     {
-        $address    = $addressRepository->findOneBy(['id' => $addressId]);
-
-        if (!$address)
-            throw $this->createNotFoundException();
-
         $entityManager->remove($address);
         $entityManager->flush();
 
@@ -168,10 +165,16 @@ class UserController extends AbstractController
     # Suppression du compte
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/user/profile/delete', name: 'user_delete_account')]
-    public function userDeleteAccount(Request $request, UserInterface $user): Response
+    public function userDeleteAccount(Request $request, UserInterface $user, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
-        return $this->render('user/includes/delete.html.twig', [
-            'user'  => $user
-        ]);
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        $tokenStorage->setToken();
+        $request->getSession()->invalidate();
+
+        $this->addFlash('success', 'Votre compte a bien été supprimé.');
+
+        return $this->redirectToRoute('home');
     }
 }
