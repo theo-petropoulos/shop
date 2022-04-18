@@ -8,6 +8,8 @@ $orange :rgb(240, 95, 0);
 $orange_light: rgb(240, 175, 0);
 $green: rgb(30, 150, 40);
 $red: rgb(170, 15, 15);
+$blue: rgb(25, 90, 240);
+$blue_light: rgb(90, 190, 255);
 
 @mixin login-register{
   font-family: $font;
@@ -36,7 +38,7 @@ $red: rgb(170, 15, 15);
   }
 }
 
-@mixin address-form{
+@mixin standard-form{
   form{
     border:1px solid $grey;
     padding:2%;
@@ -83,6 +85,55 @@ $red: rgb(170, 15, 15);
         font-size:calc(13px + 0.5vw);
       }
     }
+  }
+}
+
+@mixin div-det{
+  display:flex;
+  width:100%;
+  position:relative;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  margin:calc(max(1%, 15px)) 0;
+  padding:1%;
+  border-bottom:1px solid black;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  font-family: $font;
+  .adm_delete_btn{
+    color:red;
+    font-family: $font;
+    background:none;
+    font-size: calc(15px + 1vw);
+    width:calc(max(5%, 35px));
+    min-width:25px;
+    border:1px solid transparent;
+    &:hover{
+      cursor:pointer;
+      color:$orange;
+      border:1px solid $orange;
+      transition:all 0.3s;
+    }
+  }
+  &:last-of-type{
+    border-bottom: none;
+  }
+}
+
+@mixin div-det-button{
+  outline: 0;
+  border: 1px solid $orange_light;
+  padding: 2px 5px;
+  border-radius: unset;
+  font-family: $font;
+  background: $white;
+  width: max-content;
+  align-self: center;
+  &:hover{
+    cursor: pointer;
+    background: $orange_light;
+    transition: all 0.3s;
   }
 }
 

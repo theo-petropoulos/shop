@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\ProductRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,8 +16,16 @@ class HomeController extends AbstractController
 
     # Accueil
     #[Route(path: '/', name: 'home')]
-    public function index(Request $request): Response
+    public function index(Request $request, ProductRepository $productRepository): Response
     {
-        return $this->render('home/index.html.twig');
+        $array = $productRepository->findOneBy(['id' => 1]);
+
+        foreach ($array as $tt) {
+            dd($tt);
+        }
+
+        return $this->render('home/index.html.twig', [
+            'array' => $array
+        ]);
     }
 }

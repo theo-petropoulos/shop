@@ -96,7 +96,7 @@ class UserController extends AbstractController
             }
         }
 
-        return $this->renderForm('user/address/index.html.twig', [
+        return $this->renderForm('user/address/show.html.twig', [
             'user'      => $user,
             'addresses' => $addresses,
             'form'      => $form,
