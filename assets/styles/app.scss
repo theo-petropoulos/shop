@@ -53,6 +53,12 @@ main{
   }
 }
 
+.red-text{
+  color: $red;
+  font-weight: bold;
+  font-family: $font;
+}
+
 .back-btn{
   text-decoration: none;
   padding:1% 2%;

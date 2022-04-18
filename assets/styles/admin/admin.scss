@@ -2,6 +2,8 @@
 
 // Import user's CSS requirements
 @use './includes/landing.scss';
+@use './product/products.scss';
+@use './product/_modal_products.scss';
 
 #admin{
   display:flex;
@@ -30,7 +32,7 @@
         font-family: $font;
         outline:0;
         border:1px solid black;
-        border-radius: none;
+        border-radius: unset;
         padding:1% 0;
         font-size:calc(10px + 0.5vw);
         line-height:calc(10px + 0.5vw);

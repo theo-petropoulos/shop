@@ -15,7 +15,7 @@ class Brand
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private $id;
+    protected ?int $id;
 
     #[ORM\Column(type: "string", length: 155)]
     #[Assert\NotBlank(message: "Le champ du nom est obligatoire.")]

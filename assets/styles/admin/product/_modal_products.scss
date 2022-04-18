@@ -1,6 +1,6 @@
-@use '../../variables' as *;
+@use 'assets/styles/variables' as *;
 
-.user_add_address{
+.admin_add_item{
   position: fixed;
   display: flex;
   justify-content: center;
@@ -23,6 +23,26 @@
     @include standard-form;
     form{
       width: 90%;
+      div{
+        display:flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        div{
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          label{
+            text-align: center;
+            margin-right: 0;
+          }
+          input, textarea, select{
+            width: 70%;
+            flex-grow: 1;
+          }
+        }
+      }
     }
     .modal_buttons{
       width: 100%;
