@@ -2,7 +2,8 @@
 
 // Import user's CSS requirements
 @use './includes/landing.scss';
-@use './includes/products.scss';
+@use './product/products.scss';
+@use './product/_modal_products.scss';
 
 #admin{
   display:flex;

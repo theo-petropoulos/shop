@@ -4,6 +4,16 @@
 
 {% block body %}
     <main id="admin_alt">
+
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="success">{{ flashMessage }}</div>
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('failure') %}
+            <div class="failure">{{ flashMessage }}</div>
+        {% endfor %}
+
+        {# Search triggers #}
         <div id="adm_search_container">
             <section id="adm_search_brand">
                 <button type="submit" class="trigger_adm_search">Rechercher une marque</button>
@@ -138,27 +148,24 @@
             </details>
         </div>
 
+        {# Add Brand / Product / Discount containers #}
         <section id="add_discount_brand_product">
             <div id="add_brand" class="add_container">
-                <button id="add_brand_btn" class="add_btn">+ Ajouter une marque</button>
-                <div id="add_brand_form_container" class="add_form_container">
-                    {# Render Form via Controller #}
-                </div>
+                <button href="{{ path('admin_add_item', {entity: 'brand'}) }}" id="add_brand_btn" class="add_btn">+ Ajouter une marque</button>
+                {# Render Form via Controller #}
             </div>
             <div id="add_product" class="add_container">
-                <button id="add_product_btn" class="add_btn">+ Ajouter un produit</button>
-                <div id="add_product_form_container" class="add_form_container">
-                    {# Render Form via Controller #}
-                </div>
+                <button href="{{ path('admin_add_item', {entity: 'product'}) }}" id="add_product_btn" class="add_btn">+ Ajouter un produit</button>
+                {# Render Form via Controller #}
+
             </div>
             <div id="add_discount" class="add_container">
-                <button id="add_discount_btn" class="add_btn">+ Ajouter une promotion</button>
-                <div id="add_discount_form_container" class="add_form_container">
-                    {# Render Form via Controller #}
-                </div>
+                <button href="{{ path('admin_add_item', {entity: 'discount'}) }}" id="add_discount_btn" class="add_btn">+ Ajouter une promotion</button>
+                {# Render Form via Controller #}
             </div>
         </section>
 
+        {# Brand's search results container #}
         <section id="search_brand_container" class="search_item_container">
             <div id="search_brand_box" class="search_item_box">
                 <button id="search_brand_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
@@ -169,6 +176,7 @@
             </div>
         </section>
 
+        {# Product's search results container #}
         <section id="search_product_container" class="search_item_container">
             <div id="search_product_box" class="search_item_box">
                 <button id="search_product_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
@@ -179,6 +187,7 @@
             </div>
         </section>
 
+        {# Discount's search results container #}
         <section id="search_discount_container" class="search_item_container">
             <div id="search_discount_box" class="search_item_box">
                 <button id="search_discount_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
@@ -195,7 +204,12 @@
 
 {% block javascripts %}
     <script type="text/javascript">
-        window.searchPath = "{{ path('admin_product_search') }}"
+        window.searchPath   = "{{ path('admin_product_search') }}"
     </script>
+
+    {# Search Bar script #}
     {{ encore_entry_script_tags('admin_products_searchbar') }}
+
+    {# Add Modal script #}
+    {{ encore_entry_script_tags('modal') }}
 {% endblock %}

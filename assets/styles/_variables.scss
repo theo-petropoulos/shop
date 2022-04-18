@@ -38,7 +38,7 @@ $blue_light: rgb(90, 190, 255);
   }
 }
 
-@mixin address-form{
+@mixin standard-form{
   form{
     border:1px solid $grey;
     padding:2%;
