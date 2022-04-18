@@ -7,6 +7,8 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
@@ -17,12 +19,14 @@ class EmailVerifier
     private VerifyEmailHelperInterface $verifyEmailHelper;
     private MailerInterface $mailer;
     private EntityManagerInterface $entityManager;
+    private SessionInterface $session;
 
-    public function __construct(VerifyEmailHelperInterface $helper, MailerInterface $mailer, EntityManagerInterface $manager)
+    public function __construct(VerifyEmailHelperInterface $helper, MailerInterface $mailer, EntityManagerInterface $manager, SessionInterface $session)
     {
         $this->verifyEmailHelper    = $helper;
         $this->mailer               = $mailer;
         $this->entityManager        = $manager;
+        $this->session              = $session;
     }
 
     /**
@@ -63,8 +67,10 @@ class EmailVerifier
                 /** @var IP $extraParam */
                 $extraParam->setUser($user);
                 $this->entityManager->persist($extraParam);
+                $this->session->getFlashBag()->add('success', 'Vous pouvez à présent vous connecter.');
                 break;
-            default:break;
+            default:
+                break;
         }
 
         $this->entityManager->flush();

@@ -56,7 +56,8 @@ class SecurityController extends AbstractController
         try {
             $this->emailVerifier->handleEmailConfirmation($request, $user, 'ip', $ip);
         } catch (VerifyEmailExceptionInterface $exception) {
-            return $this->redirectToRoute('user_register');
+            $this->addFlash('failure', 'Le lien que vous avez utilisé est invalide. Veuillez réessayer.');
+            return $this->redirectToRoute('user_login');
         }
 
         return $this->redirectToRoute('user_login', [
