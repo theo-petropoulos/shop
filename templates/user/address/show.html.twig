@@ -19,8 +19,8 @@
                 {% for address in addresses %}
                     <div class="address_container" id="address_{{ address.id }}">
                         <span class="modal_buttons">
-                            <button href="{{ path('user_edit_address', {addressId: address.id}) }}" class="edit_address"><i class="fa fa-solid fa-pen"></i></button>
-                            <button href="{{ path('user_delete_address', {addressId: address.id}) }}" class="delete_address"><i class="fa fa-solid fa-trash"></i></button>
+                            <button href="{{ path('user_edit_address', {id: address.id}) }}" class="edit_address"><i class="fa fa-solid fa-pen"></i></button>
+                            <button href="{{ path('user_delete_address', {id: address.id}) }}" class="delete_address"><i class="fa fa-solid fa-trash"></i></button>
                         </span>
                         <p class="str">{{ address.lastName }} {{ address.firstName }}</p>
                         <p>{{ address.streetNumber ~ " " ~ address.streetName }}</p>
