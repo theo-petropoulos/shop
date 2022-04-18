@@ -208,7 +208,7 @@ class AdminController extends AbstractController
 
                 $form->clearErrors(true);
 
-                $this->addFlash('failure', 'Une erreur est survenue.');
+                $this->addFlash('failure', json_encode($errors));
             }
 
             return $this->redirectToRoute('admin_show_products');

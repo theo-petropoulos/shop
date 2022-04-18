@@ -24,7 +24,7 @@ class Discount
     #[Assert\NotBlank(message: "Le champ du nom est obligatoire.")]
     #[Assert\Type(type: "string", message: "Le nom doit contenir une chaine de caractères valides.")]
     #[Assert\Length(
-        min: 4, max: 155,
+        min: 3, max: 155,
         minMessage: "Le champ du nom doit contenir au moins {{ limit }} caractères.", maxMessage: "Le nom ne peut excéder {{ limit }} caractères."
     )]
     private ?string $name;

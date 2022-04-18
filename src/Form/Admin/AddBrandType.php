@@ -30,7 +30,7 @@ class AddBrandType extends AbstractType
                 ]
             ])
             ->add('active', CheckboxType::class, [
-                'label'     => 'Description',
+                'label'     => 'Activer',
                 'required'  => false
             ])
         ;
