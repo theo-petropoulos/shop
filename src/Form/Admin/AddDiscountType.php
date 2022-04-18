@@ -39,7 +39,7 @@ class AddDiscountType extends AbstractType
                 'required'  => true,
                 'widget'    => 'single_text',
                 'attr'      => [
-                    'min'       => (new \DateTime('now'))->format('Y-m-d')
+                    'min'       => (new DateTime('now'))->format('Y-m-d')
                 ]
             ])
             ->add('endingDate', DateType::class, [
@@ -71,7 +71,7 @@ class AddDiscountType extends AbstractType
         $data = $event->getData();
         $form = $event->getForm();
 
-        if ($data['product']) {
+        if (!empty($data['product'])) {
             $form->add('product', TextType::class, [
                 'mapped'    => false,
                 'data'      => $data['product']

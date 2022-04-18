@@ -33,7 +33,7 @@ class Discount
     #[Assert\NotBlank(message: "Le champ promotion est obligatoire.")]
     #[Assert\Type(type: "numeric", message: "Le champ promotion doit être de type {{ type }}.")]
     #[Assert\Range(notInRangeMessage: "La promotion doit être au minimum de {{ min }}% et au maximum de {{ max }}%.", min: 1, max: 99)]
-    private ?float$percentage;
+    private ?float $percentage;
 
     #[ORM\Column(type: "date")]
     #[Assert\Type("DateTime")]
@@ -127,5 +127,10 @@ class Discount
         $this->endingDate = $endingDate;
 
         return $this;
+    }
+
+    public function getFullDiscount(): string
+    {
+        return '[' . $this->getPercentage() . '%] ' . ucfirst($this->getName());
     }
 }

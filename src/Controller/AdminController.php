@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Brand;
 use App\Entity\Discount;
+use App\Entity\Image;
 use App\Entity\Product;
+use App\Exceptions\InvalidSizeException;
 use App\Form\Admin\AddBrandType;
 use App\Form\Admin\AddDiscountType;
 use App\Form\Admin\AddProductType;
@@ -18,7 +20,10 @@ use JetBrains\PhpStorm\Pure;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
+use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -97,8 +102,9 @@ class AdminController extends AbstractController
     }
 
     # Formulaire d'ajout d'un produit / marque / promotion
-
-    /** @throws EntityNotFoundException */
+    /**
+     * @throws InvalidSizeException|InvalidTypeException|UploadException|EntityNotFoundException
+     */
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/products/add/{entity}', name: 'admin_add_item')]
     public function adminAddItem(Request $request, ProductRepository $productRepository, BrandRepository $brandRepository): Response
@@ -121,7 +127,7 @@ class AdminController extends AbstractController
                 $options    = ['brands' => []];
                 $brands     = $brandRepository->findBy([], ['name' => 'ASC']);
 
-                $options['brands']['Toutes les marques']    = 999999;
+                $options['brands']['Toutes les marques'] = 999999;
 
                 foreach ($brands as $brand)
                     $options['brands'][ucfirst($brand->getName())] = $brand->getId();
@@ -146,6 +152,18 @@ class AdminController extends AbstractController
                         $this->addFlash('success', 'La marque a été ajoutée avec succès.');
                         break;
                     case 'product':
+                        $images = $form->get('images')->getData();
+
+                        /** @var UploadedFile $file */
+                        foreach ($images as $file) {
+                            $image  = new Image($file);
+                            $folder = $this->getParameter('products_images_directory');
+
+                            $image->upload($folder);
+
+                            $item->addImage($image);
+                        }
+
                         $this->em->persist($item);
                         $this->em->flush();
 
@@ -183,8 +201,6 @@ class AdminController extends AbstractController
                     default:
                         throw new EntityNotFoundException("L'entité spécifiée n'a pas été trouvée.");
                 }
-
-                return $this->redirectToRoute('admin_show_products');
             }
             else {
                 foreach ($form->getErrors(true) as $key => $error)
@@ -193,9 +209,9 @@ class AdminController extends AbstractController
                 $form->clearErrors(true);
 
                 $this->addFlash('failure', 'Une erreur est survenue.');
-
-                return $this->redirectToRoute('admin_show_products');
             }
+
+            return $this->redirectToRoute('admin_show_products');
         }
 
         return $this->renderForm('admin/includes/products/_modal_add_item.html.twig', [

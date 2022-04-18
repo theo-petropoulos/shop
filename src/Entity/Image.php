@@ -2,8 +2,12 @@
 
 namespace App\Entity;
 
+use App\Exceptions\InvalidSizeException;
 use App\Repository\ImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: ImageRepository::class)]
 class Image
@@ -14,11 +18,21 @@ class Image
     protected ?int $id;
 
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'images')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'cascade')]
     private Product $product;
 
     #[ORM\Column(type: 'string', length: 255)]
+    private string $name;
+
+    #[ORM\Column(type: 'string', length: 255)]
     private string $path;
+
+    private ?UploadedFile $file;
+
+    public function __construct(?UploadedFile $file)
+    {
+        $this->file = $file;
+    }
 
     public function getId(): ?int
     {
@@ -37,6 +51,18 @@ class Image
         return $this;
     }
 
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
     public function getPath(): ?string
     {
         return $this->path;
@@ -47,5 +73,33 @@ class Image
         $this->path = $path;
 
         return $this;
+    }
+
+    /**
+     * @throws InvalidSizeException|InvalidTypeException|UploadException
+     */
+    public function upload(string $path): void
+    {
+        // Check if the file isn't too voluminous and if it was correctly uploaded to the temp folder
+        if ($this->file->getSize() < 10000000 && $this->file->getError() === UPLOAD_ERR_OK) {
+            $extension = $this->file->guessExtension();
+
+            // Check if the file is from a correct MIME type
+            if (in_array($extension, ['jpeg', 'jpg', 'gif', 'bmp', 'png'])) {
+                $fileName = uniqid() . '.' . $this->file->guessExtension();
+
+                // Check if the file has been correctly moved to the products' images directory
+                if ($this->file->move($path, $fileName)) {
+                    $this->name = $fileName;
+                    $this->path = $path . '/' . $fileName;
+                }
+                else
+                    throw new UploadException('Le fichier n\'a pas pu être enregistré dans le répertoire de destination.');
+            }
+            else
+                throw new InvalidTypeException('Le fichier ne possède pas une extension d\'image valide.');
+        }
+        else
+            throw new InvalidSizeException('Le fichier est trop volumineux.');
     }
 }

@@ -6,6 +6,7 @@ use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -35,12 +36,6 @@ class Product
     #[Assert\Length(max: 500, maxMessage: "La description ne peut excéder {{ limit }} caractères.")]
     private ?string $description;
 
-    #[ORM\Column(type: "string", length: 255, nullable: true)]
-    #[Assert\NotBlank(message: "Le champ du chemin de l'image est obligatoire.")]
-    #[Assert\Type(type: "string", message: "Le champ du chemin de l'image doit contenir une chaine de caractères valides.")]
-    #[Assert\Length(max: 255, maxMessage: "Le champ du chemin de l'image ne peut excéder {{ limit }} caractères.")]
-    private ?string $imagePath;
-
     #[ORM\Column(type: "float")]
     #[Assert\NotBlank(message: "Le champ du prix est obligatoire.")]
     #[Assert\Type(type: "numeric", message: "Le prix doit être de type {{ type }}.")]
@@ -55,9 +50,10 @@ class Product
     #[Assert\Type(type: "bool", message: "La valeur active doit être de type {{ type }}.")]
     private ?bool $active;
 
-    #[ORM\OneToMany(mappedBy: 'Product', targetEntity: Image::class)]
-    private $images;
+    #[ORM\OneToMany(mappedBy: 'Product', targetEntity: Image::class, cascade: ['persist'])]
+    private Collection $images;
 
+    #[Pure]
     public function __construct()
     {
         $this->images = new ArrayCollection();
@@ -100,18 +96,6 @@ class Product
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getImagePath(): ?string
-    {
-        return $this->imagePath;
-    }
-
-    public function setImagePath(?string $imagePath): self
-    {
-        $this->imagePath = $imagePath;
 
         return $this;
     }
