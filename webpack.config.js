@@ -26,6 +26,7 @@ Encore
     .addEntry('user_delete_account', './assets/js/user/delete_account.js')
     .addEntry('admin_products_searchbar', './assets/js/admin/products/searchbar.js')
     .addEntry('admin_dynamic_form', './assets/js/admin/products/dynamic_form.js')
+    .addEntry('admin_dynamic_edit', './assets/js/admin/products/dynamic_edit.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

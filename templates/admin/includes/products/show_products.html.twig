@@ -205,6 +205,7 @@
 {% block javascripts %}
     <script type="text/javascript">
         window.searchPath   = "{{ path('admin_product_search') }}"
+        window.fetchBrands  = "{{ path('admin_fetch_brands') }}"
     </script>
 
     {# Search Bar script #}
@@ -212,4 +213,7 @@
 
     {# Add Modal script #}
     {{ encore_entry_script_tags('modal') }}
+
+    {# Dynamic Edit script #}
+    {{ encore_entry_script_tags('admin_dynamic_edit') }}
 {% endblock %}

@@ -101,10 +101,10 @@ class AdminController extends AbstractController
         return new JsonResponse(json_encode($results));
     }
 
-    # Formulaire d'ajout d'un produit / marque / promotion
     /**
      * @throws InvalidSizeException|InvalidTypeException|UploadException|EntityNotFoundException
      */
+    # Formulaire d'ajout d'un produit / marque / promotion
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/products/add/{entity}', name: 'admin_add_item')]
     public function adminAddItem(Request $request, ProductRepository $productRepository, BrandRepository $brandRepository): Response
@@ -241,6 +241,24 @@ class AdminController extends AbstractController
         }
 
         return new JsonResponse(json_encode($return));
+    }
+
+    # Récupère les produits du catalogue dépendamment de la marque
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/brands/fetch', name: 'admin_fetch_brands', methods: ['GET'])]
+    public function adminFetchBrands(BrandRepository $brandRepository): JsonResponse
+    {
+        $brands             = $brandRepository->findAll();
+        $arrayCollection    = [];
+
+        foreach ($brands as $brand) {
+            $arrayCollection[] = [
+                'id'    => $brand->getId(),
+                'name'  => $brand->getName()
+            ];
+        }
+
+        return new JsonResponse(json_encode($arrayCollection));
     }
 
     # Suppression d'une promotion
