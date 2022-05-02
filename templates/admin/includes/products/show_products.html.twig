@@ -28,7 +28,7 @@
 
         <div id="products">
             {# Affiche les promotions et les produits affectés #}
-            <details id="discounts_det">
+            <details id="discount_det">
                 <summary>Afficher les promotions</summary>
                 {% if discounts is not empty %}
                     {% set discountCounter = 1 %}
@@ -80,7 +80,7 @@
             </details>
 
             {# Affiche les marques #}
-            <details id="brands_det">
+            <details id="brand_det">
                 <summary>Afficher les marques</summary>
                 {% if brands is not empty %}
                     {% for brand in brands %}
@@ -107,7 +107,7 @@
             </details>
 
             {# Affiche les produits #}
-            <details id="products_det">
+            <details id="product_det">
                 <summary>Afficher les produits</summary>
                 {% if products is not empty %}
                     {% for product in products %}
@@ -206,6 +206,7 @@
     <script type="text/javascript">
         window.searchPath   = "{{ path('admin_product_search') }}"
         window.fetchBrands  = "{{ path('admin_fetch_brands') }}"
+        window.postEdit     = "{{ path('admin_edit_item') }}"
     </script>
 
     {# Search Bar script #}

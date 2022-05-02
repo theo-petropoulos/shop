@@ -1,10 +1,10 @@
 $(function () {
     // Display an alert and prevent Form submit in case of wrong selection of Dates
     $(document).on('change', '#add_discount_endingDate, #add_discount_startingDate', function () {
-        let startingDate = $('#add_discount_startingDate')
-        let endingDate = $('#add_discount_endingDate')
-        let submitButton = $('#add_item_submit')
-        let dateAlert = $('#alert_discount_date')
+        let startingDate    = $('#add_discount_startingDate')
+        let endingDate      = $('#add_discount_endingDate')
+        let submitButton    = $('#add_item_submit')
+        let dateAlert       = $('#alert_discount_date')
 
         dateAlert.remove()
 
@@ -25,9 +25,9 @@ $(function () {
 
     // Display a selection of Products depending on Brand's selection
     $(document).on('change', '#add_discount_brand', function () {
-        let brand = $(this).val()
-        let productInput = $('#add_discount_product')
-        let options = '<option value=""></option>'
+        let brand           = $(this).val()
+        let productInput    = $('#add_discount_product')
+        let options         = '<option value=""></option>'
 
         if (brand) {
             $.post(
@@ -38,9 +38,10 @@ $(function () {
                 (res) => {
                     // console.log(res)
                 }
-            ).done(function (data) {
-                let products = JSON.parse(data)
-                options = '<option value="999999">Tous les produits</option>'
+            )
+            .done(function (data) {
+                let products    = JSON.parse(data)
+                options         = '<option value="999999">Tous les produits</option>'
 
                 if (products.constructor.name === "Object") {
                     for (let name in products)

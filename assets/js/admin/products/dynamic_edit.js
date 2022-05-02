@@ -1,10 +1,11 @@
 $(function(){
-    window.is_search = null
-    window.item = null
-    window.id = null
+    window.is_search    = null
+    window.field        = null
+    window.id           = null
 
+    // Display an input field on edit
     $(document).on('click', '.adm_modify_button', function() {
-        if($(this).parents('.search_results_box').length)
+        if ($(this).parents('.search_results_box').length)
             is_search = 1
 
         let container       = $(this).parent('div')
@@ -12,27 +13,42 @@ $(function(){
         let value           = $(this).prev('p').text()
 
         id                  = id_container[0]
-        item                = id_container[1]
+        field               = id_container[1]
 
-        window['prevHTML_' + item + '_' + id] = $(this).parents('div').html()
+        window['prevHTML_' + field + '_' + id] = $(this).parents('div').html()
 
         if (!container.hasClass('brand_name')) {
-            container.html(
-                '<input type="text" name="' + item + '" value="' + value + '" required>\
-                <span>\
-                    <button class="adm_modify_submit">Valider</button>\
-                    <button class="adm_modify_cancel">Annuler</button>\
-                </span>'
-            )
+            if (field === 'startingDate' || field === 'endingDate') {
+                let valueToDate = value.split('/')
+                let valueYear   = valueToDate[2]
+                let valueMonth  = valueToDate[1]
+                let valueDay    = valueToDate[0]
+                value       = valueYear + '-' + valueMonth + '-' + valueDay
+
+                container.html(
+                    '<input type="date" name="' + field + '" value="' + value + '" required>\
+                    <span>\
+                        <button class="adm_modify_submit">Valider</button>\
+                        <button class="adm_modify_cancel">Annuler</button>\
+                    </span>'
+                )
+            }
+            else
+                container.html(
+                    '<input type="text" name="' + field + '" value="' + value + '" required>\
+                    <span>\
+                        <button class="adm_modify_submit">Valider</button>\
+                        <button class="adm_modify_cancel">Annuler</button>\
+                    </span>'
+                )
         }
         else {
             let brands = null
 
             $.get(
                 fetchBrands,
-                (res)=>{
+                (res) => {
                     brands = JSON.parse(res)
-                    console.log(res)
                 }
             )
             .done(() => {
@@ -52,17 +68,101 @@ $(function(){
         }
     })
 
-    /**
-     * Cancel the modification
-     */
+    // Cancel the edit
     $(document).on('click', '.adm_modify_cancel', function() {
-        /*if (is_search) {*/
-        $(this).parents('div').first().html(window['prevHTML_' + item + '_' + id])
-       /* }
+        $(this).parents('div').first().html(window['prevHTML_' + field + '_' + id])
+    })
+
+    // Submit the edit
+    $(document).on('click', '.adm_modify_submit', function(e){
+        let proceed = 1
+
+        let div     = "#" + $(this).parents('div').first().attr('id')
+        let id_div  = $(this).closest('div').attr('id').split('_')
+        let id      = id_div[0]
+        let field   = id_div[1]
+
+        let value   = $(this).closest('div').find('input').val() ?? $(this).closest('div').find('select').val()
+        let entity  = $(this).closest('details').length ?
+            $(this).closest('details').attr('id').split('_')[0] :
+            $(this).parents('div').first().attr('id').split('_')[2]
+
+        if (field === 'endingDate' || field === 'startingDate') {
+            let d = new Date(value)
+
+            if (isNaN(d.getTime()))
+                proceed = 0
+            else {
+                if (field === 'endingDate') {
+                    let cmp         = $('#' + id + '_startingDate')
+                    let cmpvalue    = cmp.find('p').text() ?
+                        cmp.find('p').text() :
+                        $('#' + id + '_startingDate_discount_search').find('p').text()
+
+                    let cmpDate     = getStandardDate(cmpvalue);
+
+                    if (cmpDate > d)
+                        proceed = 0
+                }
+                else if (field === 'startingDate') {
+                    let cmp         = $('#' + id + '_endingDate')
+                    let cmpvalue    = cmp.find('p').text() ?
+                        cmp.find('p').text() :
+                        $('#' + id + '_endingDate_discount_search').find('p').text()
+
+                    let cmpDate     = getStandardDate(cmpvalue);
+                    console.log(cmpDate, d)
+
+                    if (cmpDate < d)
+                        proceed = 0
+                }
+            }
+        }
+
+        if (proceed) {
+            $.post(
+                postEdit,
+                {
+                    entity,
+                    id,
+                    field,
+                    value
+                },
+                (res)=>{
+                    console.log(res)
+                }
+            )
+            .done(() => {
+                if (is_search) {
+                    let parent = $(this).parents('div').first()
+                    parent.html(window['prevHTML_' + field + '_' + id])
+                    parent.find('p').html(value)
+                }
+                else {
+                    if (parseInt(id) !== id) {
+                        let parent = $(this).parents('div').first()
+                        parent.html(window['prevHTML_' + field + '_' + id])
+                        parent.find('p').html(value)
+                        parent.attr('id', value + '_name')
+                    }
+                    else
+                        $(div).load(" " + div + " > *")
+                }
+            })
+        }
         else {
-            let container       = $(this).parents('div')
-            let id_container    = "#" + container.attr('id')
-            $(id_container).load(" " + id_container + " > *")
-        }*/
+            $(div).find('p').last().remove()
+            $(div).append('<p>La date est invalide.</p>')
+        }
     })
 })
+
+function getStandardDate(strDate)
+{
+    let strToDate   = strDate.split('/')
+    let stdYear     = strToDate[2]
+    let stdMonth    = strToDate[1]
+    let stdDay      = strToDate[0]
+
+    return new Date(stdYear, stdMonth, stdDay);
+}

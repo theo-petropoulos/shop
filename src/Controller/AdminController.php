@@ -14,8 +14,12 @@ use App\QueryBuilder\AdminSearch;
 use App\Repository\BrandRepository;
 use App\Repository\DiscountRepository;
 use App\Repository\ProductRepository;
+use DateTime;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Instantiator\Exception\InvalidArgumentException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
+use Exception;
 use JetBrains\PhpStorm\Pure;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -243,7 +247,7 @@ class AdminController extends AbstractController
         return new JsonResponse(json_encode($return));
     }
 
-    # Récupère les produits du catalogue dépendamment de la marque
+    # Récupère les marques du catalogue
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/brands/fetch', name: 'admin_fetch_brands', methods: ['GET'])]
     public function adminFetchBrands(BrandRepository $brandRepository): JsonResponse
@@ -261,12 +265,55 @@ class AdminController extends AbstractController
         return new JsonResponse(json_encode($arrayCollection));
     }
 
+
+    /**
+     * @throws EntityNotFoundException
+     * @throws Exception
+     */
+    # Edition d'un produit
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/products/edit', name: 'admin_edit_item')]
+    public function adminEditItem(Request $request, BrandRepository $brandRepository, ProductRepository $productRepository, DiscountRepository $discountRepository): JsonResponse
+    {
+        $entity     = $request->get('entity');
+        $id         = $request->get('id');
+        $field      = $request->get('field');
+        $value      = $request->get('value');
+
+        /** @var ServiceEntityRepository $repository */
+        $repository = ${$entity . 'Repository'};
+        if (!$repository)
+            throw new EntityNotFoundException('Une erreur est survenue. L\'entité ' . $entity . ' n\'a pas été trouvée.');
+
+        /** @var Brand|Product|Discount $item */
+        $item       = $repository->findOneBy(['id' => $id]);
+        if (!$item)
+            throw new EntityNotFoundException('Une erreur inattendue est survenue. Aucun objet de la classe ' . $entity . ' ne possède d\'id égal à ' . $id);
+
+        if (in_array($field, ['startingDate', 'endingDate']))
+            $value = new DateTime($value);
+
+        if ($field === 'brand')
+            $value = $brandRepository->findOneBy(['id' => $value]);
+
+        $method     = 'set' . ucfirst($field);
+        if (method_exists($item, $method))
+            $item->$method($value);
+        else
+            throw new InvalidArgumentException('Une erreur inattendue est survenue.');
+
+        $this->em->persist($item);
+        $this->em->flush();
+
+        return new JsonResponse(json_encode(['status' => 'success']));
+    }
+
     # Suppression d'une promotion
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/products/discount/delete/{id}', name: 'admin_delete_discount')]
     public function adminDeleteDiscount(Request $request, Discount $discount)
     {
-
+        return false;
     }
 
     # Administration des produits
