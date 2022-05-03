@@ -1,12 +1,16 @@
 Ajouter une verif login 
-	=> isVerified
-	=> Adresse IP
+	X => isVerified 
+	X => Adresse IP
 
 Ajouter sur la page utiliateur
-	=> Modification du mot de passe
-	=> Modification des adresses
-	=> Suppression du compte
+	X => Modification du mot de passe
+	X => Modification des adresses
+	X => Suppression du compte
 
 IPRecords 
 	=> Tentatives de connexions
 	=> Nombre de comptes différents
+
+Administration
+	=> Bug sur le select brand & les dates
+	=> Ajouter la désactivation / suppression

@@ -28,7 +28,7 @@
 
         <div id="products">
             {# Affiche les promotions et les produits affectés #}
-            <details id="discounts_det">
+            <details id="discount_det">
                 <summary>Afficher les promotions</summary>
                 {% if discounts is not empty %}
                     {% set discountCounter = 1 %}
@@ -39,22 +39,22 @@
                                     <i class="fas fa-caret-right"></i>
                                     <i class="fas fa-caret-down"></i>
                                 </div>
-                                <div class="span_div" id="{{ discount.id }}_name">
+                                <div class="span_div" id="{{ discount.id }}_name_discount">
                                     <h3>Promotion :</h3>
                                     <p>{{ discount.name }}</p>
                                     <button class="adm_modify_button">Modifier</button>
                                 </div>
-                                <div class="span_div" id="{{ discount.id }}_percentage">
+                                <div class="span_div" id="{{ discount.id }}_percentage_discount">
                                     <h3>Pourcentage :</h3>
                                     <p>{{ discount.percentage }}</p>
                                     <button class="adm_modify_button">Modifier</button>
                                 </div>
-                                <div class="span_div" id="{{ discount.id }}_startingDate">
+                                <div class="span_div" id="{{ discount.id }}_startingDate_discount">
                                     <h3>Début :</h3>
                                     <p>{{ discount.startingDate|date("d/m/Y") }}</p>
                                     <button class="adm_modify_button">Modifier</button>
                                 </div>
-                                <div class="span_div" id="{{ discount.id }}_endingDate">
+                                <div class="span_div" id="{{ discount.id }}_endingDate_discount">
                                     <h3>Fin :</h3>
                                     <p>{{ discount.endingDate|date("d/m/Y") }}</p>
                                     <button class="adm_modify_button">Modifier</button>
@@ -65,9 +65,9 @@
                             </summary>
                             <div>
                                 {% for product in discount.products %}
-                                    <div id="discounts_{{ product.id }}" class="div_det">
-                                        <button class="adm_delete_btn">x</button>
-                                        <div id="product_{{ product.id }}" class="">
+                                    <div id="discount_{{ product.id }}_delete_div" class="div_det">
+                                        <a href="{{ path('admin_delete_discount_product', {discountId: discount.id, productId: product.id}) }}" class="adm_delete_btn" >x</a>
+                                        <div id="product_{{ product.id }}_delete" class="">
                                             <h3>Produit :</h3>
                                             <p>{{ product.name }}</p>
                                         </div>
@@ -80,23 +80,22 @@
             </details>
 
             {# Affiche les marques #}
-            <details id="brands_det">
+            <details id="brand_det">
                 <summary>Afficher les marques</summary>
                 {% if brands is not empty %}
                     {% for brand in brands %}
                         <div id="brand_{{ brand.id }}" class="div_det">
-                            <button class="adm_delete_btn">x</button>
-                            <div id="{{ brand.id ~ "_name"}}" class="name">
+                            <div id="{{ brand.id ~ "_name_brand"}}" class="name">
                                 <h3>Marque :</h3>
                                 <p>{{ brand.name }}</p>
                                 <button class="adm_modify_button">Modifier</button>
                             </div>
-                            <div id="{{ brand.id ~ "_description"}}" class="description">
+                            <div id="{{ brand.id ~ "_description_brand"}}" class="description">
                                 <h3>Description :</h3>
                                 <p>{{ brand.description }}</p>
                                 <button class="adm_modify_button">Modifier</button>
                             </div>
-                            <div id="{{ brand.id ~ "_active"}}" class="active">
+                            <div id="{{ brand.id ~ "_active_brand"}}" class="active">
                                 <h3>Statut :</h3>
                                 <button class="adm_modify_button">{{ brand.active ? 'Désactiver' : 'Activer' }}</button>
                             </div>
@@ -107,38 +106,37 @@
             </details>
 
             {# Affiche les produits #}
-            <details id="products_det">
+            <details id="product_det">
                 <summary>Afficher les produits</summary>
                 {% if products is not empty %}
                     {% for product in products %}
                         <div id="product_{{ product.id }}" class="div_det">
-                            <button class="adm_delete_btn">x</button>
-                            <div id="{{ product.id ~ '_brand'}}" class="brand_name">
+                            <div id="{{ product.id ~ '_brand_product'}}" class="brand_name">
                                 <h4>Marque :</h4>
                                 <p>{{ product.brand.name }}</p>
                                 <button class="adm_modify_button">Modifier</button>
                             </div>
-                            <div id="{{ product.id ~ '_name'}}" class="product_name">
+                            <div id="{{ product.id ~ '_name_product'}}" class="product_name">
                                 <h4>Produit :</h4>
                                 <p>{{ product.name }}</p>
                                 <button class="adm_modify_button">Modifier</button>
                             </div>
-                            <div id="{{ product.id ~ '_description'}}" class="description">
+                            <div id="{{ product.id ~ '_description_product'}}" class="description">
                                 <h4>Description :</h4>
                                 <p>{{ product.description }}</p>
                                 <button class="adm_modify_button">Modifier</button>
                             </div>
-                            <div id="{{ product.id ~ '_price'}}" class="price">
+                            <div id="{{ product.id ~ '_price_product'}}" class="price">
                                 <h4>Prix :</h4>
                                 <p>{{ product.price }}</p>
                                 <button class="adm_modify_button">Modifier</button>
                             </div>
-                            <div id="{{ product.id ~ '_stock'}}" class="stock">
+                            <div id="{{ product.id ~ '_stock_product'}}" class="stock">
                                 <h4>Stock :</h4>
                                 <p>{{ product.stock }}</p>
                                 <button class="adm_modify_button">Modifier</button>
                             </div>
-                            <div id="{{ product.id ~ "_active"}}" class="active">
+                            <div id="{{ product.id ~ "_active_product"}}" class="active">
                                 <h3>Statut :</h3>
                                 <button class="adm_modify_button">{{ product.active ? 'Désactiver' : 'Activer' }}</button>
                             </div>
@@ -157,7 +155,6 @@
             <div id="add_product" class="add_container">
                 <button href="{{ path('admin_add_item', {entity: 'product'}) }}" id="add_product_btn" class="add_btn">+ Ajouter un produit</button>
                 {# Render Form via Controller #}
-
             </div>
             <div id="add_discount" class="add_container">
                 <button href="{{ path('admin_add_item', {entity: 'discount'}) }}" id="add_discount_btn" class="add_btn">+ Ajouter une promotion</button>
@@ -205,6 +202,8 @@
 {% block javascripts %}
     <script type="text/javascript">
         window.searchPath   = "{{ path('admin_product_search') }}"
+        window.fetchBrands  = "{{ path('admin_fetch_brands') }}"
+        window.postEdit     = "{{ path('admin_edit_item') }}"
     </script>
 
     {# Search Bar script #}
@@ -212,4 +211,7 @@
 
     {# Add Modal script #}
     {{ encore_entry_script_tags('modal') }}
+
+    {# Dynamic Edit script #}
+    {{ encore_entry_script_tags('admin_dynamic_edit') }}
 {% endblock %}
