@@ -91,13 +91,14 @@
           }
         }
         a{
-          width:15%;
+          width: 15%;
           flex-grow: 1;
           text-decoration: none;
-          color:$blue;
+          color: $blue;
           text-align: center;
+          align-self: center;
           &:hover{
-            color:red;
+            color: red;
             transition: all 0.3s;
           }
         }

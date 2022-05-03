@@ -18,8 +18,8 @@ $(function(){
         'endingDate'    : 'Date de fin',
         'description'   : 'Description',
         'stock'         : 'Stock',
-        'active'        : 'Status',
-        'status'        : 'Status',
+        'active'        : 'Statut',
+        'status'        : 'Statut',
         'true'          : 'Désactiver',
         'false'         : 'Activer'
     }
@@ -73,7 +73,6 @@ $(function(){
                         $(results).each(function (arrkey, object) {
                             $("#search_results_" + item).prepend(
                                 "<div id='" + item + "_" + object['id'] + "_search' class='div_det'>\
-                                    <button class='adm_delete_btn'>x</button>\
                                 </div>"
                             )
 
@@ -105,9 +104,9 @@ $(function(){
                                     if (key !== 'active') {
                                         $("#" + item + "_" + object['id'] + "_search").append(
                                             "<div id='" + object['id'] + "_" + key + "_" + item + "_search' class='" + key + "'>\
-                                            <h3>" + trans[key] + "</h3>\
-                                            <p>" + value + "</p>\
-                                        </div>"
+                                                <h3>" + trans[key] + "</h3>\
+                                                <p>" + value + "</p>\
+                                            </div>"
                                         )
 
                                         if (key !== 'product_name' || table !== 'discount') {
