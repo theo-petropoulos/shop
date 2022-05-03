@@ -22,6 +22,7 @@ use Doctrine\ORM\EntityNotFoundException;
 use Exception;
 use JetBrains\PhpStorm\Pure;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
 use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
@@ -29,6 +30,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -311,9 +313,25 @@ class AdminController extends AbstractController
     # Suppression d'une promotion
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/products/discount/delete/{id}', name: 'admin_delete_discount')]
-    public function adminDeleteDiscount(Request $request, Discount $discount)
+    public function adminDeleteDiscount(Request $request, Discount $discount): RedirectResponse
     {
-        return false;
+        $this->em->remove($discount);
+        $this->em->flush();
+
+        return $this->redirectToRoute('admin_show_products');
+    }
+
+    # Suppression d'un produit d'une promotion
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/products/discount/delete/{discountId}/product/{productId}', name: 'admin_delete_discount_product')]
+    #[ParamConverter('discount', Discount::class, ['mapping' => ['discountId' => 'id']])]
+    #[ParamConverter('product', Product::class, ['mapping' => ['productId' => 'id']])]
+    public function adminDeleteProductFromDiscount(Request $request, Discount $discount, Product $product): RedirectResponse
+    {
+        $discount->removeProduct($product);
+        $this->em->flush();
+
+        return $this->redirectToRoute('admin_show_products');
     }
 
     # Administration des produits

@@ -21,7 +21,8 @@ class Product
     #[ORM\JoinColumn(nullable: false)]
     private ?Brand $brand;
 
-    #[ORM\ManyToOne(targetEntity: Discount::class, inversedBy: "products")]
+    #[ORM\ManyToOne(targetEntity: Discount::class, cascade: ["persist", "remove"], inversedBy: "products")]
+    #[ORM\JoinColumn(nullable: true, onDelete: "set null")]
     private ?Discount $discount;
 
     #[ORM\Column(type: "string", length: 155)]
@@ -50,7 +51,7 @@ class Product
     #[Assert\Type(type: "bool", message: "La valeur active doit être de type {{ type }}.")]
     private ?bool $active;
 
-    #[ORM\OneToMany(mappedBy: 'Product', targetEntity: Image::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: "Product", targetEntity: Image::class, cascade: ["persist"])]
     private Collection $images;
 
     #[Pure]

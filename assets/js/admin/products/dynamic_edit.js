@@ -10,14 +10,18 @@ $(function(){
 
         let container       = $(this).parent('div')
         let id_container    = container.attr('id').split('_')
-        let value           = $(this).prev('p').text()
+        let value           = $(this).prev('p').length ? $(this).prev('p').text() : ( $(this).text() === 'Désactiver' ? 0 : 1 )
 
         id                  = id_container[0]
         field               = id_container[1]
 
         window['prevHTML_' + field + '_' + id] = $(this).parents('div').html()
 
-        if (!container.hasClass('brand_name')) {
+        if (container.hasClass('active')) {
+            let entity = $(this).closest('details').attr('id').split('_')[0]
+            ajaxPost(entity, id, field, value, $(this))
+        }
+        else if (!container.hasClass('brand_name')) {
             if (field === 'startingDate' || field === 'endingDate') {
                 let valueToDate = value.split('/')
                 let valueYear   = valueToDate[2]
@@ -94,7 +98,7 @@ $(function(){
                 proceed = 0
             else {
                 if (field === 'endingDate') {
-                    let cmp         = $('#' + id + '_startingDate')
+                    let cmp         = $('#' + id + '_startingDate_discount')
                     let cmpvalue    = cmp.find('p').text() ?
                         cmp.find('p').text() :
                         $('#' + id + '_startingDate_discount_search').find('p').text()
@@ -105,14 +109,13 @@ $(function(){
                         proceed = 0
                 }
                 else if (field === 'startingDate') {
-                    let cmp         = $('#' + id + '_endingDate')
+                    let cmp         = $('#' + id + '_endingDate_discount')
                     let cmpvalue    = cmp.find('p').text() ?
                         cmp.find('p').text() :
                         $('#' + id + '_endingDate_discount_search').find('p').text()
 
                     let cmpDate     = getStandardDate(cmpvalue);
-                    console.log(cmpDate, d)
-
+console.log(d, cmpDate)
                     if (cmpDate < d)
                         proceed = 0
                 }
@@ -140,10 +143,12 @@ $(function(){
                 }
                 else {
                     if (parseInt(id) !== id) {
-                        let parent = $(this).parents('div').first()
-                        parent.html(window['prevHTML_' + field + '_' + id])
+                        let parent = '#' + $(this).closest('div').attr('id')
+                        console.log(parent)
+                        $(parent).load(" " + parent + " > *")
+                        /*parent.html(window['prevHTML_' + field + '_' + id])
                         parent.find('p').html(value)
-                        parent.attr('id', value + '_name')
+                        parent.attr('id', value + '_name')*/
                     }
                     else
                         $(div).load(" " + div + " > *")
@@ -159,10 +164,40 @@ $(function(){
 
 function getStandardDate(strDate)
 {
+    console.log(strDate)
     let strToDate   = strDate.split('/')
     let stdYear     = strToDate[2]
-    let stdMonth    = strToDate[1]
+    let stdMonth    = strToDate[1] - 1
     let stdDay      = strToDate[0]
 
+    console.log(stdYear, stdMonth, stdDay)
+
     return new Date(stdYear, stdMonth, stdDay);
+}
+
+function ajaxPost(entity, id, field, value, btn)
+{
+    $.post(
+        postEdit,
+        {
+            entity,
+            id,
+            field,
+            value
+        },
+        (res) => {
+            // console.log(res)
+        }
+    )
+    .done(() => {
+        if (is_search) {
+            let parent = btn.parents('div').first()
+            parent.html(window['prevHTML_' + field + '_' + id])
+            parent.find('p').html(value)
+        }
+        else {
+            let parent = '#' + btn.closest('div').attr('id')
+            $(parent).load(" " + parent + " > *")
+        }
+    })
 }
