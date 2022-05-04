@@ -1,4 +1,4 @@
-$(function () {
+$(function() {
     $(document).on('click', '.delete_admin_btn', function (e) {
         e.preventDefault()
         let deleteId    = $(this).attr('id').split('_')[0]

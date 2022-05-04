@@ -1,6 +1,6 @@
-$(function () {
+$(function() {
     // Affiche un pop-up de confirmation pour la suppression d'une adresse
-    $(document).on('click', '.delete_account', function (e) {
+    $(document).on('click', '.delete_account', function(e) {
         e.preventDefault()
         let href = $(this).attr('href')
         Swal.fire({

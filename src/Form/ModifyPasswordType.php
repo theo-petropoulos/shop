@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class ModifyPasswordType extends AbstractType
 {
@@ -26,6 +27,12 @@ class ModifyPasswordType extends AbstractType
                 'required'          => true,
                 'first_options'     => ['label' => 'Nouveau mot de passe'],
                 'second_options'    => ['label' => 'Confirmez le nouveau mot de passe'],
+                'constraints'       => [
+                    new Assert\Regex(
+                        '"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"',
+                        'Le mot de passe doit contenir au moins 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre et un caractère spécial.'
+                    )
+                ]
             ])
         ;
     }

@@ -139,6 +139,11 @@ class User implements UserInterface
         return $this;
     }
 
+    public function isGranted(array $roles): bool
+    {
+        return !empty(array_intersect($roles, $this->roles));
+    }
+
     /**
      * @see PasswordAuthenticatedUserInterface
      */

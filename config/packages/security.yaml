@@ -28,6 +28,7 @@ security:
             remember_me:
                 secret:   '%kernel.secret%'
                 lifetime: 604800
+                samesite: 'strict'
             login_throttling:
                 max_attempts: 5
                 interval: '10 minutes'

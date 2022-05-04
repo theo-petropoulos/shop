@@ -11,7 +11,6 @@ use App\Security\UserLoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -19,7 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class SecurityController extends AbstractController
@@ -53,7 +51,7 @@ class SecurityController extends AbstractController
     }
 
     #[Route(path: '/user/reset-password', name: 'user_reset_password')]
-    public function resetUserPassword(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher, UserLoginFormAuthenticator $formAuthenticator)
+    public function resetUserPassword(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher, UserLoginFormAuthenticator $formAuthenticator): ?Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('user_show_profile');

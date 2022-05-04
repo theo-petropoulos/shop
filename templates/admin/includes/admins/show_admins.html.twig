@@ -43,7 +43,7 @@
                                 <a href="{{ path('admin_delete_admin', {id: admin.id}) }}" id="{{ admin.id }}_delete" class="delete_admin_btn">
                                     Supprimer le compte
                                 </a>
-                                <a href="{{ path('admin_edit_admin_password', {id: admin.id}) }}" id="{{ admin.id }}_edit_admin_password" class="edit_admin_password">
+                                <a href="{{ path('admin_edit_admin_password', {id: admin.id}) }}" id="{{ admin.id }}_edit_admin_password" class="edit_admin_password open-modal">
                                     {% if is_granted('ROLE_SUPER_ADMIN') or admin == currAdmin %}
                                         Modifier le mot de passe
                                     {% else %}

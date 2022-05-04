@@ -1,4 +1,4 @@
-$(function(){
+$(function() {
     window.is_search    = null
     window.field        = null
     window.id           = null

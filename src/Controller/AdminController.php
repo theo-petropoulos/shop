@@ -6,11 +6,13 @@ use App\Entity\Brand;
 use App\Entity\Discount;
 use App\Entity\Image;
 use App\Entity\Product;
+use App\Errors\ErrorFormatter;
 use App\Exceptions\InvalidSizeException;
 use App\Form\Admin\AddAdminType;
 use App\Form\Admin\AddBrandType;
 use App\Form\Admin\AddDiscountType;
 use App\Form\Admin\AddProductType;
+use App\Form\ModifyPasswordType;
 use App\QueryBuilder\AdminSearch;
 use App\Repository\BrandRepository;
 use App\Repository\DiscountRepository;
@@ -39,6 +41,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
@@ -62,14 +65,6 @@ class AdminController extends AbstractController
     public function adminIndex(Request $request): Response
     {
         return $this->render('admin/show.html.twig');
-    }
-
-    # Mot de passe Admin
-    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
-    #[Route(path: '/admin/password', name: 'admin_edit_password')]
-    public function adminEditPassword(Request $request): Response
-    {
-        return $this->render('admin/includes/edit_password.html.twig');
     }
 
     # Administration des clients
@@ -437,11 +432,17 @@ class AdminController extends AbstractController
     # Edition du mot de passe d'un administrateur
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/admins/edit/{id}/password', name: 'admin_edit_admin_password')]
-    public function adminEditAdminPassword(Request $request, User $admin): RedirectResponse
+    public function adminEditAdminPassword(Request $request, User $admin, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         if ($this->isGranted('ROLE_SUPER_ADMIN') || $admin === $this->security->getUser()) {
-            // todo : Directly edit password
-            return new RedirectResponse($this->generateUrl('admin_show_admins'));
+            $sortedErrors   = [];
+            /** @var Form $form */
+            $form           = $this->createForm(ModifyPasswordType::class, $admin);
+
+            return $this->renderForm('admin/includes/admins/_modal_edit_password.html.twig', [
+                'form'          => $form,
+                'sortedErrors'  => $sortedErrors
+            ]);
         }
         else {
             $extraParams = ['id' => $admin->getId()];
