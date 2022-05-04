@@ -115,7 +115,7 @@ $(function(){
                         $('#' + id + '_endingDate_discount_search').find('p').text()
 
                     let cmpDate     = getStandardDate(cmpvalue);
-console.log(d, cmpDate)
+
                     if (cmpDate < d)
                         proceed = 0
                 }
@@ -164,13 +164,10 @@ console.log(d, cmpDate)
 
 function getStandardDate(strDate)
 {
-    console.log(strDate)
     let strToDate   = strDate.split('/')
     let stdYear     = strToDate[2]
     let stdMonth    = strToDate[1] - 1
     let stdDay      = strToDate[0]
-
-    console.log(stdYear, stdMonth, stdDay)
 
     return new Date(stdYear, stdMonth, stdDay);
 }

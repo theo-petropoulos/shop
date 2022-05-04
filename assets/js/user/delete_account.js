@@ -1,6 +1,6 @@
-$(function (){
+$(function () {
     // Affiche un pop-up de confirmation pour la suppression d'une adresse
-    $(document).on('click', '.delete_account', function(e){
+    $(document).on('click', '.delete_account', function (e) {
         e.preventDefault()
         let href = $(this).attr('href')
         Swal.fire({
@@ -16,7 +16,7 @@ $(function (){
             if (result.isConfirmed) {
                 Swal.fire({
                     title: 'Succès',
-                    text: 'L\'adresse a bien été supprimée.',
+                    text: 'Le compte a bien été supprimé.',
                     icon: 'success'
                 }).then (function() {
                     window.location.replace(href)

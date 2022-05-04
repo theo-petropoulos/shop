@@ -1,0 +1,41 @@
+@use '../../variables' as *;
+
+#admin_alt{
+  #admins{
+    details{
+      .div_det{
+        div{
+          &.active{
+            width:10%;
+            min-width:50px;
+          }
+          &.firstname, &.lastname, &.email{
+            width:20%;
+            min-width:120px;
+          }
+          p{
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+        }
+        span{
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          min-width: max-content;
+          a{
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+  #add_admin_section{
+    @include admin-add-container;
+    width: 30%;
+  }
+}

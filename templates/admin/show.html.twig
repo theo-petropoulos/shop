@@ -3,6 +3,11 @@
 {% block title %}ACCUEIL | ADMINISTRATION{% endblock %}
 
 {% block body %}
+
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="success">{{ flashMessage }}</div>
+    {% endfor %}
+
     <main id="admin">
         <div id="admin_container">
             <section id="admin_titles">

@@ -1,9 +1,9 @@
 @use 'assets/styles/variables' as *;
 
-// Import user's CSS requirements
+// Import admin's CSS requirements
 @use './includes/landing.scss';
 @use './product/products.scss';
-@use './product/_modal_products.scss';
+@use './admin/admins.scss';
 
 #admin{
   display:flex;
@@ -26,24 +26,16 @@
       width:70%;
       text-align: center;
       &[type=submit]{
-        margin:2%;
-        background:$grey;
-        color:white;
-        font-family: $font;
-        outline:0;
-        border:1px solid black;
-        border-radius: unset;
-        padding:1% 0;
-        font-size:calc(10px + 0.5vw);
-        line-height:calc(10px + 0.5vw);
-        &:hover{
-          background:$grey_light;
-          transition:all 0.3s;
-          cursor:pointer;
-          font-size:calc(13px + 0.5vw);
-        }
+        @include submit-button;
       }
     }
+  }
+}
+
+#admin_alt{
+  @include admin-alt;
+  #products, #admins{
+    @include admin-alt-display;
   }
 }
 
@@ -52,21 +44,5 @@
     form{
       width:80%;
     }
-  }
-}
-
-a#back_btn{
-  font-family: $font;
-  background:white;
-  padding:1% 2%;
-  border:1px solid black;
-  text-decoration: none;
-  margin:2%;
-  text-align: center;
-  width:max-content;
-  color:black;
-  &:hover{
-    background:rgb(195, 195, 195);
-    transition:all 0.3s;
   }
 }

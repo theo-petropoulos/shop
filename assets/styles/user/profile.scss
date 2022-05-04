@@ -4,7 +4,7 @@
 @use 'includes/landing';
 @use 'includes/modify_password';
 @use 'address/show_addresses';
-@use 'address/_modal_address';
+@use '../modal';
 
 #profile{
   display:flex;
