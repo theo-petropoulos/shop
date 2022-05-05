@@ -17,9 +17,9 @@ class Product
     #[ORM\Column(type: "integer")]
     protected int $id;
 
-    #[ORM\ManyToOne(targetEntity: Brand::class, inversedBy: "products")]
+    #[ORM\ManyToOne(targetEntity: Author::class, inversedBy: "products")]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Brand $brand;
+    private ?Author $author;
 
     #[ORM\ManyToOne(targetEntity: Discount::class, cascade: ["persist", "remove"], inversedBy: "products")]
     #[ORM\JoinColumn(nullable: true, onDelete: "set null")]
@@ -31,10 +31,9 @@ class Product
     #[Assert\Length(max: 155, maxMessage: "Le nom ne peut excéder {{ limit }} caractères.")]
     private ?string $name;
 
-    #[ORM\Column(type: "string", length: 500)]
-    #[Assert\NotBlank(message: "Le champ description est obligatoire.")]
+    #[ORM\Column(type: "string", length: 1250, nullable: true)]
     #[Assert\Type(type: "string", message: "La description doit contenir une chaine de caractères valides.")]
-    #[Assert\Length(max: 500, maxMessage: "La description ne peut excéder {{ limit }} caractères.")]
+    #[Assert\Length(max: 1250, maxMessage: "La description ne peut excéder {{ limit }} caractères.")]
     private ?string $description;
 
     #[ORM\Column(type: "float")]
@@ -51,6 +50,9 @@ class Product
     #[Assert\Type(type: "bool", message: "La valeur active doit être de type {{ type }}.")]
     private ?bool $active;
 
+    #[ORM\Column(name: "purchases", type:"integer", nullable: true)]
+    private int $soldCopies;
+
     #[ORM\OneToMany(mappedBy: "product", targetEntity: Image::class, cascade: ["persist"])]
     private Collection $images;
 
@@ -65,14 +67,14 @@ class Product
         return $this->id;
     }
 
-    public function getBrand(): ?Brand
+    public function getAuthor(): ?Author
     {
-        return $this->brand;
+        return $this->author;
     }
 
-    public function setBrand(?Brand $brand): self
+    public function setAuthor(?Author $author): self
     {
-        $this->brand = $brand;
+        $this->author = $author;
 
         return $this;
     }
@@ -141,6 +143,18 @@ class Product
         return $this;
     }
 
+    public function getSoldCopies(): ?int
+    {
+        return $this->soldCopies;
+    }
+
+    public function addSoldCopies(int $soldCopies): self
+    {
+        $this->$soldCopies += $soldCopies;
+
+        return $this;
+    }
+
     public function getDiscount(): ?Discount
     {
         return $this->discount;
@@ -153,9 +167,6 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Collection<int, Image>
-     */
     public function getImages(): Collection
     {
         return $this->images;

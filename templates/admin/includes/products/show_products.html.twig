@@ -15,8 +15,8 @@
 
         {# Search triggers #}
         <div id="adm_search_container">
-            <section id="adm_search_brand">
-                <button type="submit" class="trigger_adm_search">Rechercher une marque</button>
+            <section id="adm_search_author">
+                <button type="submit" class="trigger_adm_search">Rechercher un auteur</button>
             </section>
             <section id="adm_search_product">
                 <button type="submit" class="trigger_adm_search">Rechercher un produit</button>
@@ -78,27 +78,27 @@
                 {% endif %}
             </details>
 
-            {# Affiche les marques #}
-            <details id="brand_det">
-                <summary>Afficher les marques</summary>
-                {% if brands is not empty %}
-                    {% for brand in brands %}
-                        <div id="brand_{{ brand.id }}" class="div_det">
-                            <div id="{{ brand.id ~ "_name_brand"}}" class="name">
-                                <h3>Marque :</h3>
-                                <p>{{ brand.name }}</p>
+            {# Affiche les auteurs #}
+            <details id="author_det">
+                <summary>Afficher les auteurs</summary>
+                {% if authors is not empty %}
+                    {% for author in authors %}
+                        <div id="author_{{ author.id }}" class="div_det">
+                            <div id="{{ author.id ~ "_name_author"}}" class="name">
+                                <h3>Auteur :</h3>
+                                <p>{{ author.name }}</p>
                                 <button class="adm_modify_button">Modifier</button>
                             </div>
-                            <div id="{{ brand.id ~ "_description_brand"}}" class="description">
+                            <div id="{{ author.id ~ "_description_author"}}" class="description">
                                 <h3>Description :</h3>
-                                <p>{{ brand.description }}</p>
+                                <p>{{ author.description }}</p>
                                 <button class="adm_modify_button">Modifier</button>
                             </div>
-                            <div id="{{ brand.id ~ "_active_brand"}}" class="active">
+                            <div id="{{ author.id ~ "_active_author"}}" class="active">
                                 <h3>Statut :</h3>
-                                <button class="adm_modify_button">{{ brand.active ? 'Désactiver' : 'Activer' }}</button>
+                                <button class="adm_modify_button">{{ author.active ? 'Désactiver' : 'Activer' }}</button>
                             </div>
-                            <a href="#" id="{{ brand.id ~ '_link'}}" class="show_products_by_brand">Afficher les produits</a>
+                            <a href="#" id="{{ author.id ~ '_link'}}" class="show_products_by_author">Afficher les produits</a>
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -110,9 +110,9 @@
                 {% if products is not empty %}
                     {% for product in products %}
                         <div id="product_{{ product.id }}" class="div_det">
-                            <div id="{{ product.id ~ '_brand_product'}}" class="brand_name">
-                                <h4>Marque :</h4>
-                                <p>{{ product.brand.name }}</p>
+                            <div id="{{ product.id ~ '_author_product'}}" class="author_name">
+                                <h4>Auteur :</h4>
+                                <p>{{ product.author.name }}</p>
                                 <button class="adm_modify_button">Modifier</button>
                             </div>
                             <div id="{{ product.id ~ '_name_product'}}" class="product_name">
@@ -145,10 +145,10 @@
             </details>
         </div>
 
-        {# Add Brand / Product / Discount containers #}
-        <section id="add_discount_brand_product">
-            <div id="add_brand" class="add_container">
-                <button href="{{ path('admin_add_item', {entity: 'brand'}) }}" id="add_brand_btn" class="add_btn">+ Ajouter une marque</button>
+        {# Add Author / Product / Discount containers #}
+        <section id="add_discount_author_product">
+            <div id="add_author" class="add_container">
+                <button href="{{ path('admin_add_item', {entity: 'author'}) }}" id="add_author_btn" class="add_btn">+ Ajouter un auteur</button>
                 {# Render Form via Controller #}
             </div>
             <div id="add_product" class="add_container">
@@ -161,12 +161,12 @@
             </div>
         </section>
 
-        {# Brand's search results container #}
-        <section id="search_brand_container" class="search_item_container">
-            <div id="search_brand_box" class="search_item_box">
-                <button id="search_brand_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
-                <input type="text" name="adm_search" class="adm_search_input" id="adm_search_input_brand">
-                <div class="search_results_box" id="search_results_brand">
+        {# Author's search results container #}
+        <section id="search_author_container" class="search_item_container">
+            <div id="search_author_box" class="search_item_box">
+                <button id="search_author_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
+                <input type="text" name="adm_search" class="adm_search_input" id="adm_search_input_author">
+                <div class="search_results_box" id="search_results_author">
 
                 </div>
             </div>
@@ -201,7 +201,7 @@
 {% block javascripts %}
     <script type="text/javascript">
         window.searchPath   = "{{ path('admin_product_search') }}"
-        window.fetchBrands  = "{{ path('admin_fetch_brands') }}"
+        window.fetchAuthors  = "{{ path('admin_fetch_authors') }}"
         window.postEdit     = "{{ path('admin_edit_item') }}"
     </script>
 

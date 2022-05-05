@@ -2,7 +2,7 @@
 
 namespace App\Form\Admin;
 
-use App\Entity\Brand;
+use App\Entity\Author;
 use App\Entity\Discount;
 use App\Entity\Product;
 use App\Repository\DiscountRepository;
@@ -24,10 +24,10 @@ class AddProductType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('brand', EntityType::class, [
-                'label'         => 'Marque',
+            ->add('author', EntityType::class, [
+                'label'         => 'Auteur',
                 'required'      => true,
-                'class'         => Brand::class,
+                'class'         => Author::class,
                 'choice_label'  => 'name'
             ])
             ->add('discount', EntityType::class, [
@@ -51,7 +51,7 @@ class AddProductType extends AbstractType
             ])
             ->add('description', TextareaType::class, [
                 'label'     => 'Description',
-                'required'  => true,
+                'required'  => false,
                 'attr'      => [
                     'max'       => 500
                 ]

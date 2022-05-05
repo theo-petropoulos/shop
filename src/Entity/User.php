@@ -224,9 +224,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
     public function getIP(): Collection
     {
         return $this->IP;
@@ -254,9 +251,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
     public function getAddresses(): Collection
     {
         return $this->addresses;
@@ -284,9 +278,6 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
     public function getOrders(): Collection
     {
         return $this->orders;

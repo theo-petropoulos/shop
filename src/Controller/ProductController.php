@@ -3,47 +3,43 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController extends AbstractController
 {
-    public function __construct(private ManagerRegistry $doctrine) {}
+    public function __construct() {}
 
     /**
      * Affiche tous les produits disponibles
      *
-     * @Route("/products", name="show_products_all")
+     * @Route("/products", name="show_products")
      *
      * @param Request $request
      * @return Response
      */
-    public function showProductsIndex(Request $request): Response
+    public function showProductsIndex(Request $request, ProductRepository $productRepository): Response
     {
-        $em = $this->doctrine->getManager();
-        return $this->render('product/show_all.html.twig');
+        return $this->render('product/show_all.html.twig', [
+
+        ]);
     }
 
     /**
      * Affiche un produit en particulier
      *
-     * @Route("/products/{productId}", name="show_product")
+     * @Route("/products/{id}", name="show_product")
      */
-    public function showProductIndex(Request $request, int $productId): RedirectResponse
+    public function showProductIndex(Request $request, Product $product): Response
     {
-        $em         = $this->doctrine->getManager();
-        $product    = $em->getRepository(Product::class)->findOneBy(['id' => $productId]);
+        $author = $product->getAuthor();
 
-        if ($product)
-        {
-            $brand = $product->getBrand();
-            return $this->redirectToRoute("show_brand_show_product", ['brandId' => $brand->getid(), 'productId' => $product->getId()]);
-        }
-        else throw new NotFoundHttpException('Le produit demandé n\'existe pas.');
+        return $this->render('product/show.html.twig', [
+            'product'   => $product
+        ]);
     }
 }

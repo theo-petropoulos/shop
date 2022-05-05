@@ -113,9 +113,6 @@ class Order
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
     public function getOrderDetails(): Collection
     {
         return $this->orderDetails;

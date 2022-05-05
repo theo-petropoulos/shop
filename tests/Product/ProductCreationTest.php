@@ -2,7 +2,7 @@
 
 namespace App\Tests\Product;
 
-use App\Entity\Brand;
+use App\Entity\Author;
 use App\Entity\Product;
 use Doctrine\ORM\EntityManager;
 use Exception;
@@ -32,7 +32,7 @@ class ProductCreationTest extends KernelTestCase
      */
     public function createNewProducts()
     {
-        $brand          = $this->em->getRepository(Brand::class)->findOneBy([], ['id' => 'DESC']);
+        $author          = $this->em->getRepository(Author::class)->findOneBy([], ['id' => 'DESC']);
         $counterInitial = $this->em->getRepository(Product::class)->count([]);
         for ($i = 0; $i < 10; $i++) {
             $product = new Product();
@@ -40,7 +40,7 @@ class ProductCreationTest extends KernelTestCase
                 ->setActive(true)
                 ->setDescription("Description product " . $i)
                 ->setName("Name product " . $i)
-                ->setBrand($brand)
+                ->setAuthor($author)
                 ->setImagePath("/assets/products/images/product_" . $i . ".jpg")
                 ->setPrice("45.95")
                 ->setStock("25");
@@ -63,13 +63,13 @@ class ProductCreationTest extends KernelTestCase
     public function invalidStock()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $brand          = $this->em->getRepository(Brand::class)->findOneBy([], ['id' => 'DESC']);
+        $author          = $this->em->getRepository(Author::class)->findOneBy([], ['id' => 'DESC']);
         $product = new Product();
         $product
             ->setActive(true)
             ->setDescription("Description product fail")
             ->setName("Name product fail")
-            ->setBrand($brand)
+            ->setAuthor($author)
             ->setImagePath("/assets/products/images/product_fail.jpg")
             ->setPrice("45.95")
             ->setStock("-1");
@@ -89,13 +89,13 @@ class ProductCreationTest extends KernelTestCase
     public function invalidPrice()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $brand          = $this->em->getRepository(Brand::class)->findOneBy([], ['id' => 'DESC']);
+        $author          = $this->em->getRepository(Author::class)->findOneBy([], ['id' => 'DESC']);
         $product = new Product();
         $product
             ->setActive(true)
             ->setDescription("Description product fail")
             ->setName("Name product fail")
-            ->setBrand($brand)
+            ->setAuthor($author)
             ->setImagePath("/assets/products/images/product_fail.jpg")
             ->setPrice("-1")
             ->setStock("15");

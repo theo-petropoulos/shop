@@ -6,8 +6,8 @@ window.itemBox          = '';
 $(function() {
     // Dictionary
     let trans       = {
-        'brand'         : 'Marque',
-        'brand_name'    : 'Marque',
+        'author'         : 'Auteur',
+        'author_name'    : 'Auteur',
         'product'       : 'Produit',
         'product_name'  : 'Produit',
         'Produit'       : 'Produit',
@@ -40,7 +40,7 @@ $(function() {
     })
     // Close search bar on clicking outside the div
     $(document).on('click', '.search_item_container', function(e) {
-        if($(e.target).is('#search_brand_container') || $(e.target).is('#search_product_container'))
+        if($(e.target).is('#search_author_container') || $(e.target).is('#search_product_container'))
             closeSearchBar(itemBox, itemContainer)
     })
     // Close search bar on esc keypress
@@ -85,13 +85,13 @@ $(function() {
                                 if (!array.includes(key)) {
                                     let value = object[key]
 
-                                    if (key === 'brand_name' && table === 'discount') {
+                                    if (key === 'author_name' && table === 'discount') {
                                         key     = 'Produit'
                                         value  += ' - ' + object['product_name']
                                     }
 
                                     if (table === 'discount') {
-                                        if (key === 'brand_name') {
+                                        if (key === 'author_name') {
                                             key         = 'Produit'
                                             value      += ' - ' + object['product_name']
                                         }
@@ -144,13 +144,13 @@ $(function() {
         }
     }, ".adm_search_input")
 
-    // Display Products by Brand
-    $(document).on('click', '.show_products_by_brand', function(e) {
+    // Display Products by Author
+    $(document).on('click', '.show_products_by_author', function(e) {
         e.preventDefault()
-        let brand           = $(this).parent().find('.name p').text()
+        let author           = $(this).parent().find('.name p').text()
         const productSearch = $('#adm_search_input_product');
         $('#adm_search_product .trigger_adm_search').trigger('click')
-        productSearch.val(brand).trigger('keyup')
+        productSearch.val(author).trigger('keyup')
     })
 })
 

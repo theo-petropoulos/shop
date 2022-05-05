@@ -12,5 +12,5 @@ IPRecords
 	=> Nombre de comptes différents
 
 Administration
-	=> Bug sur le select brand & les dates
+	=> Bug sur le select author & les dates
 	=> Ajouter la désactivation / suppression

@@ -38,7 +38,7 @@
             width:10%;
             min-width:50px;
           }
-          &.name, &.brand_name, &.product_name{
+          &.name, &.author_name, &.product_name{
             width:15%;
             min-width:120px;
           }
@@ -131,7 +131,7 @@
       }
     }
   }
-  #add_discount_brand_product{
+  #add_discount_author_product{
     @include admin-add-container;
     width: 90%;
   }
@@ -195,7 +195,7 @@
             width:10%;
             min-width:50px;
           }
-          &.name, &.brand_name, &.product_name{
+          &.name, &.author_name, &.product_name{
             width:15%;
             min-width:120px;
           }
