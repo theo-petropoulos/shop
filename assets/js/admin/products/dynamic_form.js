@@ -1,4 +1,4 @@
-$(function () {
+$(function() {
     // Display an alert and prevent Form submit in case of wrong selection of Dates
     $(document).on('change', '#add_discount_endingDate, #add_discount_startingDate', function () {
         let startingDate    = $('#add_discount_startingDate')

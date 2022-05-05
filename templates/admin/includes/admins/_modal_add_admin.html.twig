@@ -1,0 +1,28 @@
+{% extends '_modal.html.twig' %}
+
+{% block class %}
+    admin_add_admin
+{% endblock %}
+
+{% block modal %}
+    {# Display form errors #}
+    {% if errors is defined and errors %}
+        <div class="form-errors">
+            {% for error in errors %}
+                <div class="form-error">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {{ form_start(form, {'action': path('admin_add_admin')}) }}
+        {{ form_widget(form) }}
+        <input id="add_item_submit" type="submit" value="Ajouter">
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    <script defer type="text/javascript">
+    </script>
+{% endblock %}

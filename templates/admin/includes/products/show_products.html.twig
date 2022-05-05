@@ -31,7 +31,6 @@
             <details id="discount_det">
                 <summary>Afficher les promotions</summary>
                 {% if discounts is not empty %}
-                    {% set discountCounter = 1 %}
                     {% for discount in discounts %}
                         <details id="discount_{{ discount.id }}" class="det_det">
                             <summary>

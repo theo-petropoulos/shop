@@ -15,7 +15,7 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    protected ?int $id;
+    protected int $id;
 
     #[ORM\ManyToOne(targetEntity: Brand::class, inversedBy: "products")]
     #[ORM\JoinColumn(nullable: false)]
@@ -51,7 +51,7 @@ class Product
     #[Assert\Type(type: "bool", message: "La valeur active doit être de type {{ type }}.")]
     private ?bool $active;
 
-    #[ORM\OneToMany(mappedBy: "Product", targetEntity: Image::class, cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: "product", targetEntity: Image::class, cascade: ["persist"])]
     private Collection $images;
 
     #[Pure]

@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ADMINS | ADMINISTRATION{% endblock %}
+
+{% block body %}
+    <main id="admin_alt">
+
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="success">{{ flashMessage }}</div>
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('failure') %}
+            <div class="failure">{{ flashMessage }}</div>
+        {% endfor %}
+
+        <div id="admins">
+            {# Affiche les admins #}
+            <details id="admin_det">
+                <summary>Afficher les administrateurs</summary>
+                {% if admins is not empty %}
+                    {% for admin in admins %}
+                        <div id="admin_{{ admin.id }}" class="div_det{% if admin == currAdmin %} current_admin {% endif %}">
+                            <div id="{{ admin.id }}_email" class="email">
+                                <h3>Email :</h3>
+                                <p>{{ admin.email }}</p>
+                                <button class="adm_modify_button">Modifier</button>
+                            </div>
+                            <div id="{{ admin.id }}_lastname" class="lastname">
+                                <h3>Nom :</h3>
+                                <p>{{ admin.lastName }}</p>
+                                <button class="adm_modify_button">Modifier</button>
+                            </div>
+                            <div id="{{ admin.id }}_firstname" class="firstname">
+                                <h3>Prénom :</h3>
+                                <p>{{ admin.firstName }}</p>
+                                <button class="adm_modify_button">Modifier</button>
+                            </div>
+                            <div id="{{ admin.id }}_isVerified" class="active">
+                                <h3>Statut :</h3>
+                                <button class="adm_modify_button">{{ admin.isVerified ? 'Désactiver' : 'Activer' }}</button>
+                            </div>
+                            <span>
+                                <a href="{{ path('admin_delete_admin', {id: admin.id}) }}" id="{{ admin.id }}_delete" class="delete_admin_btn">
+                                    Supprimer le compte
+                                </a>
+                                <a href="{{ path('admin_edit_admin_password', {id: admin.id}) }}" id="{{ admin.id }}_edit_admin_password" class="edit_admin_password open-modal">
+                                    {% if is_granted('ROLE_SUPER_ADMIN') or admin == currAdmin %}
+                                        Modifier le mot de passe
+                                    {% else %}
+                                        Réintialiser le mot de passe
+                                    {% endif %}
+                                </a>
+                            </span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </details>
+        </div>
+
+        {# Add Admin container #}
+        <section id="add_admin_section">
+            <div id="add_admin" class="add_container">
+                <button href="{{ path('admin_add_admin') }}" id="add_admin_btn" class="add_btn">+ Ajouter un administrateur</button>
+                {# Render Form via Controller #}
+            </div>
+        </section>
+
+        <a href="{{ path('admin') }}" id="back_btn">Retour</a>
+
+    </main>
+{% endblock body %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        window.postEdit     = "{{ path('admin_edit_admin') }}"
+        window.currAdminId  = "{{ currAdmin.id }}"
+    </script>
+
+    {# Add Modal script #}
+    {{ encore_entry_script_tags('modal') }}
+
+    {# Dynamic Edit script #}
+    {{ encore_entry_script_tags('admin_dynamic_edit') }}
+
+    {# Delete Admin script #}
+    {{ encore_entry_script_tags('admin_delete_admin') }}
+{% endblock %}

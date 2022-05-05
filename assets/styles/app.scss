@@ -3,6 +3,7 @@
 // Import globals
 @use 'globals/header.scss';
 @use 'globals/footer.scss';
+@use '_modal.scss';
 
 // Import user
 @use 'user/login.scss';
@@ -103,4 +104,24 @@ main{
 
 .required{
   color: $red;
+}
+
+a#back_btn{
+  font-family: $font;
+  background:white;
+  padding:1% 2%;
+  border:1px solid black;
+  text-decoration: none;
+  margin:2%;
+  text-align: center;
+  width:max-content;
+  color:black;
+  &:hover{
+    background:rgb(195, 195, 195);
+    transition:all 0.3s;
+  }
+}
+
+.current_admin{
+  background: $yellow_light;
 }

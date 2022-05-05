@@ -6,14 +6,19 @@ use App\Entity\Brand;
 use App\Entity\Discount;
 use App\Entity\Image;
 use App\Entity\Product;
+use App\Errors\ErrorFormatter;
 use App\Exceptions\InvalidSizeException;
+use App\Form\Admin\AddAdminType;
 use App\Form\Admin\AddBrandType;
 use App\Form\Admin\AddDiscountType;
 use App\Form\Admin\AddProductType;
+use App\Form\ModifyPasswordType;
 use App\QueryBuilder\AdminSearch;
 use App\Repository\BrandRepository;
 use App\Repository\DiscountRepository;
 use App\Repository\ProductRepository;
+use App\Repository\UserRepository;
+use App\Security\EmailVerifier;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Instantiator\Exception\InvalidArgumentException;
@@ -23,6 +28,7 @@ use Exception;
 use JetBrains\PhpStorm\Pure;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
 use Symfony\Component\Config\Definition\Exception\InvalidTypeException;
@@ -33,15 +39,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class AdminController extends AbstractController
 {
     private EntityManagerInterface $em;
+    private Security $security;
+    private EmailVerifier $emailVerifier;
 
     #[Pure]
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->em = $entityManager;
+    public function __construct(EntityManagerInterface $entityManager, Security $security, EmailVerifier $emailVerifier) {
+        $this->em               = $entityManager;
+        $this->security         = $security;
+        $this->emailVerifier    = $emailVerifier;
     }
 
     # Accueil Admin
@@ -50,14 +65,6 @@ class AdminController extends AbstractController
     public function adminIndex(Request $request): Response
     {
         return $this->render('admin/show.html.twig');
-    }
-
-    # Mot de passe Admin
-    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
-    #[Route(path: '/admin/password', name: 'admin_edit_password')]
-    public function adminEditPassword(Request $request): Response
-    {
-        return $this->render('admin/includes/edit_password.html.twig');
     }
 
     # Administration des clients
@@ -334,12 +341,136 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_show_products');
     }
 
-    # Administration des produits
+    # Administration des administrateurs
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/admins', name: 'admin_show_admins')]
-    public function adminShowAdmins(Request $request): Response
+    public function adminShowAdmins(Request $request, UserRepository $userRepository): Response
     {
-        return $this->render('admin/includes/show_admins.html.twig');
+        $admins     = $userRepository->findByRole('admin');
+        $currAdmin  = $this->security->getUser();
+
+        return $this->render('admin/includes/admins/show_admins.html.twig', [
+            'admins'    => $admins,
+            'currAdmin' => $currAdmin
+        ]);
+    }
+
+    # Ajout d'un administrateur
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/admins/add', name: 'admin_add_admin')]
+    public function adminAddAdmin(Request $request): Response
+    {
+        $errors = [];
+
+        $admin  = new User();
+
+        /** @var Form $form */
+        $form   = $this->createForm(AddAdminType::class, $admin);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+
+            if ($form->isValid()) {
+                /** @var User $admin */
+                $admin = $form->getData();
+                $admin->setRoles(['ROLE_ADMIN']);
+
+                $this->em->persist($admin);
+                $this->em->flush();
+
+                $this->addFlash('success', 'L\'Administrateur a été ajouté avec succès.');
+            }
+            else {
+                foreach ($form->getErrors(true) as $key => $error)
+                    $errors[$key] = $error->getMessage();
+
+                $form->clearErrors(true);
+
+                $this->addFlash('failure', json_encode($errors));
+            }
+
+            return $this->redirectToRoute('admin_show_admins');
+        }
+
+        return $this->renderForm('admin/includes/admins/_modal_add_admin.html.twig', [
+            'form'      => $form,
+            'errors'    => $errors
+        ]);
+    }
+
+    # Edition d'un administrateur
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/admins/edit', name: 'admin_edit_admin')]
+    public function adminEditAdmin(Request $request, UserRepository $userRepository): Response
+    {
+        $id         = $request->get('id');
+        $field      = $request->get('field');
+        $value      = $request->get('value');
+
+        /** @var User $admin */
+        $admin      = $userRepository->findOneBy(['id' => $id]);
+
+        if (!$admin)
+            throw new NotFoundResourceException('L\'utilisateur demandé n\'a pas été trouvé.');
+
+        $method     = 'set' . ucfirst($field);
+        if (method_exists($admin, $method))
+            $admin->$method($value);
+        else
+            throw new InvalidArgumentException('Une erreur inattendue est survenue.');
+
+        $this->em->persist($admin);
+        $this->em->flush();
+
+        return new JsonResponse(json_encode(['status' => 'success']));
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     */
+    # Edition du mot de passe d'un administrateur
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/admins/edit/{id}/password', name: 'admin_edit_admin_password')]
+    public function adminEditAdminPassword(Request $request, User $admin, UserPasswordHasherInterface $userPasswordHasher): Response
+    {
+        if ($this->isGranted('ROLE_SUPER_ADMIN') || $admin === $this->security->getUser()) {
+            $sortedErrors   = [];
+            /** @var Form $form */
+            $form           = $this->createForm(ModifyPasswordType::class, $admin);
+
+            return $this->renderForm('admin/includes/admins/_modal_edit_password.html.twig', [
+                'form'          => $form,
+                'sortedErrors'  => $sortedErrors
+            ]);
+        }
+        else {
+            $extraParams = ['id' => $admin->getId()];
+            $this->emailVerifier->sendEmailConfirmation(
+                'user_reset_password',
+                $admin,
+                (new TemplatedEmail())
+                    ->from(new Address('okko.network@gmail.com', 'Stripe Shop'))
+                    ->to($admin->getEmail())
+                    ->subject('Réinitialisation du mot de passe')
+                    ->htmlTemplate('email/login/confirmation_ip.html.twig'),
+                $extraParams
+            );
+
+            $this->addFlash('success', 'Un email de réinitialisation du mot de passe vient d\'être envoyé.');
+            return new RedirectResponse($this->generateUrl('admin_show_admins'));
+        }
+    }
+
+    # Suppression d'un administrateur
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/admins/delete/{id}', name: 'admin_delete_admin')]
+    public function adminDeleteAdmin(Request $request, User $admin): RedirectResponse
+    {
+        $this->em->remove($admin);
+        $this->em->flush();
+
+        return $this->redirectToRoute('admin_show_admins');
     }
 
 }
