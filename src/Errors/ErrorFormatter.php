@@ -20,27 +20,31 @@ class ErrorFormatter
 
     public function sortErrors(): array
     {
-        foreach ($this->errors as $error) {
-            $cause  = $error->getCause();
-            $key    = $this->form->getName();
+        if (!empty($this->errors)) {
+            foreach ($this->errors as $error) {
+                $cause  = $error->getCause();
+                $key    = $this->form->getName();
 
-            if ($cause instanceof ConstraintViolation) {
+                if ($cause instanceof ConstraintViolation) {
 
-                if (preg_match('(data|children)', $cause->getPropertyPath()) === 1) {
-                    $path           = array_diff(explode('.', $cause->getPropertyPath()), ['data', 'children']);
-                    $originName     = $error->getOrigin()->getName();
+                    if (preg_match('(data|children)', $cause->getPropertyPath()) === 1) {
+                        $path           = array_diff(explode('.', $cause->getPropertyPath()), ['data', 'children']);
+                        $originName     = $error->getOrigin()->getName();
 
-                    foreach ($path as $index => $subPath) {
-                        $key .= '_' . str_replace(['children', '[', ']'], '', $subPath);
+                        foreach ($path as $index => $subPath) {
+                            $key .= '_' . str_replace(['children', '[', ']'], '', $subPath);
+                        }
+                        $key .= '_' . $originName;
                     }
-                    $key .= '_' . $originName;
+                    else
+                        $key = null;
                 }
-                else
-                    $key = null;
+                if ($key)
+                    $this->sortedErrors[$key] = $error->getMessage();
             }
-            if ($key)
-                $this->sortedErrors[$key] = $error->getMessage();
         }
+        else
+            $this->sortedErrors = [];
 
         return $this->sortedErrors;
     }
