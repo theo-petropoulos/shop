@@ -14,10 +14,7 @@
             min-width:120px;
           }
           p{
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            @include clamped-lines-2;
           }
         }
         span{

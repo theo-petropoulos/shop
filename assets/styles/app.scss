@@ -1,37 +1,40 @@
 @use 'assets/styles/variables' as *;
 
 // Import globals
-@use 'globals/header.scss';
-@use 'globals/footer.scss';
-@use '_modal.scss';
+@use 'globals/header';
+@use 'globals/footer';
+@use '_modal';
 
 // Import user
-@use 'user/login.scss';
-@use 'user/register.scss';
-@use 'user/profile.scss';
+@use 'user/user';
 
 // Import admin
-@use 'admin/admin.scss';
+@use 'admin/admin';
+
+// Import brand
+@use 'brand/brand';
 
 // Global rules
-*,html,body{
-  margin:0;
-  padding:0;
+*, html, body{
+  margin: 0;
+  padding: 0;
+  font-family: $font;
 }
 
 body{
-  min-width:100vw;
-  min-height:100vh;
+  min-width: 100vw;
+  min-height: 100vh;
   overflow-x: hidden;
-  display:flex;
-  flex-direction:column;
-  background:white;
+  display: flex;
+  flex-direction: column;
+  background: white;
 }
 
 main{
-  min-height:85vh;
+  min-height: 85vh;
 }
 
+// Specific rules
 .success, .failure, .warning{
   font-family: $font;
   position:absolute;

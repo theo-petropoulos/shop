@@ -3,5 +3,21 @@
 {% block pretitle %}NOS MARQUES{% endblock %}
 
 {% block body %}
-    Ici les marques
+    <main id="brands">
+        <section id="brands_container">
+            {% if brands is not empty %}
+                {% for brand in brands %}
+                    <div id="{{ brand.id }}_container" class="brand_container navto_container">
+                        <a href="{{ (path('show_brand', {id: brand.id})) }}" class="navto">{{ brand.name }}</a>
+                        <p>{{ brand.description }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </section>
+    </main>
 {% endblock body %}
+
+{% block javascripts %}
+    {# Clickable sections script #}
+    {{ encore_entry_script_tags('clickable_section') }}
+{% endblock %}

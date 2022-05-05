@@ -22,6 +22,7 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('modal', './assets/js/modal.js')
+    .addEntry('clickable_section', './assets/js/clickable_sections.js')
     .addEntry('edit_delete_address', './assets/js/user/addresses/edit_delete_address.js')
     .addEntry('user_delete_account', './assets/js/user/delete_account.js')
     .addEntry('admin_products_searchbar', './assets/js/admin/products/searchbar.js')
