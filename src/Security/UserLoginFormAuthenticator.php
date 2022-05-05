@@ -16,6 +16,8 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
@@ -35,14 +37,16 @@ class UserLoginFormAuthenticator extends AbstractLoginFormAuthenticator
     private TokenStorageInterface $tokenStorage;
     private SessionInterface $session;
     private EmailVerifier $emailVerifier;
+    private AccessDecisionManagerInterface $accessManager;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage, SessionInterface $session, EmailVerifier $emailVerifier)
+    public function __construct(UrlGeneratorInterface $urlGenerator, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage, SessionInterface $session, EmailVerifier $emailVerifier, AccessDecisionManagerInterface $accessManager)
     {
         $this->urlGenerator     = $urlGenerator;
         $this->entityManager    = $entityManager;
         $this->tokenStorage     = $tokenStorage;
         $this->session          = $session;
         $this->emailVerifier    = $emailVerifier;
+        $this->accessManager    = $accessManager;
     }
 
     public function authenticate(Request $request): Passport
@@ -89,7 +93,7 @@ class UserLoginFormAuthenticator extends AbstractLoginFormAuthenticator
             else {
                 $this->entityManager->persist($currentIP);
                 $this->entityManager->flush();
-                try{
+                try {
                     $extraParams = ['id' => $user->getId(), 'ip' => $currentIP->getId()];
                     $this->emailVerifier->sendEmailConfirmation(
                         'login_verify_ip',
@@ -112,7 +116,12 @@ class UserLoginFormAuthenticator extends AbstractLoginFormAuthenticator
             }
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('user_show_profile'));
+        $roles = $user->getRoles();
+
+        if (array_intersect(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'], $roles))
+            return new RedirectResponse($this->urlGenerator->generate('admin'));
+        else
+            return new RedirectResponse($this->urlGenerator->generate('user_show_profile'));
     }
 
     protected function getLoginUrl(Request $request): string

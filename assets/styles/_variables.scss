@@ -11,6 +11,7 @@ $red: rgb(170, 15, 15);
 $red_strong: rgb(255, 0, 0);
 $blue: rgb(25, 90, 240);
 $blue_light: rgb(90, 190, 255);
+$yellow_light: rgba(255, 225, 95, 0.50);
 
 @mixin login-register{
   font-family: $font;
@@ -154,5 +155,96 @@ $blue_light: rgb(90, 190, 255);
     transition:all 0.3s;
     cursor:pointer;
     font-size:calc(13px + 0.5vw);
+  }
+}
+
+@mixin admin-alt{
+  display: flex;
+  width: 100%;
+  position: relative;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 2%;
+  box-sizing: border-box;
+}
+
+@mixin admin-add-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  position:relative;
+  .add_container{
+    width:25%;
+    flex-grow: 1;
+    padding:2%;
+    display:flex;
+    button.adm_modify_btn, button.add_btn{
+      flex-grow: 1;
+      width:90%;
+      padding:2%;
+      background:white;
+      border:1px solid $orange_light;
+      font-family: $font;
+      &:hover{
+        cursor:pointer;
+        background:$orange_light;
+        transition: all 0.3s;
+      }
+    }
+  }
+}
+
+@mixin admin-alt-display{
+  width: 90%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border: 1px solid black;
+  font-family: $font;
+  padding: 1%;
+  box-sizing: border-box;
+  details{
+    width: 100%;
+    position: relative;
+    padding: 2%;
+    border: 1px solid $orange;
+    margin: calc(max(1%,15px)) 0;
+    box-sizing: border-box;
+    summary{
+      font-size: calc(14px + 0.6vw);
+      &:hover{
+        cursor: pointer;
+      }
+    }
+    .div_det{
+      @include div-det;
+      div{
+        width: 25%;
+        min-width: 100px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        button {
+          @include div-det-button;
+        }
+      }
+      a{
+        width: 15%;
+        flex-grow: 1;
+        text-decoration: none;
+        color: $blue;
+        text-align: center;
+        align-self: center;
+        &:hover{
+          color: red;
+          transition: all 0.3s;
+        }
+      }
+    }
   }
 }

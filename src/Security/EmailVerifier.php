@@ -62,6 +62,7 @@ class EmailVerifier
             case 'register':
                 $user->setIsVerified(true);
                 $this->entityManager->persist($user);
+                $this->session->getFlashBag()->add('success', 'Vous pouvez à présent vous connecter.');
                 break;
             case 'ip':
                 /** @var IP $extraParam */
@@ -69,6 +70,7 @@ class EmailVerifier
                 $this->entityManager->persist($extraParam);
                 $this->session->getFlashBag()->add('success', 'Vous pouvez à présent vous connecter.');
                 break;
+            case 'reset_password':
             default:
                 break;
         }

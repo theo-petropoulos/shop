@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Address;
 use App\Entity\User;
+use App\Errors\ErrorFormatter;
 use App\Form\AddAddressType;
 use App\Form\ModifyPasswordType;
 use App\Repository\AddressRepository;
@@ -12,6 +13,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -39,33 +41,47 @@ class UserController extends AbstractController
     #[Route(path: '/user/profile/password', name: 'user_edit_password')]
     public function userEditPassword(Request $request, UserInterface $user, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(ModifyPasswordType::class, $user);
+        /** @var Form $form */
+        $form           = $this->createForm(ModifyPasswordType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->refresh($user);
-            $oldPassword = $form->get('old_password')->getData();
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $entityManager->refresh($user);
+                $oldPassword = $form->get('old_password')->getData();
 
-            if ($userPasswordHasher->isPasswordValid($user, $oldPassword)) {
-                $hashedPassword = $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('password')->getData()
-                );
-                $user->setPassword($hashedPassword);
+                if ($userPasswordHasher->isPasswordValid($user, $oldPassword)) {
+                    $hashedPassword = $userPasswordHasher->hashPassword(
+                        $user,
+                        $form->get('password')->getData()
+                    );
+                    $user->setPassword($hashedPassword);
 
-                $entityManager->persist($user);
-                $entityManager->flush();
+                    $entityManager->persist($user);
+                    $entityManager->flush();
 
-                $this->addFlash('success', 'Le mot de passe a été modifié avec succès.');
+                    $this->addFlash('success', 'Le mot de passe a été modifié avec succès.');
+                }
+                else
+                    $this->addFlash('failure', 'Votre ancien mot de passe ne correspond pas avec ce que vous avez saisi.');
             }
-            else
-                $this->addFlash('failure', 'Votre ancien mot de passe ne correspond pas avec ce que vous avez saisi.');
+            else {
+                $errorFormatter = new ErrorFormatter($form);
+                $sortedErrors   = $errorFormatter->sortErrors();
+                $form->clearErrors(true);
+
+                return new JsonResponse(json_encode($sortedErrors));
+            }
         }
 
-        return $this->renderForm('user/includes/edit_password.html.twig', [
-            'user'  => $user,
-            'form'  => $form
-        ]);
+        /** @var User $user */
+        if ($user->isGranted(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN']))
+            return $this->redirectToRoute('admin_show_admins');
+        else
+            return $this->renderForm('user/includes/edit_password.html.twig', [
+                'user'  => $user,
+                'form'  => $form
+            ]);
     }
 
     # Affichage des adresses

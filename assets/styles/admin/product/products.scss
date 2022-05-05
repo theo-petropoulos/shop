@@ -1,14 +1,6 @@
 @use '../../variables' as *;
 
 #admin_alt{
-  display:flex;
-  width:100%;
-  position:relative;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  padding:2%;
-  box-sizing: border-box;
   #adm_search_container{
     display:flex;
     width:90%;
@@ -39,39 +31,9 @@
     }
   }
   #products{
-    width:90%;
-    position:relative;
-    display:flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    border:1px solid black;
-    font-family: $font;
-    padding:1%;
-    box-sizing: border-box;
     details{
-      width:100%;
-      position:relative;
-      padding:2%;
-      border:1px solid $orange;
-      margin:calc(max(1%,15px)) 0;
-      box-sizing: border-box;
-      summary{
-        font-size: calc(14px + 0.6vw);
-        &:hover{
-          cursor:pointer;
-        }
-      }
       .div_det{
-        @include div-det;
         div{
-          width:25%;
-          min-width: 100px;
-          flex-grow: 1;
-          display:flex;
-          flex-direction: column;
-          justify-content: space-between;
-          text-align: center;
           &.active, &.stock, &.price{
             width:10%;
             min-width:50px;
@@ -80,26 +42,11 @@
             width:15%;
             min-width:120px;
           }
-          button {
-            @include div-det-button;
-          }
           p{
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-          }
-        }
-        a{
-          width: 15%;
-          flex-grow: 1;
-          text-decoration: none;
-          color: $blue;
-          text-align: center;
-          align-self: center;
-          &:hover{
-            color: red;
-            transition: all 0.3s;
           }
         }
       }
@@ -188,30 +135,8 @@
     }
   }
   #add_discount_brand_product{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    @include admin-add-container;
     width: 90%;
-    position:relative;
-    .add_container{
-      width:25%;
-      flex-grow: 1;
-      padding:2%;
-      display:flex;
-      button.adm_modify_btn, button.add_btn{
-        flex-grow: 1;
-        width:90%;
-        padding:2%;
-        background:white;
-        border:1px solid $orange_light;
-        font-family: $font;
-        &:hover{
-          cursor:pointer;
-          background:$orange_light;
-          transition: all 0.3s;
-        }
-      }
-    }
   }
   .search_item_container{
     height:100vh;
