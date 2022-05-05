@@ -5,9 +5,9 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  flex-grow: 1;
   background: $grey_dark;
   border-bottom: 1px solid $black;
-  min-height: 15vh;
   height: max-content;
   flex-wrap: wrap;
   box-shadow: -2px 0 6px 3px $grey_dark;
@@ -83,19 +83,20 @@
       color: $white_light;
       position: relative;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       height: max-content;
       h1{
+        position: relative;
         height: max-content;
         display: flex;
-        flex-direction: column;
-        width:100%;
-        position:relative;
-        padding:5px 10px;
+        flex-direction: row;
+        width: 100%;
+        font-size: large;
         span{
           width: 100%;
           display: block;
           transition: all 0.3s;
+          margin: 0 1%;
           &:first-of-type{
             background: black;
             text-align: center;

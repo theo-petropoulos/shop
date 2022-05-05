@@ -39,7 +39,8 @@ class ProductController extends AbstractController
         $author = $product->getAuthor();
 
         return $this->render('product/show.html.twig', [
-            'product'   => $product
+            'product'   => $product,
+            'author'    => $author
         ]);
     }
 }

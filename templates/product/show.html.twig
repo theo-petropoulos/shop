@@ -3,5 +3,13 @@
 {% block pretitle %}{{ product.name|upper }}{% endblock %}
 
 {% block body %}
-    Ici la page du produit : {{ product.name }}
+    {% set author = product.author %}
+    <main id="product">
+        <section id="product_container">
+            <div id="product_image_container">
+                {% set imageName = product.getImages ? product.getImages[0].name : null %}
+                <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ imageName) }}" alt="{{ product.name }} par {{ author.name }}">
+            </div>
+        </section>
+    </main>
 {% endblock body %}
