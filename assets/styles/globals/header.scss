@@ -1,15 +1,17 @@
 @use 'assets/styles/variables' as *;
 
 #header_nav{
-  position:relative;
-  display:flex;
+  position: relative;
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background:white;
-  border-bottom:1px solid $grey;
-  min-height:15vh;
-  height:max-content;
+  background: $grey_dark;
+  border-bottom: 1px solid $black;
+  min-height: 15vh;
+  height: max-content;
   flex-wrap: wrap;
+  box-shadow: -2px 0 6px 3px $grey_dark;
+  z-index: 2;
   #header_right{
     position:relative;
     min-width:max-content;
@@ -18,7 +20,7 @@
     display:flex;
     flex-wrap: wrap;
     ul{
-      display:flex;
+      display: flex;
       flex-direction: row;
       flex-grow: 1;
       justify-content: flex-end;
@@ -26,34 +28,42 @@
       flex-wrap: wrap;
       li{
         list-style-type: none;
-        display:flex;
+        display: flex;
         justify-content: center;
         min-width: 120px;
-        position:relative;
-        margin:0% 2%;
+        position: relative;
+        margin: 0 2%;
         a{
-          font-family:$font;
+          font-family: $font;
           text-decoration: none;
-          color:black;
+          color: $white_light;
           &:hover{
-            color:$orange;
+            color: $orange;
             transition:color 0.3s;
           }
         }
         &#search_bar_container{
-          width:max-content;
-          min-width: 200px;
+          position: relative;
+          width: max-content;
+          min-width: 300px;
           input{
-            margin:0% calc(max(1%, 6px));
-            border:1px solid black;
+            width: 95%;
+            margin: 0 calc(max(1%, 6px));
+            border: 1px solid black;
             border-radius: unset;
             font-family: $font;
             outline: 0;
             border-bottom: none;
           }
           button{
-            background:none;
-            border:none;
+            background: none;
+            border: none;
+            color: $white_light;
+            &:hover{
+              cursor: pointer;
+              color: $white;
+              transition: all 0.3s;
+            }
           }
         }
       }
@@ -61,35 +71,35 @@
   }
 
   #header_left{
-    position:relative;
-    min-width:max-content;
-    width:30%;
+    position: relative;
+    min-width: max-content;
+    width: 30%;
     flex-grow: 1;
-    display:flex;
+    display: flex;
     a{
-      font-family:$font;
+      font-family: $font;
       text-decoration: none;
-      padding:1% 2%;
-      color:black;
-      position:relative;
-      display:flex;
+      padding: 1% 2%;
+      color: $white_light;
+      position: relative;
+      display: flex;
       flex-direction: column;
       height: max-content;
       h1{
         height: max-content;
-        display:flex;
+        display: flex;
         flex-direction: column;
         width:100%;
         position:relative;
         padding:5px 10px;
         span{
-          width:100%;
-          display:block;
-          transition:all 0.3s;
+          width: 100%;
+          display: block;
+          transition: all 0.3s;
           &:first-of-type{
-            background:black;
+            background: black;
             text-align: center;
-            color:white;
+            color: $orange;
           }
           &:last-of-type{
             text-align: right;
@@ -99,14 +109,14 @@
       &:hover{
         h1{
           span{
-            transition:all 0.5s;
+            transition: all 0.5s;
             &:first-of-type{
-              background:white;
-              color:black;
+              background: unset;
+              color: $white_light;
             }
             &:last-of-type{
               background:black;
-              color:white;
+              color: $orange;
             }
           }
         }

@@ -23,7 +23,7 @@ $(function() {
 
     // Récupère les erreurs via JsonResponse
     $(document).on('submit', '#main_modal form', function(e) {
-        e.preventDefault()
+        /*e.preventDefault()
         let form = $(this)
         console.log(form, form.serialize())
         $.ajax({
@@ -43,7 +43,7 @@ $(function() {
                 })
                 return false;
             }
-        })
+        })*/
     })
 })
 

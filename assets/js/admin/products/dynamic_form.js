@@ -23,17 +23,17 @@ $(function() {
         }
     })
 
-    // Display a selection of Products depending on Brand's selection
-    $(document).on('change', '#add_discount_brand', function () {
-        let brand           = $(this).val()
+    // Display a selection of Products depending on Author's selection
+    $(document).on('change', '#add_discount_author', function () {
+        let author           = $(this).val()
         let productInput    = $('#add_discount_product')
         let options         = '<option value=""></option>'
 
-        if (brand) {
+        if (author) {
             $.post(
                 fetchPath,
                 {
-                    brand
+                    author
                 },
                 (res) => {
                     // console.log(res)

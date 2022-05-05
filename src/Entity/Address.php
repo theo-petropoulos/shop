@@ -78,18 +78,11 @@ class Address
         return $this->id;
     }
 
-    /**
-     * @return ?User
-     */
     public function getCustomer(): ?User
     {
         return $this->customer;
     }
 
-    /**
-     * @param User|null $customer
-     * @return self
-     */
     public function setCustomer(?User $customer): self
     {
         $this->customer = $customer;
@@ -97,18 +90,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return ?string
-     */
     public function getLastName(): ?string
     {
         return $this->lastName;
     }
 
-    /**
-     * @param string
-     * @return self
-     */
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
@@ -116,18 +102,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return ?string
-     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
-    /**
-     * @param string
-     * @return self
-     */
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
@@ -135,18 +114,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return ?string
-     */
     public function getStreetNumber(): ?string
     {
         return $this->streetNumber;
     }
 
-    /**
-     * @param string|null $streetNumber
-     * @return self
-     */
     public function setStreetNumber(?string $streetNumber): self
     {
         $this->streetNumber = $streetNumber;
@@ -154,18 +126,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return ?string
-     */
     public function getStreetName(): ?string
     {
         return $this->streetName;
     }
 
-    /**
-     * @param string
-     * @return self
-     */
     public function setStreetName(string $streetName): self
     {
         $this->streetName = $streetName;
@@ -173,18 +138,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return ?string
-     */
     public function getStreetAddition(): ?string
     {
         return $this->streetAddition;
     }
 
-    /**
-     * @param string|null $streetAddition
-     * @return self
-     */
     public function setStreetAddition(?string $streetAddition): self
     {
         $this->streetAddition = $streetAddition;
@@ -192,36 +150,22 @@ class Address
         return $this;
     }
 
-    /**
-     * @return ?int
-     */
     public function getPostalCode(): ?int
     {
         return $this->postalCode;
     }
 
-    /**
-     * @param int|string
-     * @return self
-     */
     public function setPostalCode(mixed $postalCode): self
     {
         $this->postalCode = $postalCode;
         return $this;
     }
 
-    /**
-     * @return ?string
-     */
     public function getCity(): ?string
     {
         return $this->city;
     }
 
-    /**
-     * @param string
-     * @return self
-     */
     public function setCity(string $city): self
     {
         $this->city = $city;
@@ -229,18 +173,11 @@ class Address
         return $this;
     }
 
-    /**
-     * @return ?bool
-     */
     public function getMain(): ?bool
     {
         return $this->main;
     }
 
-    /**
-     * @param bool|null $main
-     * @return self
-     */
     public function setMain(?bool $main): self
     {
         $this->main = $main;

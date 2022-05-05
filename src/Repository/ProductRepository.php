@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Brand;
+use App\Entity\Author;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,14 +21,14 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-    public function findAllSortedByBrands()
+    public function findAllSortedByAuthors()
     {
        $query   = $this->createQueryBuilder('p')
-                    ->addSelect('b.name as brandName')
-                    ->innerJoin(Brand::class, 'b')
-                    ->where('b.id = p.brand')
+                    ->addSelect('b.name as authorName')
+                    ->innerJoin(Author::class, 'b')
+                    ->where('b.id = p.author')
                     ->addOrderBy('b.active', 'DESC')
-                    ->addOrderBy('brandName')
+                    ->addOrderBy('authorName')
                     ->addOrderBy('p.id');
        $results = $query->getQuery()->getResult();
 

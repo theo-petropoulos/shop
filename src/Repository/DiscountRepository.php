@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Brand;
+use App\Entity\Author;
 use App\Entity\Discount;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -30,12 +30,12 @@ class DiscountRepository extends ServiceEntityRepository
             $query = $this->createQueryBuilder('d')
                 ->from(Product::class, 'p')
                 ->addSelect('p.id')
-                ->addSelect('b.name as brandName')
+                ->addSelect('b.name as authorName')
                 ->addSelect('p.name as productName')
-                ->innerJoin(Brand::class, 'b')
+                ->innerJoin(Author::class, 'b')
                 ->where('p.discount = :discount')
-                ->andWhere('p.brand = b.id')
-                ->addOrderBy('brandName')
+                ->andWhere('p.author = b.id')
+                ->addOrderBy('authorName')
                 ->addOrderBy('productName')
                 ->setParameter(':discount', $v->getId())
             ;

@@ -71,7 +71,7 @@
       </trans-unit>
       <trans-unit id="YW21SPH" resname="The mime type of the file is invalid ({{ type }}). Allowed mime types are {{ types }}.">
         <source>The mime type of the file is invalid ({{ type }}). Allowed mime types are {{ types }}.</source>
-        <target>Le type du fichier est invalide ({{ type }}). Les types autorisés sont {{ types }}.</target>
+        <target>Le type du fichier est invalide ({{ type }}). Les types authorisés sont {{ types }}.</target>
       </trans-unit>
       <trans-unit id="NubOmrs" resname="This value should be {{ limit }} or less.">
         <source>This value should be {{ limit }} or less.</source>
@@ -163,7 +163,7 @@
       </trans-unit>
       <trans-unit id="zVtJJEa" resname="The image width is too big ({{ width }}px). Allowed maximum width is {{ max_width }}px.">
         <source>The image width is too big ({{ width }}px). Allowed maximum width is {{ max_width }}px.</source>
-        <target>La largeur de l'image est trop grande ({{ width }}px). La largeur maximale autorisée est de {{ max_width }}px.</target>
+        <target>La largeur de l'image est trop grande ({{ width }}px). La largeur maximale authorisée est de {{ max_width }}px.</target>
       </trans-unit>
       <trans-unit id="s8LFQGC" resname="The image width is too small ({{ width }}px). Minimum width expected is {{ min_width }}px.">
         <source>The image width is too small ({{ width }}px). Minimum width expected is {{ min_width }}px.</source>
@@ -171,7 +171,7 @@
       </trans-unit>
       <trans-unit id="Z.NgqFj" resname="The image height is too big ({{ height }}px). Allowed maximum height is {{ max_height }}px.">
         <source>The image height is too big ({{ height }}px). Allowed maximum height is {{ max_height }}px.</source>
-        <target>La hauteur de l'image est trop grande ({{ height }}px). La hauteur maximale autorisée est de {{ max_height }}px.</target>
+        <target>La hauteur de l'image est trop grande ({{ height }}px). La hauteur maximale authorisée est de {{ max_height }}px.</target>
       </trans-unit>
       <trans-unit id="AW1lWVM" resname="The image height is too small ({{ height }}px). Minimum height expected is {{ min_height }}px.">
         <source>The image height is too small ({{ height }}px). Minimum height expected is {{ min_height }}px.</source>
@@ -283,7 +283,7 @@
       </trans-unit>
       <trans-unit id="VczCWzQ" resname="The image ratio is too big ({{ ratio }}). Allowed maximum ratio is {{ max_ratio }}.">
         <source>The image ratio is too big ({{ ratio }}). Allowed maximum ratio is {{ max_ratio }}.</source>
-        <target>Le rapport largeur/hauteur de l'image est trop grand ({{ ratio }}). Le rapport maximal autorisé est {{ max_ratio }}.</target>
+        <target>Le rapport largeur/hauteur de l'image est trop grand ({{ ratio }}). Le rapport maximal authorisé est {{ max_ratio }}.</target>
       </trans-unit>
       <trans-unit id="v57PXhq" resname="The image ratio is too small ({{ ratio }}). Minimum ratio expected is {{ min_ratio }}.">
         <source>The image ratio is too small ({{ ratio }}). Minimum ratio expected is {{ min_ratio }}.</source>
@@ -291,19 +291,19 @@
       </trans-unit>
       <trans-unit id="rpajj.a" resname="The image is square ({{ width }}x{{ height }}px). Square images are not allowed.">
         <source>The image is square ({{ width }}x{{ height }}px). Square images are not allowed.</source>
-        <target>L'image est carrée ({{ width }}x{{ height }}px). Les images carrées ne sont pas autorisées.</target>
+        <target>L'image est carrée ({{ width }}x{{ height }}px). Les images carrées ne sont pas authorisées.</target>
       </trans-unit>
       <trans-unit id="G_lu2qW" resname="The image is landscape oriented ({{ width }}x{{ height }}px). Landscape oriented images are not allowed.">
         <source>The image is landscape oriented ({{ width }}x{{ height }}px). Landscape oriented images are not allowed.</source>
-        <target>L'image est au format paysage ({{ width }}x{{ height }}px). Les images au format paysage ne sont pas autorisées.</target>
+        <target>L'image est au format paysage ({{ width }}x{{ height }}px). Les images au format paysage ne sont pas authorisées.</target>
       </trans-unit>
       <trans-unit id="sFyGx4B" resname="The image is portrait oriented ({{ width }}x{{ height }}px). Portrait oriented images are not allowed.">
         <source>The image is portrait oriented ({{ width }}x{{ height }}px). Portrait oriented images are not allowed.</source>
-        <target>L'image est au format portrait ({{ width }}x{{ height }}px). Les images au format portrait ne sont pas autorisées.</target>
+        <target>L'image est au format portrait ({{ width }}x{{ height }}px). Les images au format portrait ne sont pas authorisées.</target>
       </trans-unit>
       <trans-unit id="jZgqcpL" resname="An empty file is not allowed.">
         <source>An empty file is not allowed.</source>
-        <target>Un fichier vide n'est pas autorisé.</target>
+        <target>Un fichier vide n'est pas authorisé.</target>
       </trans-unit>
       <trans-unit id="bcfVezI" resname="The host could not be resolved.">
         <source>The host could not be resolved.</source>

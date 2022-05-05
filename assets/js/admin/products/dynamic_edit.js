@@ -21,7 +21,7 @@ $(function() {
             let entity = $(this).closest('details').attr('id').split('_')[0]
             ajaxPost(entity, id, field, value, $(this))
         }
-        else if (!container.hasClass('brand_name')) {
+        else if (!container.hasClass('author_name')) {
             if (field === 'startingDate' || field === 'endingDate') {
                 let valueToDate = value.split('/')
                 let valueYear   = valueToDate[2]
@@ -31,6 +31,15 @@ $(function() {
 
                 container.html(
                     '<input type="date" name="' + field + '" value="' + value + '" required>\
+                    <span>\
+                        <button class="adm_modify_submit">Valider</button>\
+                        <button class="adm_modify_cancel">Annuler</button>\
+                    </span>'
+                )
+            }
+            else if (field === 'description') {
+                container.html(
+                    '<textarea name="' + field + '" required>' + value + '</textarea>\
                     <span>\
                         <button class="adm_modify_submit">Valider</button>\
                         <button class="adm_modify_cancel">Annuler</button>\
@@ -47,25 +56,25 @@ $(function() {
                 )
         }
         else {
-            let brands = null
+            let authors = null
 
             $.get(
-                fetchBrands,
+                fetchAuthors,
                 (res) => {
-                    brands = JSON.parse(res)
+                    authors = JSON.parse(res)
                 }
             )
             .done(() => {
                 container.html(
-                    '<select id="select_brands_modify" name="id_brand"></select>\
+                    '<select id="select_authors_modify" name="id_author"></select>\
                     <span>\
                         <button class="adm_modify_submit">Valider</button>\
                         <button class="adm_modify_cancel">Annuler</button>\
                     </span>'
                 )
-                for (let brand of brands) {
-                    $('#select_brands_modify').append(
-                        '<option value="' + brand['id'] + '">' + brand['name'] + '</option>'
+                for (let author of authors) {
+                    $('#select_authors_modify').append(
+                        '<option value="' + author['id'] + '">' + author['name'] + '</option>'
                     )
                 }
             })
@@ -86,7 +95,7 @@ $(function() {
         let id      = id_div[0]
         let field   = id_div[1]
 
-        let value   = $(this).closest('div').find('input').val() ?? $(this).closest('div').find('select').val()
+        let value   = $(this).closest('div').find('input').val() ?? ($(this).closest('div').find('textarea').val() ?? $(this).closest('div').find('select').val())
         let entity  = $(this).closest('details').length ?
             $(this).closest('details').attr('id').split('_')[0] :
             $(this).parents('div').first().attr('id').split('_')[2]

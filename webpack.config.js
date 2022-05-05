@@ -21,6 +21,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
+    .addEntry('cart', './assets/js/cart.js')
     .addEntry('modal', './assets/js/modal.js')
     .addEntry('clickable_section', './assets/js/clickable_sections.js')
     .addEntry('edit_delete_address', './assets/js/user/addresses/edit_delete_address.js')
@@ -29,6 +30,7 @@ Encore
     .addEntry('admin_dynamic_form', './assets/js/admin/products/dynamic_form.js')
     .addEntry('admin_dynamic_edit', './assets/js/admin/products/dynamic_edit.js')
     .addEntry('admin_delete_admin', './assets/js/admin/admins/delete_admin.js')
+    .addEntry('background_switcher', './assets/js/author/background_switcher.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

@@ -50,11 +50,11 @@ class AddDiscountType extends AbstractType
                     'min'       => (new DateTime('now'))->format('Y-m-d')
                 ]
             ])
-            ->add('brand', ChoiceType::class, [
-                'label'         => 'Marque',
+            ->add('author', ChoiceType::class, [
+                'label'         => 'Auteur',
                 'required'      => false,
                 'mapped'        => false,
-                'choices'       => $options['brands'],
+                'choices'       => $options['authors'],
             ])
             ->add('product', ChoiceType::class, [
                 'label'         => 'Produit',
@@ -83,7 +83,7 @@ class AddDiscountType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'    => Discount::class,
-            'brands'        => array()
+            'authors'        => array()
         ]);
     }
 }

@@ -2,19 +2,19 @@
 
 namespace App\Controller;
 
-use App\Entity\Brand;
+use App\Entity\Author;
 use App\Entity\Discount;
 use App\Entity\Image;
 use App\Entity\Product;
 use App\Errors\ErrorFormatter;
 use App\Exceptions\InvalidSizeException;
 use App\Form\Admin\AddAdminType;
-use App\Form\Admin\AddBrandType;
+use App\Form\Admin\AddAuthorType;
 use App\Form\Admin\AddDiscountType;
 use App\Form\Admin\AddProductType;
 use App\Form\ModifyPasswordType;
 use App\QueryBuilder\AdminSearch;
-use App\Repository\BrandRepository;
+use App\Repository\AuthorRepository;
 use App\Repository\DiscountRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
@@ -85,14 +85,14 @@ class AdminController extends AbstractController
     # Administration des produits
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/products', name: 'admin_show_products')]
-    public function adminShowProducts(Request $request, BrandRepository $brandRepository, ProductRepository $productRepository, DiscountRepository $discountRepository): Response
+    public function adminShowProducts(Request $request, AuthorRepository $authorRepository, ProductRepository $productRepository, DiscountRepository $discountRepository): Response
     {
-        $brands     = $brandRepository->findBy([], ['active' => 'DESC']);
-        $products   = $productRepository->findBy([], ['active' => 'DESC']);
+        $authors     = $authorRepository->findBy([], ['name' => 'ASC', 'active' => 'DESC']);
+        $products   = $productRepository->findBy([], ['author' => 'DESC', 'active' => 'DESC']);
         $discounts  = $discountRepository->findBy([], ['startingDate' => 'ASC']);
 
         return $this->render('admin/includes/products/show_products.html.twig', [
-            'brands'        => $brands,
+            'authors'        => $authors,
             'products'      => $products,
             'discounts'     => $discounts
         ]);
@@ -117,19 +117,19 @@ class AdminController extends AbstractController
     /**
      * @throws InvalidSizeException|InvalidTypeException|UploadException|EntityNotFoundException
      */
-    # Formulaire d'ajout d'un produit / marque / promotion
+    # Formulaire d'ajout d'un produit / auteur / promotion
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/products/add/{entity}', name: 'admin_add_item')]
-    public function adminAddItem(Request $request, ProductRepository $productRepository, BrandRepository $brandRepository): Response
+    public function adminAddItem(Request $request, ProductRepository $productRepository, AuthorRepository $authorRepository): Response
     {
         $entity = $request->get('entity');
         $errors = [];
 
         /** @var Form $form */
         switch ($entity) {
-            case 'brand':
-                $item       = new Brand();
-                $form       = $this->createForm(AddBrandType::class, $item);
+            case 'author':
+                $item       = new Author();
+                $form       = $this->createForm(AddAuthorType::class, $item);
                 break;
             case 'product':
                 $item       = new Product();
@@ -137,13 +137,13 @@ class AdminController extends AbstractController
                 break;
             case 'discount':
                 $item       = new Discount();
-                $options    = ['brands' => []];
-                $brands     = $brandRepository->findBy([], ['name' => 'ASC']);
+                $options    = ['authors' => []];
+                $authors     = $authorRepository->findBy([], ['name' => 'ASC']);
 
-                $options['brands']['Toutes les marques'] = 999999;
+                $options['authors']['Toutes les auteurs'] = 999999;
 
-                foreach ($brands as $brand)
-                    $options['brands'][ucfirst($brand->getName())] = $brand->getId();
+                foreach ($authors as $author)
+                    $options['authors'][ucfirst($author->getName())] = $author->getId();
 
                 $form = $this->createForm(AddDiscountType::class, $item, $options);
                 break;
@@ -158,11 +158,11 @@ class AdminController extends AbstractController
             if ($form->isValid()) {
 
                 switch ($entity) {
-                    case 'brand':
+                    case 'author':
                         $this->em->persist($item);
                         $this->em->flush();
 
-                        $this->addFlash('success', 'La marque a été ajoutée avec succès.');
+                        $this->addFlash('success', 'L\'auteur a été ajouté avec succès.');
                         break;
                     case 'product':
                         $images = $form->get('images')->getData();
@@ -170,7 +170,7 @@ class AdminController extends AbstractController
                         /** @var UploadedFile $file */
                         foreach ($images as $file) {
                             $image  = new Image($file);
-                            $folder = $this->getParameter('products_images_directory');
+                            $folder = $this->getParameter('products_images_directory') . '/' . $item->getAuthor()->getId();
 
                             $image->upload($folder);
 
@@ -233,17 +233,17 @@ class AdminController extends AbstractController
         ]);
     }
 
-    # Récupère les produits du catalogue dépendamment de la marque
+    # Récupère les produits du catalogue dépendamment de l\'auteur
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/products/fetch', name: 'admin_fetch_products')]
-    public function adminFetchProductsByBrand(Request $request, ProductRepository $productRepository, BrandRepository $brandRepository): Response
+    public function adminFetchProductsByAuthor(Request $request, ProductRepository $productRepository, AuthorRepository $authorRepository): Response
     {
-        $brandId    = $request->get('brand');
+        $authorId    = $request->get('author');
         $return     = [];
 
-        if ($brandId !== '999999') {
-            $brand      = $brandRepository->findOneBy(['id' => $brandId]);
-            $products   = $productRepository->findBy(['brand' => $brand]);
+        if ($authorId !== '999999') {
+            $author      = $authorRepository->findOneBy(['id' => $authorId]);
+            $products   = $productRepository->findBy(['author' => $author]);
         }
         else {
             $products = $productRepository->findBy([], ['name' => 'ASC']);
@@ -256,18 +256,18 @@ class AdminController extends AbstractController
         return new JsonResponse(json_encode($return));
     }
 
-    # Récupère les marques du catalogue
+    # Récupère les auteurs du catalogue
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
-    #[Route(path: '/admin/brands/fetch', name: 'admin_fetch_brands', methods: ['GET'])]
-    public function adminFetchBrands(BrandRepository $brandRepository): JsonResponse
+    #[Route(path: '/admin/authors/fetch', name: 'admin_fetch_authors', methods: ['GET'])]
+    public function adminFetchAuthors(AuthorRepository $authorRepository): JsonResponse
     {
-        $brands             = $brandRepository->findAll();
+        $authors             = $authorRepository->findAll();
         $arrayCollection    = [];
 
-        foreach ($brands as $brand) {
+        foreach ($authors as $author) {
             $arrayCollection[] = [
-                'id'    => $brand->getId(),
-                'name'  => $brand->getName()
+                'id'    => $author->getId(),
+                'name'  => $author->getName()
             ];
         }
 
@@ -282,7 +282,7 @@ class AdminController extends AbstractController
     # Edition d'un produit
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/products/edit', name: 'admin_edit_item')]
-    public function adminEditItem(Request $request, BrandRepository $brandRepository, ProductRepository $productRepository, DiscountRepository $discountRepository): JsonResponse
+    public function adminEditItem(Request $request, AuthorRepository $authorRepository, ProductRepository $productRepository, DiscountRepository $discountRepository): JsonResponse
     {
         $entity     = $request->get('entity');
         $id         = $request->get('id');
@@ -294,7 +294,7 @@ class AdminController extends AbstractController
         if (!$repository)
             throw new EntityNotFoundException('Une erreur est survenue. L\'entité ' . $entity . ' n\'a pas été trouvée.');
 
-        /** @var Brand|Product|Discount $item */
+        /** @var Author|Product|Discount $item */
         $item       = $repository->findOneBy(['id' => $id]);
         if (!$item)
             throw new EntityNotFoundException('Une erreur inattendue est survenue. Aucun objet de la classe ' . $entity . ' ne possède d\'id égal à ' . $id);
@@ -302,8 +302,8 @@ class AdminController extends AbstractController
         if (in_array($field, ['startingDate', 'endingDate']))
             $value = new DateTime($value);
 
-        if ($field === 'brand')
-            $value = $brandRepository->findOneBy(['id' => $value]);
+        if ($field === 'author')
+            $value = $authorRepository->findOneBy(['id' => $value]);
 
         $method     = 'set' . ucfirst($field);
         if (method_exists($item, $method))

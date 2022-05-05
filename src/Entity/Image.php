@@ -18,8 +18,12 @@ class Image
     protected int $id;
 
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'images')]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'cascade')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'cascade')]
     private Product $product;
+
+    #[ORM\ManyToOne(targetEntity: Author::class, inversedBy: 'images')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'cascade')]
+    private Author $author;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
@@ -47,6 +51,18 @@ class Image
     public function setProduct(?Product $product): self
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?Author
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?Author $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }
