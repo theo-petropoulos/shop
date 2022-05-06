@@ -6,17 +6,10 @@
   transition: all 0.5s;
   background-position: center;
   background-size: 110%;
-  overflow-y: hidden;
   background-color: $grey;
-  &::after{
-    position: absolute;
-    content: '';
-    width: 100%;
-    height: 100%;
-    background-color: $grey_transparent;
-  }
   #authors_container{
     position:relative;
+    height: 100%;
     padding: 0.5%;
     display: flex;
     flex-direction: row;
@@ -29,9 +22,6 @@
       height: 20%;
       min-height: 120px;
       min-width: 250px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
       margin: 0.5%;
       border: 1px solid $black;
       cursor: pointer;
@@ -58,19 +48,29 @@
           transition: background-color 0.3s;
         }
       }
-      p{
-        @include clamped-lines-4;
-        background: $grey_transparent;
-        color: $white;
-        padding: 1%;
-      }
-      a{
-        color: $white;
-        text-shadow: 1px 0 $black, 0 1px $black, -1px 0 $black, 0 -1px $black;
-        text-decoration: none;
-        font-size: calc(14px + 1vw);
-        font-weight: bold;
-        text-align: center;
+      span{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        p{
+          @include clamped-lines-4;
+          background: $grey_transparent;
+          color: $white;
+          padding: 1%;
+        }
+        h2{
+          color: $white;
+          text-shadow: 1px 0 $black, 0 1px $black, -1px 0 $black, 0 -1px $black;
+          text-decoration: none;
+          font-size: calc(14px + 1vw);
+          font-weight: bold;
+          text-align: center;
+        }
       }
     }
   }

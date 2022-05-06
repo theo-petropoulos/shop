@@ -9,13 +9,15 @@ $grey_transparent       : rgba(45, 45, 45, 0.3);
 $grey_light             : rgb(115, 115, 115);
 $grey_light_transparent : rgba(115, 115, 115, 0.3);
 $orange                 : rgb(240, 95, 0);
+$orange_mid             : rgb(250, 130, 25);
 $orange_light           : rgb(240, 175, 0);
 $green                  : rgb(30, 150, 40);
 $red                    : rgb(170, 15, 15);
 $red_strong             : rgb(255, 0, 0);
 $blue                   : rgb(25, 90, 240);
 $blue_light             : rgb(90, 190, 255);
-$yellow_light           : rgba(255, 225, 95, 0.50);
+$yellow                 : rgb(255, 220, 60);
+$yellow_transparent     : rgba(255, 225, 95, 0.50);
 
 @mixin login-register{
   font-family: $font;

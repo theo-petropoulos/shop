@@ -12,5 +12,8 @@ IPRecords
 	=> Nombre de comptes différents
 
 Administration
-	=> Bug sur le select author & les dates
-	=> Ajouter la désactivation / suppression
+	X => Bug sur le select author & les dates
+	X => Ajouter la désactivation / suppression
+
+Produit
+	=> Désactiver l'ajout au panier si le stock est null

@@ -19,14 +19,15 @@
                 {% if products is not null %}
                     {% for product in products %}
                         {% set imageName = product.getImages ? product.getImages[0].name : null %}
-                        <article id="{{ product.id }}_product" class="author_product_container navto_container">
-                            <a href="{{ path('show_product', {id: product.id}) }}" class="navto" style="display: none"></a>
-                            <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ imageName) }}" class="author_product_image" alt="{{ product.name }} par {{ author.name }}">
-                            <div id="{{ product.id }}_add2cart" class="btn-cart" href="#">
-                                <p class="btn-cart_price"><i class="fas fa-shopping-cart"></i>  {{ product.price|number_format(2, '.', ',') }} €</p>
-                                <p class="btn-cart_add">Ajouter</p>
-                            </div>
-                        </article>
+                        <a href="{{ path('show_product', {id: product.id}) }}" id="{{ product.id }}_product" class="author_product_container navto_container">
+                            <span>
+                                <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ imageName) }}" class="author_product_image" alt="{{ product.name }} par {{ author.name }}">
+                                <div id="{{ product.id }}_add2cart" class="btn-cart" href="#">
+                                    <p class="btn-cart_price"><i class="fas fa-shopping-cart"></i>  {{ product.price|number_format(2, '.', ',') }} €</p>
+                                    <p class="btn-cart_add">Ajouter</p>
+                                </div>
+                            </span>
+                        </a>
                     {% endfor %}
                 {% endif %}
             </div>
@@ -35,12 +36,9 @@
 {% endblock body %}
 
 {% block javascripts %}
-    {# Clickable sections script #}
-    {{ encore_entry_script_tags('clickable_section') }}
-
     {# Switch background script #}
     {{ encore_entry_script_tags('background_switcher') }}
 
-    {# Switch background script #}
+    {# Cart handler script #}
     {{ encore_entry_script_tags('cart') }}
 {% endblock %}

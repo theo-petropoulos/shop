@@ -5,11 +5,45 @@
 {% block body %}
     {% set author = product.author %}
     <main id="product">
-        <section id="product_container">
-            <div id="product_image_container">
-                {% set imageName = product.getImages ? product.getImages[0].name : null %}
-                <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ imageName) }}" alt="{{ product.name }} par {{ author.name }}">
+        <section id="product_suggestions_container">
+
+        </section>
+        <section id="product_image_container">
+            {% set imageName = product.getImages ? product.getImages[0].name : null %}
+            <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ imageName) }}" class="product_image" alt="{{ product.name }} par {{ author.name }}">
+        </section>
+        <section id="product_description_container">
+            <div id="product_text">
+                <span id="product_title">
+                    <h1>{{ product.name }}</h1>
+                    <h3>{{ author.name }}</h3>
+                </span>
+                <p>{{ product.description }}</p>
+            </div>
+            <div id="product_buy">
+                <div id="product_buy_group">
+                    <p>{{ product.price|number_format(2, '.', ',') }} €</p>
+                    <span id="product_buy_selector">
+                        <button id="buy_minus" disabled>-</button>
+                        <span id="buy_counter">1</span>
+                        <button id="buy_plus">+</button>
+                    </span>
+                    <button id="{{ product.id }}_add2cart" class="btn-cart_add">Ajouter au panier</button>
+                </div>
             </div>
         </section>
     </main>
 {% endblock body %}
+
+{% block javascripts %}
+    <script defer>
+        $(function() {
+            $(document).on('click', '.product_image', function() {
+                window.open($(this).attr('src'))
+            })
+        })
+    </script>
+
+    {# Cart handler script #}
+    {{ encore_entry_script_tags('cart') }}
+{% endblock %}

@@ -14,6 +14,9 @@
 // Import author
 @use 'author/author';
 
+// Import product
+@use 'product/product';
+
 // Global rules
 *, html, body{
   margin: 0;
@@ -30,8 +33,17 @@ body{
   background: white;
 }
 
+header{
+  min-height: max-content;
+  flex-grow: 1;
+}
+
 main{
   flex-grow: 1;
+  height: 95%;
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 // Specific rules
@@ -126,5 +138,9 @@ a#back_btn{
 }
 
 .current_admin{
-  background: $yellow_light;
+  background: $yellow_transparent;
+}
+
+@media screen and (max-width:499px){
+
 }
