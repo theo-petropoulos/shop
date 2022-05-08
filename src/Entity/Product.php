@@ -51,7 +51,7 @@ class Product
     private ?bool $active;
 
     #[ORM\Column(name: "purchases", type:"integer", nullable: true)]
-    private int $soldCopies;
+    private int $purchases;
 
     #[ORM\OneToMany(mappedBy: "product", targetEntity: Image::class, cascade: ["persist"])]
     private Collection $images;
@@ -143,14 +143,14 @@ class Product
         return $this;
     }
 
-    public function getSoldCopies(): ?int
+    public function getPurchases(): ?int
     {
-        return $this->soldCopies;
+        return $this->purchases;
     }
 
-    public function addSoldCopies(int $soldCopies): self
+    public function addPurchases(int $purchases): self
     {
-        $this->$soldCopies += $soldCopies;
+        $this->purchases += $purchases;
 
         return $this;
     }

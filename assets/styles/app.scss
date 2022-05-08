@@ -89,6 +89,24 @@ main{
   }
 }
 
+.backto_holder{
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1% 2%;
+  background: $grey_dark_transparent;
+  .btn-backto{
+    color: $white_light;
+    text-decoration: unset;
+    width: max-content;
+    font-weight: 600;
+    &:hover{
+      color: $orange_light;
+      transition: all 0.3s;
+    }
+  }
+}
+
 .swal2-popup{
   font-family: $font !important;
 }

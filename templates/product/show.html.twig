@@ -6,29 +6,67 @@
     {% set author = product.author %}
     <main id="product">
         <section id="product_suggestions_container">
+            <span class="backto_holder">
+                <a href="{{ path('show_author', {id: author.id}) }}" class="btn-backto"><i class="fas fa-solid fa-caret-left"></i>  Revenir à l'artiste</a>
+            </span>
+            <div id="product_suggestions_resizer">
+                {% if trendings is not empty %}
+                    <div id="top_sells_container" class="product_suggestions_scroller">
+                        <span class="suggestions_title">
+                            <h2><i class="fa-solid fa-medal"></i> MEILLEURES VENTES</h2>
+                        </span>
+                        <button class="btn-suggestions_nav suggestions-left"><i class="fa-solid fa-caret-left"></i></button>
+                        {% for topSell in topSells %}
+                            {% set imageName = topSell.getImages ? topSell.getImages[0].name : null %}
+                            <a href="{{ path('show_product', {id: topSell.id}) }}" id="{{ topSell.id }}_product" class="suggestion_container navto_container">
+                                <img src="{{ asset('images/products/' ~ topSell.author.id ~ '/' ~ imageName) }}" class="suggestion_image" alt="{{ topSell.name }} par {{ topSell.author.name }}">
+                            </a>
+                        {% endfor %}
+                        <button class="btn-suggestions_nav suggestions-right"><i class="fa-solid fa-caret-right"></i></button>
+                    </div>
+                {% endif %}
 
+                <div id="trendings_container" class="product_suggestions_scroller">
+                    <span class="suggestions_title">
+                        <h2><i class="fa-solid fa-arrow-trend-up"></i> TENDANCES DE LA SEMAINE</h2>
+                    </span>
+                    <button class="btn-suggestions_nav suggestions-left"><i class="fa-solid fa-caret-left"></i></button>
+                    {% for trending in trendings %}
+                        {% set imageName = trending.getImages ? trending.getImages[0].name : null %}
+                        <a href="{{ path('show_product', {id: trending.id}) }}" id="{{ trending.id }}_product" class="suggestion_container navto_container">
+                            <img src="{{ asset('images/products/' ~ trending.author.id ~ '/' ~ imageName) }}" class="suggestion_image" alt="{{ trending.name }} par {{ trending.author.name }}">
+                        </a>
+                    {% endfor %}
+                    <button class="btn-suggestions_nav suggestions-right"><i class="fa-solid fa-caret-right"></i></button>
+                </div>
+            </div>
         </section>
         <section id="product_image_container">
             {% set imageName = product.getImages ? product.getImages[0].name : null %}
-            <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ imageName) }}" class="product_image" alt="{{ product.name }} par {{ author.name }}">
+            <div class="product_image_resizer">
+                <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ imageName) }}" class="product_image" alt="{{ product.name }} par {{ author.name }}">
+            </div>
+            <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ imageName) }}" class="product_image_hidden" alt="{{ product.name }} par {{ author.name }}">
         </section>
         <section id="product_description_container">
-            <div id="product_text">
-                <span id="product_title">
-                    <h1>{{ product.name }}</h1>
-                    <h3>{{ author.name }}</h3>
-                </span>
-                <p>{{ product.description }}</p>
-            </div>
-            <div id="product_buy">
-                <div id="product_buy_group">
-                    <p>{{ product.price|number_format(2, '.', ',') }} €</p>
-                    <span id="product_buy_selector">
-                        <button id="buy_minus" disabled>-</button>
-                        <span id="buy_counter">1</span>
-                        <button id="buy_plus">+</button>
+            <div class="product_description_resizer">
+                <div id="product_text">
+                    <span id="product_title">
+                        <h1>{{ product.name }}</h1>
+                        <h3><a href="{{ path('show_author', {id: author.id}) }}">{{ author.name }}</a></h3>
                     </span>
-                    <button id="{{ product.id }}_add2cart" class="btn-cart_add">Ajouter au panier</button>
+                    <p>{{ product.description }}</p>
+                </div>
+                <div id="product_buy">
+                    <div id="product_buy_group">
+                        <p>{{ product.price|number_format(2, '.', ',') }} €</p>
+                        <span id="product_buy_selector">
+                            <button id="buy_minus" disabled>-</button>
+                            <span id="buy_counter">1</span>
+                            <button id="buy_plus">+</button>
+                        </span>
+                        <button id="{{ product.id }}_add2cart" class="btn-cart_add">Ajouter au panier</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -46,4 +84,10 @@
 
     {# Cart handler script #}
     {{ encore_entry_script_tags('cart') }}
+
+    {# Zoom on Hover script #}
+    {{ encore_entry_script_tags('product_zoom_hover') }}
+
+    {# Suggestions script #}
+    {{ encore_entry_script_tags('suggestions') }}
 {% endblock %}

@@ -6,8 +6,8 @@
     <main id="author">
         {% set image = (author.getLastProduct is not null and author.getLastProduct.getImages is not null) ? author.getLastProduct.getImages[0] : null %}
         <section id="left_section" style="background-image: url('{{ asset('images/products/' ~ author.id ~ '/' ~ image.name) }}')">
-            <span>
-                <a href="{{ path('show_authors') }}"><i class="fas fa-solid fa-caret-left"></i>  Revenir aux artistes</a>
+            <span class="backto_holder">
+                <a href="{{ path('show_authors') }}" class="btn-backto"><i class="fas fa-solid fa-caret-left"></i>  Revenir aux artistes</a>
             </span>
         </section>
         <section id="right_section">

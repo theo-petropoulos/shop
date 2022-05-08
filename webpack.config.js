@@ -30,6 +30,8 @@ Encore
     .addEntry('admin_dynamic_edit', './assets/js/admin/products/dynamic_edit.js')
     .addEntry('admin_delete_admin', './assets/js/admin/admins/delete_admin.js')
     .addEntry('background_switcher', './assets/js/author/background_switcher.js')
+    .addEntry('product_zoom_hover', './assets/js/product/zoom_hover.js')
+    .addEntry('suggestions', './assets/js/product/suggestions.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
