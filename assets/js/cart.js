@@ -37,10 +37,11 @@ $(function() {
             if (!idFound) {
                 cart[id] = quantity
             }
-console.log(cart)
             cart            = JSON.stringify(cart)
         }
 
         Cookies.set('cart', cart, { sameSite: 'strict' })
+
+        flash('Article ajouté au panier', 2500, 'success')
     })
 })

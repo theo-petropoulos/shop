@@ -5,9 +5,13 @@ $(function() {
     let refSizing = $('.product_image_hidden')
 
     resizeContainer(refSizing)
+    setTimeout(function(){
+        resizeContainer(refSizing)
+    }, 1500)
 
     $(window, 'body', 'main', '#product_image_container').resize(function() {
-        resizeContainer(refSizing)
+        if (refSizing.width() && refSizing.height())
+            resizeContainer(refSizing)
     })
 
     $(".product_image_resizer")

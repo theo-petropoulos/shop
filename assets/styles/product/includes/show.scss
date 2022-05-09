@@ -4,8 +4,9 @@
   position: relative;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap-reverse;
-  background-color: $grey;
+  flex-wrap: wrap;
+  background: rgb(255,156,0);
+  background: linear-gradient(227deg, rgba(100,40,0,1) 0%, rgba(45,45,45,1) 50%, rgba(25,25,25,1) 100%);
   section{
     position: relative;
     display: flex;
@@ -19,7 +20,7 @@
     justify-content: center;
     flex-direction: column;
     #product_suggestions_resizer{
-      width: 90%;
+      width: 100%;
       height: 90%;
       display: flex;
       flex-direction: column;
@@ -64,12 +65,14 @@
           border: unset;
           outline: unset;
           cursor: pointer;
-          z-index: 3;
+          z-index: 2;
           &.suggestions-left{
             left: 0;
+            box-shadow: 3px 3px 2px 2px $grey_transparent;
           }
           &.suggestions-right{
             right: 0;
+            box-shadow: -3px 3px 2px 2px $grey_transparent;
           }
           i{
             flex-grow: 1;
@@ -88,11 +91,12 @@
           top: 0;
           left: 0;
           width: 70%;
-          z-index: 3;
+          z-index: 2;
+          box-shadow: 3px 3px 4px 3px $grey_transparent;
           h2{
             width: 100%;
             background-color: $orange;
-            color: $white_light;
+            color: $white;
             border-bottom-right-radius: 30px;
             padding: 1% 2%;
             font-size: medium;
@@ -156,8 +160,14 @@
         height: 50%;
         min-height: 300px;
         flex-grow: 1;
-        padding: 1%;
+        padding: 4%;
         position: relative;
+        background: rgb(45,45,45);
+        background: linear-gradient(35deg, rgba(45,45,45,1) 25%, rgba(75,75,75,1) 100%);
+        border-top-right-radius: 6%;
+        border-top-left-radius: 6%;
+        box-shadow: 4px 4px 6px 4px $grey_dark_transparent;
+        border-bottom: 3px solid $orange_light_transparent;
         h1{
           color: $orange;
           font-size: x-large;
@@ -186,6 +196,12 @@
           display: flex;
           flex-direction: column;
           align-items: center;
+          padding: 4%;
+          background: rgb(45,45,45);
+          background: linear-gradient(35deg, rgba(35,35,35,1) 0%, rgba(45,45,45,1) 75%, rgba(65,65,65,1) 100%);
+          border-bottom-right-radius: 6%;
+          border-bottom-left-radius: 6%;
+          box-shadow: 4px 0 6px 4px $grey_dark_transparent;
           p{
             font-size: xx-large;
             color: $orange_light;
@@ -214,9 +230,10 @@
           .btn-cart_add{
             background: $orange_mid;
             border: 1px solid $orange;
-            border-radius: unset;
-            padding: 1% 2%;
+            padding: 3% 5% 2% 5%;
             font-size: large;
+            border-radius: 6%;
+            color: $white;
             &:hover{
               cursor: pointer;
               background: $orange_light;
@@ -230,5 +247,27 @@
 }
 
 @media screen and (max-width:499px){
-
+  #product{
+    #product_suggestions_container{
+      display: none;
+    }
+    #product_image_container{
+      height: 50%;
+    }
+    #product_description_container{
+      height: 50%;
+      .product_description_resizer{
+        #product_text{
+          height: max-content;
+          min-height: unset;
+          flex-grow: unset;
+        }
+        #product_buy{
+          height: max-content;
+          min-height: unset;
+          flex-grow: unset;
+        }
+      }
+    }
+  }
 }

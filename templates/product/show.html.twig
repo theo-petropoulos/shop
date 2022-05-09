@@ -9,34 +9,57 @@
             <span class="backto_holder">
                 <a href="{{ path('show_author', {id: author.id}) }}" class="btn-backto"><i class="fas fa-solid fa-caret-left"></i>  Revenir à l'artiste</a>
             </span>
+            {# Suggestions container #}
             <div id="product_suggestions_resizer">
-                {% if trendings is not empty %}
-                    <div id="top_sells_container" class="product_suggestions_scroller">
-                        <span class="suggestions_title">
-                            <h2><i class="fa-solid fa-medal"></i> MEILLEURES VENTES</h2>
-                        </span>
-                        <button class="btn-suggestions_nav suggestions-left"><i class="fa-solid fa-caret-left"></i></button>
+
+                {# Top sells container #}
+                <div id="top_sells_container" class="product_suggestions_scroller">
+                    <span class="suggestions_title">
+                        <h2><i class="fa-solid fa-medal"></i> MEILLEURES VENTES</h2>
+                    </span>
+                    <button class="btn-suggestions_nav suggestions-left"><i class="fa-solid fa-caret-left"></i></button>
+                    {% if topSells is not empty %}
                         {% for topSell in topSells %}
                             {% set imageName = topSell.getImages ? topSell.getImages[0].name : null %}
                             <a href="{{ path('show_product', {id: topSell.id}) }}" id="{{ topSell.id }}_product" class="suggestion_container navto_container">
                                 <img src="{{ asset('images/products/' ~ topSell.author.id ~ '/' ~ imageName) }}" class="suggestion_image" alt="{{ topSell.name }} par {{ topSell.author.name }}">
                             </a>
                         {% endfor %}
-                        <button class="btn-suggestions_nav suggestions-right"><i class="fa-solid fa-caret-right"></i></button>
-                    </div>
-                {% endif %}
+                    {% endif %}
+                    <button class="btn-suggestions_nav suggestions-right"><i class="fa-solid fa-caret-right"></i></button>
+                </div>
 
+                {# Trendings container #}
                 <div id="trendings_container" class="product_suggestions_scroller">
                     <span class="suggestions_title">
                         <h2><i class="fa-solid fa-arrow-trend-up"></i> TENDANCES DE LA SEMAINE</h2>
                     </span>
                     <button class="btn-suggestions_nav suggestions-left"><i class="fa-solid fa-caret-left"></i></button>
-                    {% for trending in trendings %}
-                        {% set imageName = trending.getImages ? trending.getImages[0].name : null %}
-                        <a href="{{ path('show_product', {id: trending.id}) }}" id="{{ trending.id }}_product" class="suggestion_container navto_container">
-                            <img src="{{ asset('images/products/' ~ trending.author.id ~ '/' ~ imageName) }}" class="suggestion_image" alt="{{ trending.name }} par {{ trending.author.name }}">
-                        </a>
-                    {% endfor %}
+                    {% if trendings is not empty %}
+                        {% for trending in trendings %}
+                            {% set imageName = trending.getImages ? trending.getImages[0].name : null %}
+                            <a href="{{ path('show_product', {id: trending.id}) }}" id="{{ trending.id }}_product" class="suggestion_container navto_container">
+                                <img src="{{ asset('images/products/' ~ trending.author.id ~ '/' ~ imageName) }}" class="suggestion_image" alt="{{ trending.name }} par {{ trending.author.name }}">
+                            </a>
+                        {% endfor %}
+                    {% endif %}
+                    <button class="btn-suggestions_nav suggestions-right"><i class="fa-solid fa-caret-right"></i></button>
+                </div>
+
+                {# Artist container #}
+                <div id="author_products_container" class="product_suggestions_scroller">
+                    <span class="suggestions_title">
+                        <h2><i class="fa-solid fa-palette"></i> DU MÊME ARTISTE</h2>
+                    </span>
+                    <button class="btn-suggestions_nav suggestions-left"><i class="fa-solid fa-caret-left"></i></button>
+                    {% if authorProducts is not empty %}
+                        {% for authorProduct in authorProducts %}
+                            {% set imageName = authorProduct.getImages ? authorProduct.getImages[0].name : null %}
+                            <a href="{{ path('show_product', {id: authorProduct.id}) }}" id="{{ authorProduct.id }}_product" class="suggestion_container navto_container">
+                                <img src="{{ asset('images/products/' ~ authorProduct.author.id ~ '/' ~ imageName) }}" class="suggestion_image" alt="{{ authorProduct.name }} par {{ authorProduct.author.name }}">
+                            </a>
+                        {% endfor %}
+                    {% endif %}
                     <button class="btn-suggestions_nav suggestions-right"><i class="fa-solid fa-caret-right"></i></button>
                 </div>
             </div>
@@ -65,7 +88,7 @@
                             <span id="buy_counter">1</span>
                             <button id="buy_plus">+</button>
                         </span>
-                        <button id="{{ product.id }}_add2cart" class="btn-cart_add">Ajouter au panier</button>
+                        <button id="{{ product.id }}_add2cart" class="btn-cart_add"><i class="fa-solid fa-cart-arrow-down"></i></button>
                     </div>
                 </div>
             </div>

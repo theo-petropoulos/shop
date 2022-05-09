@@ -54,16 +54,17 @@ main{
   top: 20%;
   left: 50%;
   transform: translate(-50%, -20%);
-  opacity: 1;
-  background: white;
+  opacity: 0;
   border: 1px solid black;
   padding: 1.5%;
   animation: disappear 0.5s ease-in 3s forwards;
+  transition: opacity 0.4s;
   &.warning {
     color: $orange_light;
   }
   &.success{
     color: $green;
+    background: $green_light;
   }
   &.failure{
     color: $red;
@@ -74,6 +75,19 @@ main{
   color: $red;
   font-weight: bold;
   font-family: $font;
+}
+
+#custom-flash-message{
+  position: absolute;
+  visibility: hidden;
+  opacity: 1;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -10%);
+  padding: 1% 2%;
+  border-radius: 10px;
+  font-size: large;
+  z-index: 6;
 }
 
 .back-btn{

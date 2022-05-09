@@ -97,7 +97,6 @@
           transition: all 0.3s;
           margin: 0 1%;
           &:first-of-type{
-            background: black;
             text-align: center;
             color: $orange;
           }
@@ -111,11 +110,9 @@
           span{
             transition: all 0.5s;
             &:first-of-type{
-              background: unset;
               color: $white_light;
             }
             &:last-of-type{
-              background:black;
               color: $orange;
             }
           }

@@ -22,3 +22,7 @@ global.Swal = Swal;
 // loads js-cookie
 import Cookies from 'js-cookie';
 global.Cookies = Cookies;
+
+// loads custom-flash-messages
+import {flashMessage} from "./js/custom_messages";
+global.flash = flashMessage
