@@ -1,6 +1,11 @@
 $(function() {
     let counterField    = $('#buy_counter')
-    let counter         = parseInt(counterField.text())
+    let counter         = counterField.length ? parseInt(counterField.text()) : 1
+
+    $(document).on('click', '.btn-cart, .btn-cart_add', function(e) {
+        e.preventDefault()
+        console.log(e.target)
+    })
 
     // Decrease the product's counter
     $(document).on('click', '#buy_minus:enabled', function() {
@@ -16,6 +21,7 @@ $(function() {
             $('#buy_minus').prop('disabled', false)
     })
 
+    // Add product to the cart
     $(document).on('click', '.btn-cart_add', function() {
         let id          = $(this).attr('id').split('_')[0]
         let quantity    = counter

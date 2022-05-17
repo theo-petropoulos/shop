@@ -64,6 +64,8 @@
                 </div>
             </div>
         </section>
+
+        {# Product's image container #}
         <section id="product_image_container">
             {% set imageName = product.getImages ? product.getImages[0].name : null %}
             <div class="product_image_resizer">
@@ -71,8 +73,12 @@
             </div>
             <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ imageName) }}" class="product_image_hidden" alt="{{ product.name }} par {{ author.name }}">
         </section>
+
+        {# Product's description container #}
         <section id="product_description_container">
             <div class="product_description_resizer">
+
+                {# Product's text #}
                 <div id="product_text">
                     <span id="product_title">
                         <h1>{{ product.name }}</h1>
@@ -80,6 +86,8 @@
                     </span>
                     <p>{{ product.description }}</p>
                 </div>
+
+                {# Product's price & cart button #}
                 <div id="product_buy">
                     <div id="product_buy_group">
                         <p>{{ product.price|number_format(2, '.', ',') }} €</p>
@@ -97,6 +105,7 @@
 {% endblock body %}
 
 {% block javascripts %}
+    {# Open product's image in another tab on click #}
     <script defer>
         $(function() {
             $(document).on('click', '.product_image', function() {

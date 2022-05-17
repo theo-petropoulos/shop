@@ -53,6 +53,11 @@
             font-family: $font;
             outline: 0;
             border-bottom: none;
+            background-color: $grey_light;
+            &::selection{
+              background: $grey_dark;
+              color: $grey_light;
+            }
           }
           button{
             background: none;
@@ -60,7 +65,7 @@
             color: $white_light;
             &:hover{
               cursor: pointer;
-              color: $white;
+              color: $orange;
               transition: all 0.3s;
             }
           }

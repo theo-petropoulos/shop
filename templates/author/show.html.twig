@@ -5,11 +5,15 @@
 {% block body %}
     <main id="author">
         {% set image = (author.getLastProduct is not null and author.getLastProduct.getImages is not null) ? author.getLastProduct.getImages[0] : null %}
+
+        {# Picture visualizer #}
         <section id="left_section" style="background-image: url('{{ asset('images/products/' ~ author.id ~ '/' ~ image.name) }}')">
             <span class="backto_holder">
                 <a href="{{ path('show_authors') }}" class="btn-backto"><i class="fas fa-solid fa-caret-left"></i>  Revenir aux artistes</a>
             </span>
         </section>
+
+        {# Author's gallery #}
         <section id="right_section">
             <div id="author_description">
                 <h1>{{ author.name }}</h1>
@@ -23,8 +27,8 @@
                             <span>
                                 <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ imageName) }}" class="author_product_image" alt="{{ product.name }} par {{ author.name }}">
                                 <div id="{{ product.id }}_add2cart" class="btn-cart" href="#">
-                                    <p class="btn-cart_price"><i class="fas fa-shopping-cart"></i>  {{ product.price|number_format(2, '.', ',') }} €</p>
-                                    <p class="btn-cart_add">Ajouter</p>
+                                    <button id="{{ product.id }}_add2cart_price" class="btn-cart_price"><i class="fas fa-shopping-cart"></i>  {{ product.price|number_format(2, '.', ',') }} €</button>
+                                    <button id="{{ product.id }}_add2cart_add" class="btn-cart_add">Ajouter</button>
                                 </div>
                             </span>
                         </a>

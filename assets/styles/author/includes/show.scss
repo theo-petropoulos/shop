@@ -98,7 +98,17 @@
             i{
               font-size: smaller;
             }
+            .btn-cart_price{
+              font-family: $font;
+              font-size: medium;
+              cursor: pointer;
+              border: unset;
+              background: $orange;
+            }
             .btn-cart_add{
+              font-family: $font;
+              font-size: medium;
+              cursor: pointer;
               opacity: 0;
               position: absolute;
               top: 50%;
@@ -106,6 +116,7 @@
               width: 100%;
               transform: translate(-50%, -50%);
               background: $orange;
+              border: unset;
             }
             &:hover{
               transform: scale(1.1);

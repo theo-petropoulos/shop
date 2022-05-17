@@ -1,19 +1,9 @@
-Ajouter une verif login 
-	X => isVerified 
-	X => Adresse IP
-
-Ajouter sur la page utiliateur
-	X => Modification du mot de passe
-	X => Modification des adresses
-	X => Suppression du compte
-
 IPRecords 
 	=> Tentatives de connexions
 	=> Nombre de comptes différents
 
 Administration
-	X => Bug sur le select author & les dates
-	X => Ajouter la désactivation / suppression
+	=> Check l'optimisation des images à l'upload
 
 Produit
 	=> Désactiver l'ajout au panier si le stock est null

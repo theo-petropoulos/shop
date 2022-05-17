@@ -290,6 +290,9 @@
             "./config/packages/sensio_framework_extra.yaml"
         ]
     },
+    "spatie/image-optimizer": {
+        "version": "1.6.2"
+    },
     "symfony/asset": {
         "version": "v5.4.0"
     },
@@ -476,6 +479,9 @@
     },
     "symfony/polyfill-php81": {
         "version": "v1.23.0"
+    },
+    "symfony/process": {
+        "version": "v5.4.8"
     },
     "symfony/property-access": {
         "version": "v5.4.0"

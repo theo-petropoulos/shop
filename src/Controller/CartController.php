@@ -25,7 +25,8 @@ class CartController extends AbstractController
         $arrayCart  = json_decode($request->cookies->get('cart'), true);
         $cart       = [];
 
-        foreach($arrayCart as $productId => $quantity) {
+        // todo : Modifier l'association objet => quantité
+        foreach ($arrayCart as $productId => $quantity) {
             $cart[$quantity] = $productRepository->findOneBy(['id' => $productId]);
         }
 

@@ -3,5 +3,12 @@
 {% block pretitle %}NOS PRODUITS{% endblock %}
 
 {% block body %}
-    Ici les produits
+    <main id="products">
+
+    </main>
 {% endblock body %}
+
+{% block javascripts %}
+    {# Cart handler script #}
+    {{ encore_entry_script_tags('cart') }}
+{% endblock %}
