@@ -4,11 +4,30 @@
 
 {% block body %}
     <main id="products">
-
+        {% for product in products %}
+            <div id="{{ product.id }}_product" class="product_container">
+                <a href="{{ path('show_product', {id: product.id}) }}">
+                    <img src="{{ asset('images/products/' ~ product.author.id ~ '/' ~ product.images[0].name) }}">
+                </a>
+            </div>
+        {% endfor %}
+        <div id="load_products" class="product_container">
+            <a href="{{ path('load_products') }}" id="load_products_link">
+                <p>Charger plus de produits</p>
+                <i class="fa-solid fa-plus"></i>
+            </a>
+        </div>
     </main>
 {% endblock body %}
 
 {% block javascripts %}
+    <script>
+        let productHref = "{{ path('show_product', {id: 'idPlaceholder'}) }}"
+        let imagePath   = "{{ asset('images/products/authorIdPlaceholder/imageNamePlaceholder') }}"
+    </script>
     {# Cart handler script #}
     {{ encore_entry_script_tags('cart') }}
+
+    {# More products script #}
+    {{ encore_entry_script_tags('loadmore') }}
 {% endblock %}
