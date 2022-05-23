@@ -141,7 +141,7 @@ $(function() {
                     value
                 },
                 (res)=>{
-                    console.log(res)
+                    // console.log(res)
                 }
             )
             .done(() => {
@@ -153,11 +153,8 @@ $(function() {
                 else {
                     if (parseInt(id) !== id) {
                         let parent = '#' + $(this).closest('div').attr('id')
-                        console.log(parent)
+                        // console.log(parent)
                         $(parent).load(" " + parent + " > *")
-                        /*parent.html(window['prevHTML_' + field + '_' + id])
-                        parent.find('p').html(value)
-                        parent.attr('id', value + '_name')*/
                     }
                     else
                         $(div).load(" " + div + " > *")

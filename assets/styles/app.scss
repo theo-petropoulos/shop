@@ -14,6 +14,9 @@
 // Import author
 @use 'author/author';
 
+// Import product
+@use 'product/product';
+
 // Global rules
 *, html, body{
   margin: 0;
@@ -22,36 +25,46 @@
 }
 
 body{
-  min-width: 100vw;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
   background: white;
 }
 
+header{
+  min-height: max-content;
+  flex-grow: 1;
+}
+
 main{
-  min-height: 85vh;
+  flex-grow: 1;
+  height: 95%;
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 // Specific rules
 .success, .failure, .warning{
   font-family: $font;
-  position:absolute;
-  z-index:9;
-  top:20%;
-  left:50%;
-  transform:translate(-50%, -20%);
-  opacity:1;
-  background: white;
-  border:1px solid black;
-  padding:1.5%;
+  position: absolute;
+  z-index: 9;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -20%);
+  opacity: 0;
+  border: 1px solid black;
+  padding: 1.5%;
   animation: disappear 0.5s ease-in 3s forwards;
+  transition: opacity 0.4s;
   &.warning {
     color: $orange_light;
   }
   &.success{
     color: $green;
+    background: $green_light;
   }
   &.failure{
     color: $red;
@@ -64,16 +77,47 @@ main{
   font-family: $font;
 }
 
+#custom-flash-message{
+  position: absolute;
+  visibility: hidden;
+  opacity: 1;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -10%);
+  padding: 1% 2%;
+  border-radius: 10px;
+  font-size: large;
+  z-index: 6;
+}
+
 .back-btn{
   text-decoration: none;
-  padding:1% 2%;
-  border:1px solid black;
-  background:white;
-  color:black;
-  margin:calc(max(2%, 20px));
+  padding: 1% 2%;
+  border: 1px solid black;
+  background: white;
+  color: black;
+  margin: calc(max(2%, 20px));
   &:hover{
-    background:rgb(195, 195, 195);
+    background: rgb(195, 195, 195);
     transition: all 0.3s;
+  }
+}
+
+.backto_holder{
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1% 2%;
+  background: $grey_dark_transparent;
+  .btn-backto{
+    color: $white_light;
+    text-decoration: unset;
+    width: max-content;
+    font-weight: 600;
+    &:hover{
+      color: $orange_light;
+      transition: all 0.3s;
+    }
   }
 }
 
@@ -126,5 +170,9 @@ a#back_btn{
 }
 
 .current_admin{
-  background: $yellow_light;
+  background: $yellow_transparent;
+}
+
+@media screen and (max-width:499px){
+
 }

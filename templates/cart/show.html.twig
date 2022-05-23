@@ -3,5 +3,15 @@
 {% block pretitle %}PANIER{% endblock %}
 
 {% block body %}
-    Ici le panier
+    <main id="cart">
+        <section id="cart_products_container">
+            {% for quantity, product in cart %}
+                <div id="cart_product_container">
+                    <h2>{{ product.name }}</h2>
+                    <p>{{ quantity }}</p>
+                    <p>{{ product.price * quantity }} €</p>
+                </div>
+            {% endfor %}
+        </section>
+    </main>
 {% endblock body %}

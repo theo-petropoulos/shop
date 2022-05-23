@@ -28,6 +28,7 @@ use Exception;
 use JetBrains\PhpStorm\Pure;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
@@ -87,7 +88,7 @@ class AdminController extends AbstractController
     #[Route(path: '/admin/products', name: 'admin_show_products')]
     public function adminShowProducts(Request $request, AuthorRepository $authorRepository, ProductRepository $productRepository, DiscountRepository $discountRepository): Response
     {
-        $authors     = $authorRepository->findBy([], ['name' => 'ASC', 'active' => 'DESC']);
+        $authors    = $authorRepository->findBy([], ['name' => 'ASC', 'active' => 'DESC']);
         $products   = $productRepository->findBy([], ['author' => 'DESC', 'active' => 'DESC']);
         $discounts  = $discountRepository->findBy([], ['startingDate' => 'ASC']);
 
@@ -165,7 +166,8 @@ class AdminController extends AbstractController
                         $this->addFlash('success', 'L\'auteur a été ajouté avec succès.');
                         break;
                     case 'product':
-                        $images = $form->get('images')->getData();
+                        $images     = $form->get('images')->getData();
+                        $optimizer  = OptimizerChainFactory::create();
 
                         /** @var UploadedFile $file */
                         foreach ($images as $file) {
@@ -173,6 +175,8 @@ class AdminController extends AbstractController
                             $folder = $this->getParameter('products_images_directory') . '/' . $item->getAuthor()->getId();
 
                             $image->upload($folder);
+
+                            $optimizer->optimize($image->getPath());
 
                             $item->addImage($image);
                         }

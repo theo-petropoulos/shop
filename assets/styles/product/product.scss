@@ -1,0 +1,5 @@
+@use 'assets/styles/variables' as *;
+
+// Import product's CSS requirements
+@use 'includes/show';
+@use 'includes/landing';

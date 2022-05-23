@@ -32,10 +32,9 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * Inscription d'un utilisateur
-     *
      * @throws Exception
      */
+    # Inscription d'un utilisateur
     #[Route(path: '/user/register', name: 'user_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
@@ -92,6 +91,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
+    # Vérifie l'email de l'utilisateur après inscription
     #[Route(path: '/verify/register/email', name: 'register_verify_email')]
     public function verifyUserEmail(Request $request, TranslatorInterface $translator, UserRepository $userRepository): Response
     {

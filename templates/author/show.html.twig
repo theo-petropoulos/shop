@@ -5,11 +5,15 @@
 {% block body %}
     <main id="author">
         {% set image = (author.getLastProduct is not null and author.getLastProduct.getImages is not null) ? author.getLastProduct.getImages[0] : null %}
+
+        {# Picture visualizer #}
         <section id="left_section" style="background-image: url('{{ asset('images/products/' ~ author.id ~ '/' ~ image.name) }}')">
-            <span>
-                <a href="{{ path('show_authors') }}"><i class="fas fa-solid fa-caret-left"></i>  Revenir aux artistes</a>
+            <span class="backto_holder">
+                <a href="{{ path('show_authors') }}" class="btn-backto"><i class="fas fa-solid fa-caret-left"></i>  Revenir aux artistes</a>
             </span>
         </section>
+
+        {# Author's gallery #}
         <section id="right_section">
             <div id="author_description">
                 <h1>{{ author.name }}</h1>
@@ -19,14 +23,15 @@
                 {% if products is not null %}
                     {% for product in products %}
                         {% set imageName = product.getImages ? product.getImages[0].name : null %}
-                        <article id="{{ product.id }}_product" class="author_product_container navto_container">
-                            <a href="{{ path('show_product', {id: product.id}) }}" class="navto" style="display: none"></a>
-                            <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ imageName) }}" class="author_product_image" alt="Oeuvre intitulée {{ product.name }}">
-                            <div id="{{ product.id }}_add2cart" class="btn-cart" href="#">
-                                <p class="btn-cart_price"><i class="fas fa-shopping-cart"></i>  {{ product.price|number_format(2, '.', ',') }} €</p>
-                                <p class="btn-cart_add">Ajouter</p>
-                            </div>
-                        </article>
+                        <a href="{{ path('show_product', {id: product.id}) }}" id="{{ product.id }}_product" class="author_product_container navto_container">
+                            <span>
+                                <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ imageName) }}" class="author_product_image" alt="{{ product.name }} par {{ author.name }}">
+                                <div id="{{ product.id }}_add2cart" class="btn-cart" href="#">
+                                    <button id="{{ product.id }}_add2cart_price" class="btn-cart_price"><i class="fas fa-shopping-cart"></i>  {{ product.price|number_format(2, '.', ',') }} €</button>
+                                    <button id="{{ product.id }}_add2cart_add" class="btn-cart_add">Ajouter</button>
+                                </div>
+                            </span>
+                        </a>
                     {% endfor %}
                 {% endif %}
             </div>
@@ -35,12 +40,9 @@
 {% endblock body %}
 
 {% block javascripts %}
-    {# Clickable sections script #}
-    {{ encore_entry_script_tags('clickable_section') }}
-
     {# Switch background script #}
     {{ encore_entry_script_tags('background_switcher') }}
 
-    {# Switch background script #}
+    {# Cart handler script #}
     {{ encore_entry_script_tags('cart') }}
 {% endblock %}

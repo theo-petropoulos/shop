@@ -16,5 +16,13 @@ const $ = require('jquery');
 global.$ = global.jQuery = $;
 
 // loads sweet alert
-const Swal = require("sweetalert2");
+import Swal from 'sweetalert2';
 global.Swal = Swal;
+
+// loads js-cookie
+import Cookies from 'js-cookie';
+global.Cookies = Cookies;
+
+// loads custom-flash-messages
+import {flashMessage} from "./js/custom_messages";
+global.flash = flashMessage
