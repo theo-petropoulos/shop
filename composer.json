@@ -21,6 +21,7 @@
         "rollerworks/password-strength-validator": "^1.7",
         "scienta/doctrine-json-functions": "^5.0",
         "sensio/framework-extra-bundle": "^6.2",
+        "spatie/image-optimizer": "^1.6",
         "symfony/asset": "5.4.*",
         "symfony/console": "5.4.*",
         "symfony/dotenv": "5.4.*",

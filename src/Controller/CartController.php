@@ -2,8 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CartController extends AbstractController
 {
-    public function __construct(private ManagerRegistry $doctrine) {}
+    public function __construct() {}
 
     /**
      * Affiche le panier
@@ -21,9 +20,19 @@ class CartController extends AbstractController
      *
      * @Route("/cart/", name="show_cart")
      */
-    public function showCart(Request $request): Response
+    public function showCart(Request $request, ProductRepository $productRepository): Response
     {
-        return $this->render('cart/show.html.twig');
+        $arrayCart  = json_decode($request->cookies->get('cart'), true);
+        $cart       = [];
+
+        // todo : Modifier l'association objet => quantité
+        foreach ($arrayCart as $productId => $quantity) {
+            $cart[$quantity] = $productRepository->findOneBy(['id' => $productId]);
+        }
+
+        return $this->render('cart/show.html.twig', [
+            'cart'      => $cart
+        ]);
     }
 
     /**

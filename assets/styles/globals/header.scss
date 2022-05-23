@@ -5,10 +5,9 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  flex-grow: 1;
   background: $grey_dark;
   border-bottom: 1px solid $black;
-  min-height: 15vh;
-  height: max-content;
   flex-wrap: wrap;
   box-shadow: -2px 0 6px 3px $grey_dark;
   z-index: 2;
@@ -54,6 +53,11 @@
             font-family: $font;
             outline: 0;
             border-bottom: none;
+            background-color: $grey_light;
+            &::selection{
+              background: $grey_dark;
+              color: $grey_light;
+            }
           }
           button{
             background: none;
@@ -61,7 +65,7 @@
             color: $white_light;
             &:hover{
               cursor: pointer;
-              color: $white;
+              color: $orange;
               transition: all 0.3s;
             }
           }
@@ -83,21 +87,21 @@
       color: $white_light;
       position: relative;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       height: max-content;
       h1{
+        position: relative;
         height: max-content;
         display: flex;
-        flex-direction: column;
-        width:100%;
-        position:relative;
-        padding:5px 10px;
+        flex-direction: row;
+        width: 100%;
+        font-size: large;
         span{
           width: 100%;
           display: block;
           transition: all 0.3s;
+          margin: 0 1%;
           &:first-of-type{
-            background: black;
             text-align: center;
             color: $orange;
           }
@@ -111,11 +115,9 @@
           span{
             transition: all 0.5s;
             &:first-of-type{
-              background: unset;
               color: $white_light;
             }
             &:last-of-type{
-              background:black;
               color: $orange;
             }
           }

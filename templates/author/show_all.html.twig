@@ -11,14 +11,16 @@
             {% if authors is not empty %}
                 {% for author in authors %}
                     {% set image = (author.getLastProduct is not null and author.getLastProduct.getImages is not null) ? author.getLastProduct.getImages[0] : null %}
-                    <div id="{{ author.id }}_container" class="author_container navto_container"
+                    <a href="{{ (path('show_author', {id: author.id})) }}" id="{{ author.id }}_container" class="author_container navto_container"
                             {% if image is not null %}
                                 style="background-image: url('{{ asset('images/products/' ~ author.id ~ '/' ~ image.name) }}')"
                             {% endif %}
                     >
-                        <a href="{{ (path('show_author', {id: author.id})) }}" class="navto">{{ author.name }}</a>
-                        <p>{{ author.description }}</p>
-                    </div>
+                        <span>
+                            <h2 class="navto">{{ author.name }}</h2>
+                            <p>{{ author.description }}</p>
+                        </span>
+                    </a>
                 {% endfor %}
             {% endif %}
         </section>
@@ -26,9 +28,6 @@
 {% endblock body %}
 
 {% block javascripts %}
-    {# Clickable sections script #}
-    {{ encore_entry_script_tags('clickable_section') }}
-
     {# Switch background script #}
     {{ encore_entry_script_tags('background_switcher') }}
 {% endblock %}

@@ -20,17 +20,29 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
+
+    /** Global */
     .addEntry('app', './assets/app.js')
     .addEntry('cart', './assets/js/cart.js')
     .addEntry('modal', './assets/js/modal.js')
-    .addEntry('clickable_section', './assets/js/clickable_sections.js')
+
+    /** User */
     .addEntry('edit_delete_address', './assets/js/user/addresses/edit_delete_address.js')
     .addEntry('user_delete_account', './assets/js/user/delete_account.js')
+
+    /** Admin */
     .addEntry('admin_products_searchbar', './assets/js/admin/products/searchbar.js')
     .addEntry('admin_dynamic_form', './assets/js/admin/products/dynamic_form.js')
     .addEntry('admin_dynamic_edit', './assets/js/admin/products/dynamic_edit.js')
     .addEntry('admin_delete_admin', './assets/js/admin/admins/delete_admin.js')
+
+    /** Author */
     .addEntry('background_switcher', './assets/js/author/background_switcher.js')
+
+    /** Product */
+    .addEntry('product_zoom_hover', './assets/js/product/zoom_hover.js')
+    .addEntry('suggestions', './assets/js/product/suggestions.js')
+    .addEntry('loadmore', './assets/js/product/load_more.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
