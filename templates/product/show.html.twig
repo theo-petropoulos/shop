@@ -92,9 +92,9 @@
                     <div id="product_buy_group">
                         <p>{{ product.price|number_format(2, '.', ',') }} €</p>
                         <span id="product_buy_selector">
-                            <button id="buy_minus" disabled>-</button>
-                            <span id="buy_counter">1</span>
-                            <button id="buy_plus">+</button>
+                            <button id="{{ product.id }}_buy_minus" class="buy_minus" disabled>-</button>
+                            <span id="{{ product.id }}_buy_counter" class="buy_counter">1</span>
+                            <button id="{{ product.id }}_buy_plus" class="buy_plus">+</button>
                         </span>
                         <button id="{{ product.id }}_add2cart" class="btn-cart_add"><i class="fa-solid fa-cart-arrow-down"></i></button>
                     </div>
@@ -107,6 +107,8 @@
 {% block javascripts %}
     {# Open product's image in another tab on click #}
     <script defer>
+        let stock = "{{ product.stock }}"
+
         $(function() {
             $(document).on('click', '.product_image', function() {
                 window.open($(this).attr('src'))

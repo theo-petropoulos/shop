@@ -4,6 +4,9 @@ $(function() {
     $(document).on('click', '#load_products_link', function(e) {
         e.preventDefault()
 
+        $('#fa_plus').css('opacity', '0')
+        $('#fa_loader').css('opacity', '1')
+
         let href = $(this).attr('href')
 
         $.post(
@@ -29,6 +32,8 @@ $(function() {
                         addDiv.remove()
                     }
                 }
+                $('#fa_plus').css('opacity', '1')
+                $('#fa_loader').css('opacity', '0')
             }
         )
 

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\ProductRepository;
+use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,35 +14,35 @@ class CartController extends AbstractController
     public function __construct() {}
 
     /**
-     * Affiche le panier
-     *
-     * @param Request $request
-     * @return Response
-     *
-     * @Route("/cart/", name="show_cart")
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function showCart(Request $request, ProductRepository $productRepository): Response
+    # Affiche le panier
+    #[Route(path: '/cart', name: 'show_cart')]
+    public function showCart(Request $request, ProductRepository $productRepository, Connection $connection): Response
     {
         $arrayCart  = json_decode($request->cookies->get('cart'), true);
         $cart       = [];
+        $trendings  = [];
 
         // todo : Modifier l'association objet => quantité
-        foreach ($arrayCart as $productId => $quantity) {
-            $cart[$quantity] = $productRepository->findOneBy(['id' => $productId]);
+        foreach ((array) $arrayCart as $productId => $quantity) {
+            $cart[] = ['product' => $productRepository->findOneBy(['id' => $productId]), 'quantity' => $quantity];
+        }
+
+        if (count($cart) < 4) {
+            $sql            = 'SELECT p.id FROM `purchases7d` p LIMIT 10';
+            $stmt           = $connection->executeQuery($sql);
+            $trendings      = $stmt->fetchAllAssociative();
+            shuffle($trendings);
+
+            foreach ($trendings as $key => $id) {
+                $trendings[$key] = $productRepository->find($id);
+            }
         }
 
         return $this->render('cart/show.html.twig', [
-            'cart'      => $cart
+            'cart'      => $cart,
+            'trendings' => $trendings
         ]);
-    }
-
-    /**
-     * Ajoute un produit au panier du client
-     *
-     * @Route("/products/{productId}/to_cart", name="add_product_to_cart")
-     */
-    public function addProductToCart(Request $request): Response
-    {
-        return $this->render('home/index.html.twig');
     }
 }

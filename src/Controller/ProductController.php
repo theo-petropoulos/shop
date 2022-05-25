@@ -102,4 +102,11 @@ class ProductController extends AbstractController
             'authorProducts'    => $authorProducts
         ]);
     }
+
+    # Affiche un produit en particulier et les suggestions
+    #[Route(path: '/products/{id}/{quantity}', name: 'is_available')]
+    public function isAvailableAtQuantity(Product $product, int $quantity): JsonResponse
+    {
+        return new JsonResponse(json_encode($product->getStock() >= $quantity));
+    }
 }

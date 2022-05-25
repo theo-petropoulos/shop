@@ -5,13 +5,71 @@
 {% block body %}
     <main id="cart">
         <section id="cart_products_container">
-            {% for quantity, product in cart %}
-                <div id="cart_product_container">
-                    <h2>{{ product.name }}</h2>
-                    <p>{{ quantity }}</p>
-                    <p>{{ product.price * quantity }} €</p>
+            {% if cart is not empty %}
+                {% for index in cart %}
+                    {% set product, quantity = index.product, index.quantity %}
+                    {% set author, image = product.author, product.images[0] %}
+                    <div class="cart_product" id="{{ product.id }}_cart_product">
+                        <button class="cart_product_remove"><i class="fa-solid fa-trash-can"></i></button>
+                        <div class="cart_product_image_infos">
+                            <div class="cart_product_image_container">
+                                <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ image.name) }}" class="author_product_image" alt="{{ product.name }} par {{ author.name }}">
+                            </div>
+                            <span class="cart_product_infos_holder">
+                                <h3>{{ product.name }}</h3>
+                                <h4><b>PU</b>: {{ product.price|number_format(2) }} €</h4>
+                            </span>
+                        </div>
+                        <div class="cart_product_quantity_holder">
+                            <button class="cart_minus" id="{{ product.id }}_cart_minus">-</button>
+                            <p>{{ quantity }}</p>
+                            <button class="cart_plus" id="{{ product.id }}_cart_plus">+</button>
+                        </div>
+                        <p class="cart_product_total">{{ (product.price * quantity)|number_format(2) }} €</p>
+                        <a href="{{ path('show_product', {id: product.id}) }}"><span>Fiche produit <i class="fa-solid fa-square-up-right"></i></span></a>
+                    </div>
+                {% endfor %}
+                {% if cart|length < 4 %}
+                    <section id="cart_product_suggestions_container">
+                        <div id="cart_product_suggestions_resizer">
+                            {# Trendings container #}
+                            <div id="trendings_container" class="product_suggestions_scroller">
+                                <span class="suggestions_title">
+                                    <h2><i class="fa-solid fa-arrow-trend-up"></i> TENDANCES DE LA SEMAINE</h2>
+                                </span>
+                                <button class="btn-suggestions_nav suggestions-left"><i class="fa-solid fa-caret-left"></i></button>
+                                {% if trendings is not empty %}
+                                    {% for trending in trendings %}
+                                        {% set imageName = trending.getImages ? trending.getImages[0].name : null %}
+                                        <a href="{{ path('show_product', {id: trending.id}) }}" id="{{ trending.id }}_product" class="suggestion_container navto_container">
+                                            <img src="{{ asset('images/products/' ~ trending.author.id ~ '/' ~ imageName) }}" class="suggestion_image" alt="{{ trending.name }} par {{ trending.author.name }}">
+                                        </a>
+                                    {% endfor %}
+                                {% endif %}
+                                <button class="btn-suggestions_nav suggestions-right"><i class="fa-solid fa-caret-right"></i></button>
+                            </div>
+                        </div>
+                    </section>
+                {% endif %}
+            {% else %}
+                <div id="cart_empty_container">
+                    <p>{{ "cart.empty"|trans({}, 'messages') }}</p>
+                    <a id="cart_empty_goto_products" href="{{ path('show_products') }}">{{ 'cart.empty_button'|trans({}, 'messages')  }}</a>
                 </div>
-            {% endfor %}
+            {% endif %}
+        </section>
+        <section id="cart_payment_container">
+            <div id="payment_placeholder">
+                Paiement à venir
+            </div>
         </section>
     </main>
 {% endblock body %}
+
+{% block javascripts %}
+    {# Cart handler script #}
+    {{ encore_entry_script_tags('cart') }}
+
+    {# Suggestions script #}
+    {{ encore_entry_script_tags('suggestions') }}
+{% endblock %}
