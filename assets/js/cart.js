@@ -79,7 +79,7 @@ $(function() {
 
             flash('Article supprimé du panier', 2500, 'failure')
 
-            $('#cart_products_container').load(window.location.href + " #cart_products_container > *")
+            $('#cart').load(window.location.href + " #cart > *")
         }
     })
 
@@ -109,7 +109,7 @@ $(function() {
             cart = JSON.stringify(cart)
             Cookies.set('cart', cart, { sameSite: 'strict' })
 
-            $('#cart_products_container').load(window.location.href + " #cart_products_container > *")
+            $('#cart').load(window.location.href + " #cart > *")
         }
     })
 })

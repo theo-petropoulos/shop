@@ -58,11 +58,24 @@
                 </div>
             {% endif %}
         </section>
-        <section id="cart_payment_container">
-            <div id="payment_placeholder">
-                Paiement à venir
-            </div>
-        </section>
+        {% if cart|length %}
+            <section id="cart_payment_container">
+                <div id="cart_payment_main">
+                    <section id="cart_payment_total">
+                        <p>TOTAL : <b>{{ totalPrice|number_format(2) }} €</b><br><small>(Inc. TVA 5.5% : <b>{{ (totalPrice * 5.5 / 100) }} €</b>)</small></p>
+                    </section>
+                    <section id="cart_payment_checkout">
+                        {% if user.id|default %}
+                            Payer
+                        {% else %}
+                            Payer en tant qu'invité
+                            ou
+                            Se connecter
+                        {% endif %}
+                    </section>
+                </div>
+            </section>
+        {% endif %}
     </main>
 {% endblock body %}
 
