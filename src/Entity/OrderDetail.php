@@ -11,13 +11,13 @@ class OrderDetail
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: "integer")]
-    private $id;
+    protected int $id;
 
     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: "orderDetails")]
     #[ORM\JoinColumn(unique: false, nullable: false)]
     private ?Order $order;
 
-    #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: "orderDetails")]
+    #[ORM\ManyToOne(targetEntity: Product::class)]
     #[ORM\JoinColumn(unique: false, nullable: false)]
     private ?Product $product;
 

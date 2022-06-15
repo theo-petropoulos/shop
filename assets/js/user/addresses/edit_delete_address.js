@@ -11,7 +11,7 @@ $(function() {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Supprimer l\'adresse',
             cancelButtonText: 'Annuler'
-        }).then((result) => {
+        }).then ((result) => {
             if (result.isConfirmed) {
                 Swal.fire({
                     title: 'Succès',

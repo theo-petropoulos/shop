@@ -82,6 +82,14 @@ main{
   font-family: $font;
 }
 
+.separator_grey_light{
+  width: 80%;
+  margin: 1% auto;
+  height: 1px;
+  border-radius: 6px;
+  background-color: $grey_light_transparent;
+}
+
 #custom-flash-message{
   position: absolute;
   visibility: hidden;

@@ -4,6 +4,10 @@
 
 {% block body %}
     <main id="cart">
+        {% for flashMessage in app.session.flashbag.get('warning') %}
+            <div class="warning">{{ flashMessage }}</div>
+        {% endfor %}
+
         <section id="cart_products_container">
             {% if cart is not empty %}
                 {% for index in cart %}
@@ -62,16 +66,21 @@
             <section id="cart_payment_container">
                 <div id="cart_payment_main">
                     <section id="cart_payment_total">
-                        <p>TOTAL : <b>{{ totalPrice|number_format(2) }} €</b><br><small>(Inc. TVA 5.5% : <b>{{ (totalPrice * 5.5 / 100) }} €</b>)</small></p>
+                        <p>Total : <b>{{ totalPrice|number_format(2) }} €</b><br><small>(Inc. TVA 5.5% : <b>{{ (totalPrice * 5.5 / 100)|number_format(2) }} €</b>)</small></p>
+                        <p>Les frais de ports sont calculés à la prochaine étape.</p>
                     </section>
+                    <hr>
                     <section id="cart_payment_checkout">
-                        {% if user.id|default %}
-                            Payer
-                        {% else %}
-                            Payer en tant qu'invité
-                            ou
-                            Se connecter
-                        {% endif %}
+                        <h2>Procéder au paiement</h2>
+                        <span id="cart_payment_buttons">
+                            {% if user.id|default %}
+                                <a href="{{ path('user_checkout_set_address') }}">Continuer</a>
+                            {% else %}
+                                <a href="{{ path('guest_checkout_set_address') }}">Payer en tant qu'invité</a><br>
+                                <div class="separator_grey_light"></div>
+                                <a href="{{ path('user_login') }}">Se connecter</a>
+                            {% endif %}
+                        </span>
                     </section>
                 </div>
             </section>

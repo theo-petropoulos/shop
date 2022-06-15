@@ -55,7 +55,7 @@ $(function() {
                         cart            = JSON.stringify(cart)
                     }
 
-                    Cookies.set('cart', cart, { sameSite: 'strict' })
+                    Cookies.set('cart', cart, { sameSite: 'lax' })
 
                     flash('Article ajouté au panier', 2500, 'success')
                 }
@@ -75,7 +75,7 @@ $(function() {
         else {
             delete cart[id]
             cart = JSON.stringify(cart)
-            Cookies.set('cart', cart, { sameSite: 'strict' })
+            Cookies.set('cart', cart, { sameSite: 'lax' })
 
             flash('Article supprimé du panier', 2500, 'failure')
 
@@ -107,7 +107,7 @@ $(function() {
             }
 
             cart = JSON.stringify(cart)
-            Cookies.set('cart', cart, { sameSite: 'strict' })
+            Cookies.set('cart', cart, { sameSite: 'lax' })
 
             $('#cart').load(window.location.href + " #cart > *")
         }

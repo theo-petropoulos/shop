@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
+use App\Entity\Cart;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
@@ -24,33 +24,27 @@ class CartController extends AbstractController
     public function showCart(Request $request, ProductRepository $productRepository, Connection $connection, Security $security): Response
     {
         $user       = $security->getUser();
-        $arrayCart  = json_decode($request->cookies->get('cart'), true);
-        $cart       = [];
         $trendings  = [];
-        $totalPrice = 0;
+        $arrayCart  = json_decode($request->cookies->get('cart'), true);
 
-        foreach ((array) $arrayCart as $productId => $quantity) {
-            if ($product = $productRepository->findOneBy(['id' => $productId])) {
-                $cart[]     = ['product' => $product, 'quantity' => $quantity];
-                $totalPrice += (int) $product->getPrice() * $quantity;
-            }
-        }
+        $cart       = new Cart($productRepository);
+        $cart->getCartFromCookie((array) $arrayCart);
 
-        if (count($cart) < 4) {
+        // Affiche les suggestions si moins de 4 articles dans le panier
+        if (count($cart->getCart()) < 4) {
             $sql        = 'SELECT p.id FROM `purchases7d` p LIMIT 10';
             $stmt       = $connection->executeQuery($sql);
             $trendings  = $stmt->fetchAllAssociative();
             shuffle($trendings);
 
-            foreach ($trendings as $key => $id) {
+            foreach ($trendings as $key => $id)
                 $trendings[$key] = $productRepository->find($id);
-            }
         }
 
         return $this->render('cart/show.html.twig', [
-            'cart'          => $cart,
+            'cart'          => $cart->getCart(),
             'trendings'     => $trendings,
-            'totalPrice'    => $totalPrice,
+            'totalPrice'    => $cart->getTotalPrice(),
             'user'          => $user
         ]);
     }

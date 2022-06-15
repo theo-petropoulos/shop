@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block pretitle %}MES ADRESSES{% endblock %}
+{% block pretitle %}PAIEMENT | ADRESSES{% endblock %}
 
 {% block body %}
     <main id="addresses">
@@ -27,12 +27,17 @@
                         <p>{{ address.streetAddition }}</p>
                         <p>{{ address.postalCode|format_number({integer_digit: 5}) }}</p>
                         <p>{{ address.city }}</p>
+                        <button for="{{ address.id }}_select" class="select_checkout_address" id="{{ address.id }}_select_checkout_address">Sélectionner</button>
                     </div>
                 {% endfor %}
                 {% else %}
                     <p>Vous n'avez pas encore enregistré d'adresse.</p>
-            {% endif %}
-        </section>
+                {% endif %}
+            </section>
+
+        <form action="{{ path('user_checkout') }}" method="POST" id="checkout_form_stripe">
+            <button type="submit">Checkout</button>
+        </form>
 
         {% if errors %}
             <div class="form-errors">
@@ -44,12 +49,12 @@
             </div>
         {% endif %}
 
-        {{ form_start(form) }}
-            {{ form_widget(form, {'attr': {'class': 'user_add_address'}}) }}
-            <input type="submit" value="Ajouter">
+        {{ form_start(form, {'action': path('user_checkout_set_address')}) }}
+        {{ form_widget(form, {'attr': {'class': 'user_add_address'}}) }}
+        <input type="submit" value="Ajouter">
         {{ form_end(form) }}
 
-        <a class="back-btn" href="{{ path('user_show_profile') }}">Retour</a>
+        <a class="back-btn" href="{{ path('show_cart') }}">Retour</a>
 
     </main>
 {% endblock %}
@@ -60,4 +65,7 @@
 
     {# Pop-up modal script #}
     {{ encore_entry_script_tags('modal') }}
+
+    {# Pop-up modal script #}
+    {{ encore_entry_script_tags('checkout_select_address') }}
 {% endblock %}

@@ -146,7 +146,11 @@ class UserController extends AbstractController
             else
                 $this->addFlash('failure', 'Votre saisie comporte un ou plusieurs caractères interdits. Veuillez réessayer.');
 
-            return $this->redirectToRoute('user_show_addresses');
+            $referer = $request->headers->get('referer');
+            if ($referer && is_string($referer))
+                return $this->redirect($referer);
+            else
+                return $this->redirectToRoute('user_show_addresses');
         }
 
         return $this->renderForm('user/address/_modal_edit_address.html.twig', [
@@ -165,7 +169,11 @@ class UserController extends AbstractController
         $entityManager->remove($address);
         $entityManager->flush();
 
-        return $this->redirectToRoute('user_show_addresses');
+        $referer = $request->headers->get('referer');
+        if ($referer && is_string($referer))
+            return $this->redirect($referer);
+        else
+            return $this->redirectToRoute('user_show_addresses');
     }
 
     # Commandes de l'utilisateur

@@ -44,6 +44,9 @@ Encore
     .addEntry('suggestions', './assets/js/product/suggestions.js')
     .addEntry('loadmore', './assets/js/product/load_more.js')
 
+    /** Checkout */
+    .addEntry('checkout_select_address', './assets/js/checkout/user_select_address.js')
+
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
 
