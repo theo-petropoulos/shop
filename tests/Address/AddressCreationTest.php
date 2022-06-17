@@ -51,7 +51,7 @@ class AddressCreationTest extends KernelTestCase
         }
         $this->em->flush();
         $counterFinal = $this->em->getRepository(Address::class)->count([]);
-        $this->assertEquals($counterInitial + 50321, $counterFinal);
+        $this->assertEquals($counterInitial + count($users), $counterFinal);
     }
 
     /**
