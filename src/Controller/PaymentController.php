@@ -5,21 +5,28 @@ namespace App\Controller;
 use App\Entity\Address;
 use App\Entity\Cart;
 use App\Entity\Order;
+use App\Entity\OrderDetail;
 use App\Entity\Product;
 use App\Entity\User;
 use App\Form\AddAddressType;
 use App\Repository\AddressRepository;
+use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
+use Stripe\Exception\InvalidRequestException;
 use Stripe\Stripe;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Security;
@@ -27,7 +34,7 @@ use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class PaymentController extends AbstractController
 {
-    public function __construct(private Security $security, private EntityManagerInterface $em) {}
+    public function __construct(private Security $security, private EntityManagerInterface $em, private MailerInterface $mailer) {}
 
     # Sélection de l'adresse pour un invité avant paiement
     #[Route('/gcheckout/address', name: 'guest_checkout_set_address')]
@@ -128,14 +135,7 @@ class PaymentController extends AbstractController
             $customer       = Customer::create([
                 'id'        => $user->getId(),
                 'name'      => $user->getLastName() . ' ' . $user->getFirstName(),
-                'email'     => $user->getEmail()/*,
-                'address'   => [
-                    'city'          => $address->getCity(),
-                    'country'       => 'France',
-                    'line1'         => $address->getStreetNumber() . ' ' . $address->getStreetName(),
-                    'line2'         => $address->getStreetAddition(),
-                    'postal_code'   => $address->getPostalCode()
-                ]*/
+                'email'     => $user->getEmail()
             ]);
         }
         else
@@ -154,11 +154,11 @@ class PaymentController extends AbstractController
         foreach ($cart->getCart() as $array)
         {
             /** @var Product $product */
-            $product    = $array['product'];
+            $product        = $array['product'];
             /** @var int $quantity */
-            $quantity   = $array['quantity'];
+            $quantity       = $array['quantity'];
 
-            $products[] = [
+            $products[]     = [
                 'price_data'    => [
                     'currency'      => 'eur',
                     'product_data'  => [
@@ -168,20 +168,36 @@ class PaymentController extends AbstractController
                 ],
                 'quantity'      => $quantity
             ];
+
+            $orderDetail    = new OrderDetail();
+            $orderDetail
+                ->setOrder($order)
+                ->setProduct($product)
+                ->setProductQuantity($quantity)
+                ->setTotal($product->getPrice() * $quantity);
+
+            $this->em->persist($orderDetail);
         }
+        $this->em->flush();
 
         $session = Session::create([
-            'customer'          => $customer,
-            'line_items'        => [$products],
-            'mode'              => 'payment',
+            'customer'              => $customer,
+            'line_items'            => [$products],
+            'mode'                  => 'payment',
             'payment_intent_data'   => [
-                'shipping'  => [
-                    'name'      => $customer->name ?? 'Inconnu',
-                    'address'   => $customer->address->toArray()
+                'shipping'      => [
+                    'name'              => $address->getLastName() . ' ' . $address->getFirstName(),
+                    'address'           => [
+                        'city'              => $address->getCity(),
+                        'country'           => 'France',
+                        'line1'             => $address->getStreetNumber() . ' ' . $address->getStreetName(),
+                        'line2'             => $address->getStreetAddition(),
+                        'postal_code'       => $address->getPostalCode()
+                    ]
                 ]
             ],
-            'success_url'       => $this->generateUrl('user_checkout_success', ['order_id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '&session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url'        => $this->generateUrl('user_checkout_failure', [], UrlGeneratorInterface::ABSOLUTE_URL)
+            'success_url'           => $this->generateUrl('user_checkout_success', ['order_id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '&session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url'            => $this->generateUrl('user_checkout_failure', [], UrlGeneratorInterface::ABSOLUTE_URL)
         ]);
 
         return $this->redirect($session->url, 303);
@@ -189,17 +205,71 @@ class PaymentController extends AbstractController
 
     /**
      * @throws ApiErrorException
+     * @throws TransportExceptionInterface
      */
     # Paiement avec succès
     #[Route('/ucheckout/success', name: 'user_checkout_success')]
-    public function paymentSuccess(Request $request, $stripeSecret): Response
+    public function paymentSuccess(Request $request, OrderRepository $orderRepository, UserRepository $userRepository, $stripeSecret): Response
     {
         Stripe::setApiKey($stripeSecret);
 
-        $session = Session::retrieve($request->get('session_id'));
-        // todo : Supprimer le cookie, actualiser l'order, envoyer un mail
-        dd($request, $session);
+        $session    = Session::retrieve($request->get('session_id'));
+        $orderId    = $request->get('order_id');
 
+        $order      = $orderRepository->find($orderId);
+
+        if (empty($order))
+            throw new InvalidRequestException('Une erreur est survenue : La commande n\'a pas été trouvée.');
+        else
+            $user   = $userRepository->find($order->getCustomer()->getId());
+
+        if ((int) $session->customer === $user->getId()) {
+            $address    = $order->getAddress();
+            $details    = $order->getOrderDetails();
+            $detArray   = [];
+
+            /** @var OrderDetail $detail */
+            foreach ($details as $detail) {
+                $detArray[] = [
+                    'product'   => $detail->getProduct(),
+                    'quantity'  => $detail->getProductQuantity(),
+                    'total'     => $detail->getTotal()
+                ];
+            }
+
+            $email      = new TemplatedEmail();
+            $email
+                ->from(new \Symfony\Component\Mime\Address('okko.network@gmail.com', 'Stripe Shop'))
+                ->to($user->getEmail())
+                ->subject('Confirmation de votre commande #' . $orderId)
+                ->htmlTemplate('email/order/confirmation_order.html.twig')
+                ->context([
+                    'lastName'  => $user->getLastName(),
+                    'firstName' => $user->getFirstName(),
+                    'address'   => [
+                        'shipTo'    => $address->getLastName() . ' ' . $address->getFirstName(),
+                        'city'      => $address->getCity(),
+                        'number'    => $address->getStreetNumber(),
+                        'street'    => $address->getStreetName(),
+                        'addition'  => $address->getStreetAddition()
+                    ],
+                    'order'     => [
+                        'id'        => $orderId,
+                        'date'      => $order->getPurchaseDate()->format('d/m/Y'),
+                        'details'   => $detArray
+                    ]
+                ]);
+            $this->mailer->send($email);
+
+            setcookie('cart', '', -1, '/');
+
+            $order->setStatus(Order::STATUS_PAID);
+            $this->em->flush();
+        }
+        else
+            throw new InvalidRequestException('Une erreur est survenue : Le client n\'a pas été trouvé.');
+
+        dd('ok');
     }
 
     # Paiement sans succès

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+
+    <head>
+        <meta charset="UTF-8">
+    </head>
+
+    <style>
+        body{
+            background:#F1F1F1;
+        }
+        table{
+            border-collapse: collapse;
+            background:#F1F1F1;
+            margin:2% 10%;
+        }
+        tbody{
+            background:white;
+        }
+        tr{
+            border:none;
+        }
+        th{
+            text-align:center;
+        }
+        h2{
+            font-family: 'Britannic Bold', serif;
+            font-weight:800;
+            font-size:1.8em;
+            background:black;
+            color:white;
+            width:max-content;
+            margin-right:auto;
+            margin-left:auto;
+            padding:2% 5%;
+        }
+        td{
+            border:none;
+        }
+        p{
+            text-align:center;
+            background:white;
+        }
+        .small{
+            font-size:0.7em;
+            color:rgb(73, 73, 73);
+        }
+        .bordert{
+            border-top:1px solid grey;
+        }
+
+    </style>
+
+    <body style="background: #F1F1F1;padding:2%;">
+        <table style="border-collapse: collapse;background: #F1F1F1;width: 90%;margin-left: auto;margin-right: auto;">
+            <thead>
+                <th style="text-align: center;"><h2 style="font-family: 'Britannic Bold', cursive;font-weight: 800;font-size: 1.8em;background: black;color: white;width: max-content;margin-right: auto;margin-left: auto;padding: 2% 5%;">MINIMAL SHOP</h2></th>
+            </thead>
+            <tbody style="background: white;">
+                <tr style="border: none;">
+                    <td style="border: none;"><p style="text-align: center;background: white;">Merci pour votre achat en date du {{ order.date }}</p></td>
+                </tr>
+                <tr style="border: none;">
+                    <td style="border: none;">
+                        <p style="text-align: center;background: white;padding:1% 5%;">Cher {{ lastName }} {{ firstName }}, vous venez d'effecter un achat sur notre site et nous vous en remercions.<br>
+                            Veuillez trouver ci-après le récapitulatif de votre commande :<br><br>
+
+                            {% set total = 0 %}
+                            {% for detail in order.details %}
+                                {% set total = total + detail.total %}
+                                {{ detail.quantity }} * {{ detail.product.name }} - {{ detail.total|number_format(2) }}<br>
+                            {% endfor %}
+                            Montant total : {{ total|number_format(2) }}<br><br>
+
+                            La commande sera expédiée à l'adresse suivante :<br>
+                            {{ address.shipTo }}<br>
+                            {{ address.number }} {{ address.street }}<br>
+                            {{ address.addition ? address.addition ~ '<br>' : null }}
+                            {{ address.city }}
+                        </p>
+                    </td>
+                </tr>
+                <tr style="border: none;">
+                    <td style="border: none;">
+                        <p class="borderb" style="text-align: center;background: white;">Merci encore pour votre confiance.<br>
+                            En cas de problème, veuillez nous contacter à l'adresse suivante : <b>support@minimal-shop.com</b> .<br>
+                            Cordialement,
+                        </p>
+                    </td>
+                </tr>
+                <tr style="border: none;">
+                    <td style="border: none;">
+                        <p class="bordert" style="padding:1% 0%;text-align: center;background: white;border-top: 1px solid grey;"> L'équipe MINIMAL SHOP</p>
+                    </td>
+                </tr>
+                <tr style="height: 50px;border: none;"></tr>
+            </tbody>
+        </table>
+    </body>
+
+</html>
+
+{# {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }} #}
