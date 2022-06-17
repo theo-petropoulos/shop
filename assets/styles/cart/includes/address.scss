@@ -1,0 +1,20 @@
+@use 'assets/styles/variables' as *;
+
+.select_checkout_address{
+  padding: 2%;
+  width: max-content;
+  margin: auto;
+  border-radius: 8px;
+  outline: unset;
+  border: 2px ridge $grey_light;
+  transition: all 0.2s;
+  &:hover{
+    cursor: pointer;
+    background: $green_light;
+    transition: all 0.3s;
+  }
+  &:active{
+    transform: scale(0.95);
+    transition: all 0.2s;
+  }
+}

@@ -1,2 +1,6 @@
 connexion:
   error: "Identifiant ou mot de passe incorrect."
+
+cart:
+  empty: "Votre panier est vide"
+  empty_button: "Catalogue"

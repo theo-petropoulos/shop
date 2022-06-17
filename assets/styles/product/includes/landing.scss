@@ -44,14 +44,30 @@
         border: 0.5vh solid $white_light;
         transition: color 0.3s, border 0.3s;
         p{
+          position: absolute;
+          width: 100%;
+          top: 25%;
+          left: 50%;
           font-size: x-large;
           font-weight: bold;
-          transition: font-size 0.3s ease-in;
+          opacity: 1;
+          transform: rotate(0deg) translate(-50%, -25%);
+          transition: all 0.3s ease-in;
         }
         i{
-          font-size: xx-large;
+          position: absolute;
+          margin: auto;
           transform: rotate(0deg);
           transition: all 0.4s ease-out;
+          &#fa_plus{
+            opacity: 1;
+            font-size: xx-large;
+          }
+          &#fa_loader{
+            opacity: 0;
+            font-size: xxx-large;
+            animation: 0.7s rotate360 linear infinite;
+          }
         }
         &:hover{
           color: $orange;
@@ -59,15 +75,26 @@
           transition: color 0.3s, border 0.3s;
           p{
             font-size: large;
-            transition: font-size 0.3s ease-in;
+            opacity: 0;
+            transition: all 0.3s ease-in;
           }
           i{
-            transform: rotate(360deg) scale(1.2);
-            font-size: xxx-large;
-            transition: all 0.5s ease-in-out;
+            &#fa_plus{
+              transform: rotate(360deg) scale(1.2);
+              transform-origin: center;
+              font-size: xxx-large;
+              transition: all 0.5s ease-in-out;
+            }
+            &#fa_loader{
+              animation: 0.7s rotate360 linear infinite;
+            }
           }
         }
       }
     }
   }
+}
+
+@keyframes rotate360{
+  to {transform: rotate(360deg);}
 }
