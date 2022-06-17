@@ -31,49 +31,59 @@ class UserPersonalDataTest extends KernelTestCase
     }
 
     /**
-     * Test using an invalid firstname
+     * Tests in an User can update his infos
      * @test
      * @throws Exception
      */
-    public function invalidFirstName()
+    public function canUpdateInfos()
     {
-        $this->expectException(\InvalidArgumentException::class);
         $user = new User();
         $user
-            ->setCreationDate(new \DateTime("today"))
-            ->setFirstName("Pa + trick");
+            ->setFirstName("John")
+            ->setLastName("Doe")
+            ->setEmail(mt_rand(1, 999999) . "@gmail.com")
+            ->setPhone("0102030405")
+            ->setPassword("MOTDEPASSEENCLAIR")
+            ->setCreationDate(new \DateTime("today"));
+
         $this->em->persist($user);
+        $this->em->flush();
+
+        $oldMail = $user->getEmail();
+
+        $user
+            ->setFirstName("Jane")
+            ->setLastName("Dorian")
+            ->setEmail("new_" . mt_rand(1, 999999) . "@gmail.com")
+            ->setPhone("999999000");
+
+        $this->assertEquals("Jane", $user->getFirstName());
+        $this->assertEquals("Dorian", $user->getLastName());
+        $this->assertEquals("999999000", $user->getPhone());
+        $this->assertNotEquals($oldMail, $user->getEmail());
+
+        $this->em->remove($user);
         $this->em->flush();
     }
 
     /**
-     * Test using an invalid lastname
+     * Tests in an User cannot use and already used Email
      * @test
      * @throws Exception
      */
-    public function invalidLastName()
+    public function cannotUseAlreadyUsedEmail()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $user = new User();
-        $user
-            ->setCreationDate(new \DateTime("today"))
-            ->setLastName("Pa + trick");
-        $this->em->persist($user);
-        $this->em->flush();
-    }
+        $this->expectException(UniqueConstraintViolationException::class);
 
-    /**
-     * Test using an invalid phone number
-     * @test
-     * @throws Exception
-     */
-    public function invalidPhone()
-    {
-        $this->expectException(\InvalidArgumentException::class);
         $user = new User();
         $user
-            ->setCreationDate(new \DateTime("today"))
-            ->setPhone("01(23456789");
+            ->setFirstName("John")
+            ->setLastName("Doe")
+            ->setEmail("gblfjvc@gmail.com")
+            ->setPhone("0102030405")
+            ->setPassword("MOTDEPASSEENCLAIR")
+            ->setCreationDate(new \DateTime("today"));
+
         $this->em->persist($user);
         $this->em->flush();
     }

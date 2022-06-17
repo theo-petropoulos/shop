@@ -59,7 +59,7 @@ class Address
 
     #[ORM\Column(type: "string", length: 80)]
     #[Assert\NotBlank(message: "Le champ de la ville est obligatoire.")]
-    #[Assert\Type(type: "string",message: "La ville doit être une chaine de caractères valides.")]
+    #[Assert\Type(type: "string", message: "La ville doit être une chaine de caractères valides.")]
     #[Assert\Length(min: 3, max: 80, minMessage: "La ville doit contenir au moins {{ limit }} caractères.", maxMessage: "La ville ne doit pas excéder {{ limit }} caractères.")]
     #[Assert\Regex(pattern: "/^[\p{L}\s'-]+$/ui", message: "La ville ne peut contenir que des lettres, des apostrophes et des tirets.")]
     private ?string $city;
@@ -158,6 +158,7 @@ class Address
     public function setPostalCode(mixed $postalCode): self
     {
         $this->postalCode = $postalCode;
+
         return $this;
     }
 

@@ -21,6 +21,10 @@ class AuthorController extends AbstractController
     {
         $authors = $authorRepository->findBy(['active' => true]);
 
+        foreach ($authors as $key => $author)
+            if (empty($author->getLastProduct()))
+                unset($authors[$key]);
+
         return $this->render('author/show_all.html.twig', [
             'authors'    => $authors
         ]);
