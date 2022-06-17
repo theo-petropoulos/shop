@@ -4,7 +4,7 @@ namespace App\Tests\Address;
 
 use App\Entity\Address;
 use App\Entity\User;
-use App\Exceptions\InvalidSizeException;
+use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
 use Doctrine\ORM\EntityManager;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -78,19 +78,18 @@ class AddressCreationTest extends KernelTestCase
     }
 
     /**
-     * Test setting an invalid postal code
+     * Test missing an address attribute
      * @test
      * @throws Exception
      */
-    public function invalidSizePostalCode()
+    public function missingLastName()
     {
-        $this->expectException(InvalidSizeException::class);
+        $this->expectException(NotNullConstraintViolationException::class);
         $address    = new Address();
         $user       = $this->em->getRepository(User::class)->findOneBy([], ['id' => 'DESC']);
         $address
             ->setCustomer($user)
             ->setFirstName($user->getFirstName())
-            ->setLastName($user->getLastName())
             ->setCity("Marseille")
             ->setPostalCode("455000")
             ->setStreetNumber("3")

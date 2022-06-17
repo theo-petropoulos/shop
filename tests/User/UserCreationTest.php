@@ -2,14 +2,10 @@
 
 namespace App\Tests\User;
 
-use App\Entity\Product;
 use App\Entity\User;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Exception;
-use SebastianBergmann\Diff\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class UserCreationTest extends KernelTestCase
@@ -56,6 +52,7 @@ class UserCreationTest extends KernelTestCase
 
     /** Test deleting newly added Users from the database
      * @test
+     * @throws ORMException
      */
     public function deleteNewlyCreatedUsers()
     {

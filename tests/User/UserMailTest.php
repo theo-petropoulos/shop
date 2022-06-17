@@ -2,13 +2,11 @@
 
 namespace App\Tests\User;
 
-use App\Entity\Product;
 use App\Entity\User;
 use App\Exceptions\InvalidEmailException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManager;
 use Exception;
-use SebastianBergmann\Diff\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class UserMailTest extends KernelTestCase

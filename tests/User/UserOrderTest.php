@@ -6,9 +6,9 @@ use App\Entity\Order;
 use App\Entity\OrderDetail;
 use App\Entity\Product;
 use App\Entity\User;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\ORM\EntityManager;
 use Exception;
-use SebastianBergmann\Diff\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class UserOrderTest extends KernelTestCase
@@ -63,6 +63,46 @@ class UserOrderTest extends KernelTestCase
 
         $counterFinal = $this->em->getRepository(Order::class)->count([]);
         $this->assertEquals($counterInitial + 1, $counterFinal);
+    }
+
+    /**
+     * Test if an Address associated with an Order cannot be deleted
+     * @test
+     * @throws Exception
+     */
+    public function cannotDeleteOrderAddress()
+    {
+        $this->expectException(ForeignKeyConstraintViolationException ::class);
+
+        /** @var Order $order */
+        $order          = $this->em->getRepository(Order::class)->findOneBy([], ['id' => 'DESC']);
+        $address        = $order->getAddress();
+
+        $this->em->remove($address);
+        $this->em->flush();
+    }
+
+    /**
+     * Test if an Order is successfully deleted
+     * @test
+     * @throws Exception
+     */
+    public function deleteUserOrder()
+    {
+        $counterInitial = $this->em->getRepository(Order::class)->count([]);
+        $order          = $this->em->getRepository(Order::class)->findOneBy([], ['id' => 'DESC']);
+        $orderDetails   = $this->em->getRepository(OrderDetail::class)->findBy(['order' => $order]);
+
+        foreach ($orderDetails as $detail) {
+            $this->em->remove($detail);
+        }
+        $this->em->flush();
+
+        $this->em->remove($order);
+        $this->em->flush();
+
+        $counterFinal = $this->em->getRepository(Order::class)->count([]);
+        $this->assertEquals($counterInitial - 1, $counterFinal);
     }
 
     /**

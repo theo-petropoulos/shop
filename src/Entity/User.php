@@ -187,6 +187,7 @@ class User implements UserInterface
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
+
         return $this;
     }
 
@@ -198,6 +199,7 @@ class User implements UserInterface
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
+
         return $this;
     }
 
@@ -209,6 +211,7 @@ class User implements UserInterface
     public function setPhone(string $phone): self
     {
         $this->phone = str_replace([' ', '-', ',', '.'], '', $phone);
+
         return $this;
     }
 

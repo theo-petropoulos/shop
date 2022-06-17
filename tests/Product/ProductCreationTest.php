@@ -32,7 +32,7 @@ class ProductCreationTest extends KernelTestCase
      */
     public function createNewProducts()
     {
-        $author          = $this->em->getRepository(Author::class)->findOneBy([], ['id' => 'DESC']);
+        $author         = $this->em->getRepository(Author::class)->findOneBy([], ['id' => 'DESC']);
         $counterInitial = $this->em->getRepository(Product::class)->count([]);
         for ($i = 0; $i < 10; $i++) {
             $product = new Product();
@@ -41,7 +41,6 @@ class ProductCreationTest extends KernelTestCase
                 ->setDescription("Description product " . $i)
                 ->setName("Name product " . $i)
                 ->setAuthor($author)
-                ->setImagePath("/assets/products/images/product_" . $i . ".jpg")
                 ->setPrice("45.95")
                 ->setStock("25");
             try {
@@ -70,7 +69,6 @@ class ProductCreationTest extends KernelTestCase
             ->setDescription("Description product fail")
             ->setName("Name product fail")
             ->setAuthor($author)
-            ->setImagePath("/assets/products/images/product_fail.jpg")
             ->setPrice("45.95")
             ->setStock("-1");
         try {
@@ -96,7 +94,6 @@ class ProductCreationTest extends KernelTestCase
             ->setDescription("Description product fail")
             ->setName("Name product fail")
             ->setAuthor($author)
-            ->setImagePath("/assets/products/images/product_fail.jpg")
             ->setPrice("-1")
             ->setStock("15");
         try {

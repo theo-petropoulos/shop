@@ -101,7 +101,7 @@ class Author
         return $this;
     }
 
-    public function getLastProduct(): Product
+    public function getLastProduct(): ?Product
     {
         return $this->products[count($this->products) - 1];
     }
