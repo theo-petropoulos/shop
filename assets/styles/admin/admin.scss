@@ -6,23 +6,25 @@
 @use './admin/admins.scss';
 
 #admin{
-  display:flex;
+  display: flex;
   width: 100%;
   position:relative;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   font-family: $font;
+  background: $grey;
+  color: $white_light;
   form{
-    width:65%;
-    display:flex;
+    width: 65%;
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding:2%;
-    border:1px solid black;
+    padding: 2%;
+    border: 1px solid $grey_light;
     input{
-      margin:1%;
+      margin: 1%;
       width:70%;
       text-align: center;
       &[type=submit]{

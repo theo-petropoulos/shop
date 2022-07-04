@@ -1,6 +1,8 @@
 @use '../../variables' as *;
 
 #admin_alt{
+  background: $grey;
+  color: $white_light;
   #adm_search_container{
     display:flex;
     width:90%;
@@ -86,7 +88,7 @@
             }
             a{
               text-decoration: none;
-              color:$blue;
+              color: $blue_light;
               &:hover{
                 color:red;
                 transition:all 0.3s;
@@ -149,20 +151,20 @@
       height:80%;
       width:100%;
       bottom:-100%;
-      background:white;
+      background: $grey_dark;
       display:flex;
       flex-direction: column;
       align-items: center;
       z-index:8;
       button{
-        background:white;
-        border:none;
-        width:max-content;
+        background: transparent;
+        border: none;
+        width: max-content;
         font-size: calc(18px + 1vw);
-        color:$blue;
+        color: $blue_light;
         &:hover{
           cursor:pointer;
-          color:$blue_light;
+          color: $white_light;
           transition: color 0.3s;
         }
       }
@@ -205,11 +207,12 @@
             padding: 2px 5px;
             border-radius: unset;
             font-family: $font;
-            background: $white;
+            background: $grey_light;
             color: black;
             width: max-content;
             align-self: center;
             font-size: initial;
+            font-weight: bold;
             &:hover{
               cursor: pointer;
               background: $orange_light;
@@ -224,10 +227,10 @@
           width:30%;
           flex-grow: 1;
           text-decoration: none;
-          color:$blue;
+          color: $blue_light;
           text-align: center;
           &:hover{
-            color:$blue_light;
+            color:$white;
             transition: all 0.3s;
           }
         }
@@ -244,20 +247,21 @@
 }
 
 .add_form_container{
-  position:fixed;
-  top:0;
-  left:0;
-  height:100vh;
-  width:100vw;
-  display:flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
   justify-content: center;
   align-items: center;
-  background:rgba(136, 136, 136, 0.8);
-  z-index:7;
+  background: rgba(136, 136, 136, 0.8);
+  z-index: 7;
   visibility: hidden;
   .add_form{
-    position:relative;
-    background:white;
+    position: relative;
+    background: $grey;
+    color: $white_light;
     border:1px solid black;
     font-family:$font;
     display:flex;

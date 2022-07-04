@@ -68,9 +68,12 @@ class Address
     #[Assert\Type(type: "bool", message: "La valeur main doit être de type {{ type }}.")]
     private ?bool $main;
 
+    private bool $deletable = true;
+
     public function __construct($user = null)
     {
-        if ($user) $this->customer = $user;
+        if ($user)
+            $this->customer = $user;
     }
 
     public function getId(): ?int
@@ -184,5 +187,15 @@ class Address
         $this->main = $main;
 
         return $this;
+    }
+
+    public function setDeletable(bool $deletable): void
+    {
+        $this->deletable = $deletable;
+    }
+
+    public function isDeletable(): bool
+    {
+        return $this->deletable;
     }
 }
