@@ -52,7 +52,7 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
 
 @mixin standard-form{
   form{
-    border:1px solid $grey;
+    border:1px solid $grey_dark;
     padding:2%;
     display:flex;
     flex-direction: column;
@@ -78,13 +78,17 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
         label{
           margin-right:1%;
           text-align: right;
-          width:30%;
+          width: 30%;
         }
       }
     }
+    input, textarea{
+      background: $grey_light;
+      border: 1px solid $grey_dark;
+    }
     input[type=submit]{
       margin-top:2%;
-      background:$grey;
+      background:$grey_dark;
       color:white;
       font-family: $font;
       outline:0;
@@ -94,7 +98,7 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
       font-size:calc(10px + 0.5vw);
       line-height:calc(10px + 0.5vw);
       &:hover{
-        background:$grey_light;
+        background: $green;
         transition:all 0.3s;
         cursor:pointer;
         font-size:calc(13px + 0.5vw);
@@ -142,9 +146,10 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
   padding: 2px 5px;
   border-radius: unset;
   font-family: $font;
-  background: $white;
+  background: $grey_light;
   width: max-content;
   align-self: center;
+  font-weight: bold;
   &:hover{
     cursor: pointer;
     background: $orange_light;
@@ -196,9 +201,10 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
       flex-grow: 1;
       width:90%;
       padding:2%;
-      background:white;
-      border:1px solid $orange_light;
+      background: $grey_light;
+      border: 1px solid $orange_light;
       font-family: $font;
+      font-weight: bold;
       &:hover{
         cursor:pointer;
         background:$orange_light;
@@ -250,11 +256,11 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
         width: 15%;
         flex-grow: 1;
         text-decoration: none;
-        color: $blue;
+        color: $blue_light;
         text-align: center;
         align-self: center;
         &:hover{
-          color: red;
+          color: $white_light;
           transition: all 0.3s;
         }
       }

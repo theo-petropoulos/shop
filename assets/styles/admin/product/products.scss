@@ -88,7 +88,7 @@
             }
             a{
               text-decoration: none;
-              color:$blue;
+              color: $blue_light;
               &:hover{
                 color:red;
                 transition:all 0.3s;
@@ -151,20 +151,20 @@
       height:80%;
       width:100%;
       bottom:-100%;
-      background:white;
+      background: $grey_dark;
       display:flex;
       flex-direction: column;
       align-items: center;
       z-index:8;
       button{
-        background:white;
-        border:none;
-        width:max-content;
+        background: transparent;
+        border: none;
+        width: max-content;
         font-size: calc(18px + 1vw);
-        color:$blue;
+        color: $blue_light;
         &:hover{
           cursor:pointer;
-          color:$blue_light;
+          color: $white_light;
           transition: color 0.3s;
         }
       }
@@ -212,6 +212,7 @@
             width: max-content;
             align-self: center;
             font-size: initial;
+            font-weight: bold;
             &:hover{
               cursor: pointer;
               background: $orange_light;
@@ -226,7 +227,7 @@
           width:30%;
           flex-grow: 1;
           text-decoration: none;
-          color:$blue_light;
+          color: $blue_light;
           text-align: center;
           &:hover{
             color:$white;

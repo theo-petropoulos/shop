@@ -18,7 +18,13 @@ $(function() {
         window['prevHTML_' + field + '_' + id] = $(this).parents('div').html()
 
         if (container.hasClass('active')) {
-            let entity = $(this).closest('details').attr('id').split('_')[0]
+            let entity = ''
+
+            if (!is_search)
+                entity = $(this).closest('details').attr('id').split('_')[0]
+            else
+                entity = $(this).closest('.div_det').attr('id').split('_')[0]
+
             ajaxPost(entity, id, field, value, $(this))
         }
         else if (!container.hasClass('author_name')) {
@@ -196,7 +202,16 @@ function ajaxPost(entity, id, field, value, btn)
         if (is_search) {
             let parent = btn.parents('div').first()
             parent.html(window['prevHTML_' + field + '_' + id])
-            parent.find('p').html(value)
+            if (parent.find('p').length)
+                parent.find('p').html(value)
+            else {
+                console.log(value)
+                if (value === 1)
+                    value = 'Désactiver';
+                else if (value === 0)
+                    value = 'Activer';
+                parent.find('button').html(value)
+            }
         }
         else {
             let parent = '#' + btn.closest('div').attr('id')

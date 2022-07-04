@@ -1,0 +1,50 @@
+#landing {
+  display: flex;
+  flex-direction: column;
+  padding: 2%;
+  border: 1px solid black;
+  text-align: center;
+  min-width: max-content;
+}
+#landing #landing_titles {
+  border-bottom: 1px solid black;
+  padding: 1%;
+}
+#landing #landing_titles a {
+  text-decoration: none;
+  color: rgb(240, 95, 0);
+}
+#landing #landing_titles a:hover {
+  color: rgb(240, 175, 0);
+  transition: all 0.3s;
+}
+#landing #landing_content {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  padding: 1%;
+  min-width: max-content;
+}
+#landing #landing_content a {
+  text-decoration: none;
+  color: rgb(240, 95, 0);
+}
+#landing #landing_content a:hover {
+  color: rgb(240, 175, 0);
+  transition: all 0.3s;
+}
+#landing #landing_content a:last-of-type {
+  color: rgb(170, 15, 15);
+  border-top: 1px solid black;
+}
+#landing #landing_content a:last-of-type:hover {
+  color: rgb(255, 0, 0);
+}
+
+@media screen and (max-width: 499px) {
+  #landing {
+    width: 90%;
+  }
+}
+
+/*# sourceMappingURL=landing.css.map */
