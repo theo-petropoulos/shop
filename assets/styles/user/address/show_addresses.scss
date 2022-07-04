@@ -7,23 +7,32 @@
   align-items: center;
   width: 100%;
   height: 100%;
-  background: white;
+  background-color: $grey !important;
+  color: $white_light;
   h2{
-    font-size: calc(14px + 1vw);
+    font-size: calc(14px + 2vw);
+    padding: 1% 2%;
+    margin-top: 1%;
+    color: $orange;
+    border: 1px solid $orange;
   }
   a{
     text-decoration: none;
-    padding:1% 2%;
-    border:1px solid black;
-    background:white;
-    color:black;
+    padding: 1% 2%;
+    border: 1px solid $orange;
+    background: $grey_dark;
+    color: $orange;
     margin:calc(max(2%, 20px));
     &:hover{
-      background:rgb(195, 195, 195);
+      background: $grey;
+      color: $orange_light;
       transition: all 0.3s;
     }
   }
   @include standard-form;
+  form[name="add_address"]{
+    border: 1px solid $orange;
+  }
   #registered_addresses{
     display:flex;
     flex-direction: row;
@@ -32,12 +41,12 @@
     width:90%;
     position:relative;
     div{
-      display:flex;
+      display: flex;
       flex-direction: column;
-      width:25%;
+      width: 25%;
       min-width: 175px;
-      position:relative;
-      border:1px solid black;
+      position: relative;
+      border: 1px solid $orange;
       margin:2%;
       padding:1% 2%;
       .modal_buttons{
@@ -50,16 +59,20 @@
         width: 10%;
         button{
           width: 45%;
-          background:white;
+          background: $grey_dark;
           border-radius: unset;
           outline: none;
-          border: 1px solid black;
+          border: 1px solid $orange;
+          color: $orange;
           padding: 5%;
           margin: 1%;
-          &:hover{
-            background:rgb(209, 209, 209);
-            cursor:pointer;
-            transition:all 0.3s;
+          &:enabled{
+            &:hover{
+              background: $grey;
+              color: $orange_light;
+              cursor: pointer;
+              transition:all 0.3s;
+            }
           }
         }
       }

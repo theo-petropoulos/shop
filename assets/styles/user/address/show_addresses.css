@@ -1,0 +1,126 @@
+#addresses {
+  font-family: "Yantramanav";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: white;
+}
+#addresses h2 {
+  font-size: calc(14px + 1vw);
+}
+#addresses a {
+  text-decoration: none;
+  padding: 1% 2%;
+  border: 1px solid black;
+  background: white;
+  color: black;
+  margin: max(2%, 20px);
+}
+#addresses a:hover {
+  background: rgb(195, 195, 195);
+  transition: all 0.3s;
+}
+#addresses form {
+  border: 1px solid rgb(45, 45, 45);
+  padding: 2%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  margin: 2%;
+}
+#addresses form div {
+  position: relative;
+  width: 100%;
+}
+#addresses form div div {
+  display: flex;
+  flex-direction: row;
+  margin: 1%;
+}
+#addresses form div div label, #addresses form div div input, #addresses form div div select, #addresses form div div textarea {
+  width: 70%;
+  font-family: "Yantramanav";
+}
+#addresses form div div input[type=file] {
+  text-align: center;
+}
+#addresses form div div label {
+  margin-right: 1%;
+  text-align: right;
+  width: 30%;
+}
+#addresses form input[type=submit] {
+  margin-top: 2%;
+  background: rgb(45, 45, 45);
+  color: white;
+  font-family: "Yantramanav";
+  outline: 0;
+  border: 1px solid black;
+  border-radius: unset;
+  padding: 1.5%;
+  font-size: calc(10px + 0.5vw);
+  line-height: calc(10px + 0.5vw);
+}
+#addresses form input[type=submit]:hover {
+  background: rgb(115, 115, 115);
+  transition: all 0.3s;
+  cursor: pointer;
+  font-size: calc(13px + 0.5vw);
+}
+#addresses #registered_addresses {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 90%;
+  position: relative;
+}
+#addresses #registered_addresses div {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  min-width: 175px;
+  position: relative;
+  border: 1px solid black;
+  margin: 2%;
+  padding: 1% 2%;
+}
+#addresses #registered_addresses div .modal_buttons {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 10%;
+}
+#addresses #registered_addresses div .modal_buttons button {
+  width: 45%;
+  background: white;
+  border-radius: unset;
+  outline: none;
+  border: 1px solid black;
+  padding: 5%;
+  margin: 1%;
+}
+#addresses #registered_addresses div .modal_buttons button:hover {
+  background: rgb(209, 209, 209);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+@media screen and (max-width: 499px) {
+  #addresses form {
+    width: 95%;
+  }
+  #addresses #registered_addresses div {
+    flex-grow: 1;
+  }
+}
+
+/*# sourceMappingURL=show_addresses.css.map */

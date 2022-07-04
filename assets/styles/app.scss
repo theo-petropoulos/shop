@@ -57,7 +57,7 @@ main{
   top: 20%;
   left: 50%;
   transform: translate(-50%, -20%);
-  opacity: 0;
+  opacity: 1;
   border: 1px solid black;
   padding: 1.5%;
   animation: disappear 0.5s ease-in 3s forwards;
@@ -107,11 +107,12 @@ main{
   text-decoration: none;
   padding: 1% 2%;
   border: 1px solid black;
-  background: white;
-  color: black;
+  background: $grey_dark;
+  color: $orange;
   margin: calc(max(2%, 20px));
   &:hover{
-    background: rgb(195, 195, 195);
+    background: $grey;
+    color: $orange_light;
     transition: all 0.3s;
   }
 }
@@ -144,7 +145,7 @@ main{
 
 .close-modal{
   width: max-content;
-  background: white;
+  background: $grey_light;
   border: 1px solid black;
   right: 5%;
   top: 5%;
@@ -164,22 +165,6 @@ main{
 
 .required{
   color: $red;
-}
-
-a#back_btn{
-  font-family: $font;
-  background:white;
-  padding:1% 2%;
-  border:1px solid black;
-  text-decoration: none;
-  margin:2%;
-  text-align: center;
-  width:max-content;
-  color:black;
-  &:hover{
-    background:rgb(195, 195, 195);
-    transition:all 0.3s;
-  }
 }
 
 .current_admin{

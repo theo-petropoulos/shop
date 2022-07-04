@@ -8,6 +8,7 @@ use App\Errors\ErrorFormatter;
 use App\Form\AddAddressType;
 use App\Form\ModifyPasswordType;
 use App\Repository\AddressRepository;
+use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -87,9 +88,13 @@ class UserController extends AbstractController
     # Affichage des adresses
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/user/profile/addresses', name: 'user_show_addresses')]
-    public function userShowAddresses(Request $request, UserInterface $user, AddressRepository $addressRepository, EntityManagerInterface $entityManager): Response
+    public function userShowAddresses(Request $request, UserInterface $user, AddressRepository $addressRepository, OrderRepository $orderRepository, EntityManagerInterface $entityManager): Response
     {
         $addresses  = $addressRepository->findBy(['customer' => $user], ['id' => 'ASC']);
+        foreach($addresses as $address) {
+            if ($orderRepository->findBy(['address' => $address]))
+                $address->setDeletable(false);
+        }
         $address    = new Address($user);
 
         /** @var Form $form */
@@ -164,16 +169,21 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[IsGranted('CAN_DELETE', 'address', 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/user/profile/addresses/delete/{id}', name: 'user_delete_address')]
-    public function userDeleteAddress(Request $request, Address $address, EntityManagerInterface $entityManager): Response
+    public function userDeleteAddress(Request $request, Address $address, OrderRepository $orderRepository, EntityManagerInterface $entityManager): Response
     {
-        $entityManager->remove($address);
-        $entityManager->flush();
+        $orderExist = $orderRepository->findBy(['address' => $address]);
 
-        $referer = $request->headers->get('referer');
-        if ($referer && is_string($referer))
-            return $this->redirect($referer);
-        else
-            return $this->redirectToRoute('user_show_addresses');
+        if (empty($orderExist)) {
+            $entityManager->remove($address);
+            $entityManager->flush();
+
+            $referer = $request->headers->get('referer');
+            if ($referer && is_string($referer))
+                return $this->redirect($referer);
+        }
+        // Todo : Catch exception
+
+        return $this->redirectToRoute('user_show_addresses');
     }
 
     # Commandes de l'utilisateur
