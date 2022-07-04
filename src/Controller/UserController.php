@@ -20,13 +20,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use JetBrains\PhpStorm\Pure;
 
 class UserController extends AbstractController
 {
     #[Pure]
-    public function __construct(protected ManagerRegistry $doctrine) {}
+    public function __construct(protected ManagerRegistry $doctrine, private Security $security) {}
 
     # Affiche le profil de l'utilisateur
     #[Route(path: '/user/profile/', name: 'user_show_profile')]
@@ -189,10 +190,15 @@ class UserController extends AbstractController
     # Commandes de l'utilisateur
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/user/profile/orders', name: 'user_show_orders')]
-    public function userShowOrders(Request $request, UserInterface $user): Response
+    public function userShowOrders(Request $request): Response
     {
+        /** @var User $user */
+        $user   = $this->security->getUser();
+        $orders = $user->getOrders();
+
         return $this->render('user/includes/show_orders.html.twig', [
-            'user'  => $user
+            'user'      => $user,
+            'orders'    => $orders
         ]);
     }
 
