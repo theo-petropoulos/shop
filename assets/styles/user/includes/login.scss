@@ -14,7 +14,7 @@
   }
   @include login-register;
   form{
-    border:1px solid $grey_light;
+    border:1px solid $grey_dark;
     padding:2%;
     display:flex;
     flex-direction: column;
@@ -23,6 +23,10 @@
     justify-content: center;
     width:50%;
     margin:2%;
+    input{
+      border: 1px solid $grey_dark;
+      background: $grey_light;
+    }
     label, input{
       width:70%;
       text-align: center;

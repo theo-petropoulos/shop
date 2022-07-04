@@ -3,7 +3,7 @@
 #inscription{
   @include login-register;
   form{
-    border:1px solid $grey;
+    border:1px solid $grey_dark;
     padding:2%;
     display:flex;
     flex-direction: column;
@@ -16,6 +16,10 @@
       width: 100%;
       position: relative;
       text-align: center;
+      input{
+        border: 1px solid $grey_dark;
+        background: $grey_light;
+      }
       div{
         width: 100%;
         display: flex;

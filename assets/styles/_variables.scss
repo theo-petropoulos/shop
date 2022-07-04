@@ -30,7 +30,8 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
   flex-direction: column;
   align-items: center;
   width:100%;
-  background: white;
+  background: $grey;
+  color: $white_light;
   #inscription_header, #connexion_header, #modify_password_header{
     text-align: center;
     h3{
@@ -159,7 +160,7 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
 
 @mixin submit-button{
   margin:2%;
-  background:$grey;
+  background:$grey_dark;
   color:white;
   font-family: $font;
   outline:0;
@@ -169,7 +170,7 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
   font-size:calc(10px + 0.5vw);
   line-height:calc(10px + 0.5vw);
   &:hover{
-    background:$grey_light;
+    background: $green;
     transition:all 0.3s;
     cursor:pointer;
     font-size:calc(13px + 0.5vw);
