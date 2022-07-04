@@ -1,22 +1,35 @@
 @use '../../variables' as *;
 
 #landing{
-  display:flex;
+  display: flex;
   flex-direction: column;
-  padding:2%;
-  border:1px solid black;
+  padding: 2%;
+  border: 1px solid $orange;
   text-align: center;
   min-width: max-content;
+  width: 25%;
+  box-sizing: border-box;
+  transition: all 0.2s;
+  &:hover{
+    border: 1px solid $orange_light;
+    transition: all 0.3s;
+  }
   #landing_titles{
-    border-bottom:1px solid black;
-    padding:1%;
+    border-bottom: 1px solid $orange;
+    padding: 1%;
+    transition: all 0.2s;
     a{
+      font-size: medium;
       text-decoration: none;
-      color:$orange;
+      color: $orange;
       &:hover{
-        color:$orange_light;
-        transition:all 0.3s;
+        color: $orange_light;
+        transition: all 0.3s;
       }
+    }
+    &:hover{
+      border-bottom:1px solid $orange_light;
+      transition: all 0.3s;
     }
   }
   #landing_content{
@@ -26,17 +39,21 @@
     padding:1%;
     min-width: max-content;
     a{
+      font-size: large;
       text-decoration: none;
-      color:$orange;
+      color: $orange;
+      margin: 1%;
       &:hover{
         color:$orange_light;
         transition:all 0.3s;
       }
       &:last-of-type{
         color: $red;
-        border-top: 1px solid black;
+        border-top: 1px solid $orange;
         &:hover{
-          color:$red_strong;
+          color:  $red_strong;
+          border-top: 1px solid $orange_light;
+          transition: all 0.3s;
         }
       }
     }

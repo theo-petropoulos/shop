@@ -15,7 +15,7 @@ $orange_light_transparent : rgba(240, 175, 0, 0.6);
 $green                    : rgb(30, 150, 40);
 $green_light              : rgb(230, 255, 175);
 $green_light_transparent  : rgba(230, 255, 175, 0.5);
-$red                      : rgb(170, 15, 15);
+$red                      : rgb(195, 20, 20);
 $red_light                : rgb(200, 110, 150);
 $red_strong               : rgb(255, 0, 0);
 $blue                     : rgb(30, 60, 90);
@@ -25,14 +25,14 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
 
 @mixin login-register{
   font-family: $font;
-  display:flex;
+  display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
   width:100%;
-  background:white;
+  background: white;
   #inscription_header, #connexion_header, #modify_password_header{
-    text-align:center;
+    text-align: center;
     h3{
       font-size: calc(14px + 1vw);
     }

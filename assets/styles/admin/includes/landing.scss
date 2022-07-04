@@ -2,18 +2,28 @@
 
 #admin{
   #admin_container{
-    width:70%;
-    display:flex;
-    border:1px solid black;
+    width: 70%;
+    display: flex;
+    border: 1px solid $grey_light;
+    transition: all 0.2s;
     padding: 2%;
     flex-direction: column;
+    &:hover{
+      border:1px solid $white_light;
+      transition: all 0.3s;
+    }
     #admin_titles{
       width:100%;
       display:flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      border-bottom: 1px solid grey;
+      border-bottom: 1px solid $grey_light;
+      transition: all 0.2s;
+      &:hover{
+        border-bottom: 1px solid $white_light;
+        transition: all 0.3s;
+      }
       a{
         text-decoration: none;
         background:rgb(195, 195, 195);
@@ -27,18 +37,19 @@
       }
     }
     #admin_routes{
-      width:100%;
-      display:flex;
+      width: 100%;
+      display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       a{
         text-decoration: none;
-        color:$orange;
-        margin:calc(max(1%, 10px));
+        color: $orange;
+        margin: calc(max(1%, 10px));
+        font-size: large;
         &:hover{
-          color:$orange_light;
-          transition:all 0.3s;
+          color: $orange_light;
+          transition: all 0.3s;
         }
       }
     }
