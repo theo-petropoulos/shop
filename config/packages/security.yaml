@@ -26,9 +26,10 @@ security:
                 target: /
                 invalidate_session: true
             remember_me:
-                secret:   '%kernel.secret%'
+                secret:   '%env(APP_SECRET)%'
                 lifetime: 604800
                 samesite: 'lax'
+                name : 'minimal_shop_login_keeper'
             login_throttling:
                 max_attempts: 5
                 interval: '10 minutes'
