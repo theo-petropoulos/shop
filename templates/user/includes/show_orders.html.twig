@@ -3,5 +3,41 @@
 {% block pretitle %}MES COMMANDES{% endblock %}
 
 {% block body %}
-    Ici l'affichage des commandes
+    <main id="orders">
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="success">{{ flashMessage|raw }}</div>
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('failure') %}
+            <div class="failure">{{ flashMessage }}</div>
+        {% endfor %}
+
+        <h2>MES COMMANDES</h2>
+
+        {% if orders is empty %}
+            <p>Vous n'avez pas encore effectué de commandes, <a href="{{ path('show_products') }}">ça ne saurait tarder</a>.</p>
+        {% else %}
+            <section id="orders_section">
+            {% for order in orders %}
+                {# N'affiche que les commandes complétées #}
+                {% if order.status in constant('App\\Entity\\Order::FULLFILLED_ORDER') %}
+                    {% set quantity, total = 0, 0 %}
+                    {% for orderDetail in order.orderDetails %}
+                        {% set quantity = quantity + orderDetail.productQuantity %}
+                        {% set total = total + orderDetail.total %}
+                    {% endfor %}
+                    <div class="div_order" id="{{ order.id }}_order">
+                        <h4>Commande #{{ order.id }}</h4>
+                        <p>Payée le {{ order.purchaseDate|date('d/m/Y') }}</p>
+                        <p>{{ quantity }} article{{ quantity > 1 ? 's' : '' }}</p>
+                        <p>Total : {{ total|number_format(2) }} €</p>
+                        <a href="{{ path('order_show_invoice', {id: order.id}) }}" target="_blank"><i class="fa-solid fa-file-pdf"></i></a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            </section>
+        {% endif %}
+
+        <a class="back-btn" href="{{ path('user_show_profile') }}">Retour</a>
+    </main>
 {% endblock body %}

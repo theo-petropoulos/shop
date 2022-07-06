@@ -10,11 +10,7 @@
   background-color: $grey !important;
   color: $white_light;
   h2{
-    font-size: calc(14px + 2vw);
-    padding: 1% 2%;
-    margin-top: 1%;
-    color: $orange;
-    border: 1px solid $orange;
+    @include standard-h2-bordered;
   }
   a{
     text-decoration: none;
@@ -46,9 +42,16 @@
       width: 25%;
       min-width: 175px;
       position: relative;
-      border: 1px solid $orange;
-      margin:2%;
-      padding:1% 2%;
+      border: 1px solid $grey_light;
+      border-radius: 8px;
+      margin: 2%;
+      padding: 1% 2%;
+      background: $grey_dark;
+      transition: all 0.2s;
+      &:hover{
+        border: 1px solid $yellow;
+        transition: all 0.4s;
+      }
       .modal_buttons{
         position:absolute;
         top:3%;
@@ -62,14 +65,15 @@
           background: $grey_dark;
           border-radius: unset;
           outline: none;
-          border: 1px solid $orange;
-          color: $orange;
+          border: 1px solid $white_light;
+          color: $white_light;
           padding: 5%;
           margin: 1%;
           &:enabled{
             &:hover{
               background: $grey;
               color: $orange_light;
+              border: 1px solid $orange_light;
               cursor: pointer;
               transition:all 0.3s;
             }

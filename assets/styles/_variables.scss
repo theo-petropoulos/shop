@@ -269,6 +269,31 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
   }
 }
 
+@mixin div-in-form{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  label, input{
+    width:70%;
+    font-family: $font;
+    text-align: center;
+  }
+  label{
+    margin-bottom:1%;
+  }
+}
+
+@mixin standard-h2-bordered{
+  font-size: calc(14px + 2vw);
+  padding: 1% 2%;
+  margin-top: 1%;
+  color: $orange;
+  border: 1px solid $orange;
+}
+
 @mixin clamped-lines-2{
   display: -webkit-box;
   -webkit-line-clamp: 2;

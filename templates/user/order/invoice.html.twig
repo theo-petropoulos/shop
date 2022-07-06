@@ -1,0 +1,109 @@
+<html>
+    <head>
+        <style>
+            body {font-family: sans-serif;
+                font-size: 10pt;
+            }
+            p {	margin: 0; }
+            table.items {
+                border: 0.1mm solid #000000;
+            }
+            td { vertical-align: top; }
+            .items td {
+                border-left: 0.1mm solid #000000;
+                border-right: 0.1mm solid #000000;
+            }
+            table thead td { background-color: #EEEEEE;
+                text-align: center;
+                border: 0.1mm solid #000000;
+                font-variant: small-caps;
+            }
+            .items td.blanktotal {
+                background-color: #FFFFFF;
+                border: 0 none #000000;
+                border-top: 0.1mm solid #000000;
+                border-right: 0.1mm solid #000000;
+            }
+            .items td.totals {
+                text-align: right;
+                border: 0.1mm solid #000000;
+            }
+            .items td.cost {
+                text-align: end;
+            }
+        </style>
+    </head>
+    <body>
+        <!--mpdf
+        <htmlpageheader name="myheader">
+        <table width="100%"><tr>
+        <td width="50%" style="color:#000; "><span style="font-weight: bold; font-size: 14pt;">MinimalShop</span><br />2 Rue D'Hozier<br />13002 Marseille<br /><span style="font-family:dejavusanscondensed;">&#9742;</span>04.91.00.11.22</td>
+        <td width="50%" style="text-align: right;">Facture N°<br /><span style="font-weight: bold; font-size: 12pt;">{{ order.id }}</span></td>
+        </tr></table>
+        </htmlpageheader>
+        <htmlpagefooter name="myfooter">
+        <div style="border-top: 1px solid #000000; font-size: 9pt; text-align: center; padding-top: 3mm; ">
+        MinimalShop SA au capital de 535 900€<br />
+        RCS Lille B 495 257 360 TVA I.C. FR 25 603 247 952<br />
+        APE 4269 Z<br />
+        Page {PAGENO} sur {nb}
+        </div>
+        </htmlpagefooter>
+        <sethtmlpageheader name="myheader" value="on" show-this-page="1" />
+        <sethtmlpagefooter name="myfooter" value="on" />
+        mpdf-->
+
+        {% set user         = order.customer %}
+        {% set address      = order.address %}
+        {% set orderDetails = order.orderDetails %}
+
+        <div style="text-align: right">Facture générée le {{ 'now'|date('d/m/Y') }}</div>
+        <table width="100%" style="font-family: serif;" cellpadding="10">
+            <tr>
+                <td width="35%" style="border: 0.1mm solid #888888; "><span style="font-size: 7pt; color: #555555; font-family: sans;">Client :</span><br /><br />{{ user.lastName }} {{ user.firstName }}<br />{{ user.email }}</td>
+                <td width="10%">&nbsp;</td>
+                <td width="35%" style="border: 0.1mm solid #888888;"><span style="font-size: 7pt; color: #555555; font-family: sans;">Adresse : </span><br /><br />{{ address.lastName }} {{ address.firstName }}<br />{% if address.streetNumber %}{{ address.streetNumber ~ ' ' }}{% endif %}{{ address.streetName }}{% if address.streetAddition %}<br />{{ address.streetAddition }}{% endif %}<br />{{ address.postalCode }}<br />{{ address.city }}</td>
+            </tr>
+        </table>
+        <br />
+        <table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
+            <thead>
+                <tr>
+                    <td width="15%">Reference</td>
+                    <td width="45%">Description</td>
+                    <td width="10%">Quantite</td>
+                    <td width="15%">Prix unitaire</td>
+                    <td width="15%">Total</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% set total = 0 %}
+                {% for orderDetail in orderDetails %}
+                    {% set total    = total + orderDetail.total %}
+                    {% set product  = orderDetail.product %}
+                    <tr>
+                        <td align="center">{{ product.id }}</td>
+                        <td>{{ product.author.name }} - {{ product.name }}</td>
+                        <td align="center">{{ orderDetail.productQuantity }}</td>
+                        <td class="cost">{{ (orderDetail.total / orderDetail.productQuantity)|number_format(2) }} €</td>
+                        <td class="cost">{{ orderDetail.total }} €</td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <td class="blanktotal" colspan="3" rowspan="3"></td>
+                    <td class="totals">Sous-total :</td>
+                    <td class="totals cost">{{ total|number_format(2) }} €</td>
+                </tr>
+                <tr>
+                    <td class="totals">Frais de port :</td>
+                    <td class="totals cost">Offerts</td>
+                </tr>
+                <tr>
+                    <td class="totals"><b>Total :</b></td>
+                    <td class="totals cost"><b>{{ total|number_format(2) }} €</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

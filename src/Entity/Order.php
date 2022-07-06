@@ -12,10 +12,13 @@ use JetBrains\PhpStorm\Pure;
 #[ORM\Table(name: "`order`")]
 class Order
 {
+    const STATUS_CANCELLED  = "CANCELLED";
     const STATUS_PENDING    = "PENDING";
     const STATUS_PAID       = "PAID";
     const STATUS_SHIPPED    = "SHIPPED";
     const STATUS_DELIVERED  = "DELIVERED";
+
+    const FULLFILLED_ORDER  = [self::STATUS_PAID, self::STATUS_SHIPPED, self::STATUS_DELIVERED];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

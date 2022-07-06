@@ -111,6 +111,9 @@
     "laminas/laminas-code": {
         "version": "4.5.1"
     },
+    "mpdf/mpdf": {
+        "version": "v8.1.1"
+    },
     "myclabs/deep-copy": {
         "version": "1.10.2"
     },
@@ -128,6 +131,9 @@
     },
     "nikic/php-parser": {
         "version": "v4.13.2"
+    },
+    "paragonie/random_compat": {
+        "version": "v9.99.100"
     },
     "phar-io/manifest": {
         "version": "2.0.3"
@@ -227,6 +233,9 @@
     "rollerworks/password-strength-validator": {
         "version": "v1.7.2"
     },
+    "sasedev/mpdf-bundle": {
+        "version": "2.0.0"
+    },
     "scienta/doctrine-json-functions": {
         "version": "5.0.0"
     },
@@ -289,6 +298,9 @@
         "files": [
             "./config/packages/sensio_framework_extra.yaml"
         ]
+    },
+    "setasign/fpdi": {
+        "version": "v2.3.6"
     },
     "spatie/image-optimizer": {
         "version": "1.6.2"

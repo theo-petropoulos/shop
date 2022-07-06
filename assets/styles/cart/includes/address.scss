@@ -18,3 +18,21 @@
     transition: all 0.2s;
   }
 }
+
+#checkout_form_stripe{
+  border: unset !important;
+  button{
+    font-size: large;
+    padding: 1% 2%;
+    background: $grey_dark;
+    color: $orange;
+    border: 1px solid $orange;
+    &:hover{
+      border: 1px solid $orange_light;
+      background: $orange;
+      color: $orange_light;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+  }
+}

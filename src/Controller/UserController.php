@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Address;
+use App\Entity\Order;
 use App\Entity\User;
 use App\Errors\ErrorFormatter;
 use App\Form\AddAddressType;
@@ -11,22 +12,28 @@ use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Mpdf\Mpdf;
+use Mpdf\MpdfException;
+use Mpdf\ServiceFactory;
+use Sasedev\MpdfBundle\Factory\MpdfFactory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use JetBrains\PhpStorm\Pure;
 
 class UserController extends AbstractController
 {
     #[Pure]
-    public function __construct(protected ManagerRegistry $doctrine) {}
+    public function __construct(protected ManagerRegistry $doctrine, private Security $security) {}
 
     # Affiche le profil de l'utilisateur
     #[Route(path: '/user/profile/', name: 'user_show_profile')]
@@ -181,7 +188,7 @@ class UserController extends AbstractController
             if ($referer && is_string($referer))
                 return $this->redirect($referer);
         }
-        // Todo : Catch exception
+        // Todo : Catch exception if order exist
 
         return $this->redirectToRoute('user_show_addresses');
     }
@@ -189,11 +196,56 @@ class UserController extends AbstractController
     # Commandes de l'utilisateur
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/user/profile/orders', name: 'user_show_orders')]
-    public function userShowOrders(Request $request, UserInterface $user): Response
+    public function userShowOrders(Request $request): Response
     {
+        /** @var User $user */
+        $user   = $this->security->getUser();
+        $orders = $user->getOrders();
+
+        /** @var Order $order */
+        foreach ($orders as $key => $order)
+            if (!in_array($order->getStatus(), Order::FULLFILLED_ORDER))
+                unset($orders[$key]);
+
         return $this->render('user/includes/show_orders.html.twig', [
-            'user'  => $user
+            'user'      => $user,
+            'orders'    => $orders
         ]);
+    }
+
+
+    /**
+     * @throws MpdfException
+     */
+    # Génération de la facture d'une commande
+    #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/user/profile/orders/{id}/invoice', name: 'order_show_invoice')]
+    public function orderShowInvoice(Request $request, Order $order, MpdfFactory $factory): Response
+    {
+        $mpdf = new Mpdf([
+            'margin_left' => 20,
+            'margin_right' => 15,
+            'margin_top' => 48,
+            'margin_bottom' => 25,
+            'margin_header' => 10,
+            'margin_footer' => 10,
+            'default_font' => 'Courier'
+        ]);
+
+        $mpdf->SetProtection(array('print'));
+        $mpdf->SetTitle("Facture - MinimalShop");
+        $mpdf->SetAuthor("MinimalShop");
+        $mpdf->SetWatermarkText("Payé");
+        $mpdf->showWatermarkText = true;
+        $mpdf->watermark_font = 'Courier';
+        $mpdf->watermarkTextAlpha = 0.1;
+        $mpdf->SetDisplayMode('fullpage');
+
+        $mpdf->WriteHTML($this->renderView('user/order/invoice.html.twig', [
+            'order' => $order
+        ]));
+
+        return $factory->createDownloadResponse($mpdf, "FACTURE-" . $order->getId() . "-" . $order->getPurchaseDate()->format("dmY"));
     }
 
     # Suppression du compte

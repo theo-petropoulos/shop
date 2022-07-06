@@ -1,1 +1,71 @@
 @use 'assets/styles/variables' as *;
+
+#orders{
+  display: flex;
+  flex-direction: column;
+  h2{
+    @include standard-h2-bordered;
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  p{
+    text-align: center;
+    margin: 1%;
+    padding: 1%;
+    font-size: large;
+    font-family: $font;
+    a{
+      color: $orange;
+      transition: all 0.2s;
+      &:hover{
+        color: $orange_light;
+        transition: all 0.3s;
+      }
+    }
+  }
+  #orders_section{
+    margin-top: max(10px, 1vh);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    .div_order{
+      flex-grow: 1;
+      margin: 1%;
+      width: 20%;
+      min-width: 150px;
+      background: $grey_dark;
+      border: 1px solid $grey_light;
+      border-radius: 8px;
+      text-align: center;
+      padding: 8px;
+      box-sizing: border-box;
+      box-shadow: 8px 8px 6px 4px $grey_dark_transparent;
+      transition: all 0.2s;
+      &:hover{
+        border: 1px solid $yellow;
+        transition: all 0.4s;
+      }
+      h4{
+        font-size: large;
+      }
+      p{
+        font-size: medium;
+      }
+      a{
+        color: $orange;
+        transition: all 0.2s;
+        font-size: xx-large;
+        &:hover{
+          color: $orange_light;
+          transition: all 0.3s;
+        }
+      }
+    }
+  }
+  .back-btn{
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
