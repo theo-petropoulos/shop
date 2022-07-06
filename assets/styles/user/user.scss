@@ -6,7 +6,7 @@
 @use 'includes/login';
 @use 'includes/register';
 @use 'includes/order';
-@use 'address/show_addresses';
+@use 'includes/show_addresses';
 
 #profile{
   display:flex;
@@ -15,6 +15,4 @@
   justify-content: center;
   align-items: center;
   min-width: max-content;
-  background-color: $grey !important;
-  color: $white_light;
 }

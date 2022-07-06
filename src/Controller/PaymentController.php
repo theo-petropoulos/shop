@@ -197,7 +197,7 @@ class PaymentController extends AbstractController
                 ]
             ],
             'success_url'           => $this->generateUrl('user_checkout_success', ['order_id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '&session_id={CHECKOUT_SESSION_ID}',
-            'cancel_url'            => $this->generateUrl('user_checkout_failure', [], UrlGeneratorInterface::ABSOLUTE_URL)
+            'cancel_url'            => $this->generateUrl('user_checkout_failure', ['order_id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL)
         ]);
 
         return $this->redirect($session->url, 303);
@@ -209,7 +209,7 @@ class PaymentController extends AbstractController
      */
     # Paiement avec succès
     #[Route('/ucheckout/success', name: 'user_checkout_success')]
-    public function paymentSuccess(Request $request, OrderRepository $orderRepository, UserRepository $userRepository, $stripeSecret): Response
+    public function paymentSuccess(Request $request, OrderRepository $orderRepository, UserRepository $userRepository, $stripeSecret): RedirectResponse
     {
         Stripe::setApiKey($stripeSecret);
 
@@ -269,13 +269,21 @@ class PaymentController extends AbstractController
         else
             throw new InvalidRequestException('Une erreur est survenue : Le client n\'a pas été trouvé.');
 
-        dd('ok');
+        $this->addFlash('success', 'Merci pour votre achat !<br>Un e-mail de confirmation vient de vous être envoyé.');
+        return $this->redirectToRoute('user_show_orders');
     }
 
     # Paiement sans succès
     #[Route('/ucheckout/failure', name: 'user_checkout_failure')]
-    public function paymentFailure(Request $request): RedirectResponse
+    public function paymentFailure(Request $request, OrderRepository $orderRepository, EntityManagerInterface $em): RedirectResponse
     {
+        $orderId    = $request->get('order_id');
+
+        $order      = $orderRepository->find($orderId);
+
+        $order->setStatus(Order::STATUS_CANCELLED);
+        $em->flush();
+
         $this->addFlash('warning', 'Le paiement n\'a pas abouti');
         return $this->redirectToRoute('show_cart', $request->query->all());
     }

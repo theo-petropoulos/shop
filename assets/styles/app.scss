@@ -41,15 +41,19 @@ header{
 }
 
 main{
+  position: relative;
   flex-grow: 1;
   height: 95%;
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
+  background: $grey;
+  color: $white_light;
 }
 
 // Specific rules
 .success, .failure, .warning{
+  text-align: center;
   font-family: $font;
   position: absolute;
   z-index: 9;
@@ -57,7 +61,8 @@ main{
   left: 50%;
   transform: translate(-50%, -20%);
   opacity: 1;
-  border: 1px solid black;
+  border: 1px solid $grey_light_transparent;
+  border-radius: 8px;
   padding: 1.5%;
   animation: disappear 0.5s ease-in 3s forwards;
   transition: opacity 0.4s;
