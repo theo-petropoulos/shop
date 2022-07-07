@@ -7,7 +7,33 @@
         <div class="success">{{ flashMessage }}</div>
     {% endfor %}
     <main id="home">
-        Hello world
+        <section id="home_left_section">
+            <div id="home_left_title">
+                <h2>Minimal<span>SHOP</span></h2>
+                <h3>Impression sur verre</h3>
+            </div>
+            <div id="home_left_shipping">
+                <p>Livraison offerte sur tous les articles*</p>
+            </div>
+            <div id="home_left_description">
+                <p>MinimalSHOP vous propose à la vente des oeuvres de professionnels reconnus dans l'industrie du jeu vidéo. Notre technique d'impression sur verre permet d'obtenir une qualité supérieure, faisant ressortir les détails et les contrastes des images.</p>
+            </div>
+            <div id="home_left_img">
+                <img src="{{ asset('images/backgrounds/sw.jpg') }}" alt="ewok">
+                <ul>
+                    <li>> Sans frais de livraison</li>
+                    <li>> Qualité supérieure</li>
+                    <li>> Durabilité prouvée</li>
+                    <li>> Artistes renommés</li>
+                    <li>> Paiement sécurisé</li>
+                </ul>
+            </div>
+            <div id="home_left_conditions">
+                *Livraison offerte en point relais et à domicile pour tous les articles vendus et expédiés par MinimalSHOP à destination de la France Métropolitaine.
+            </div>
+        </section>
+        <section id="home_right_section">
+            A remplir
+        </section>
     </main>
 {% endblock body %}
-

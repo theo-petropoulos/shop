@@ -20,6 +20,9 @@
 // Import cart
 @use 'cart/cart';
 
+// Import home
+@use 'home/home';
+
 // Global rules
 *, html, body{
   margin: 0;
