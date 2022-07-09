@@ -4,7 +4,7 @@
 
 {% block body %}
     <main id="author">
-        {% set image = (author.getLastProduct is not null and author.getLastProduct.getImages is not null) ? author.getLastProduct.getImages[0] : null %}
+        {% set image = author.getLastProduct.getImages[0]|default %}
 
         {# Picture visualizer #}
         <section id="left_section" style="background-image: url('{{ asset('images/products/' ~ author.id ~ '/' ~ image.name) }}')">
@@ -20,6 +20,7 @@
                 <h2>{{ author.description }}</h2>
             </div>
             <div id="author_products_container">
+                {{ dump() }}
                 {% if products is not null %}
                     {% for product in products %}
                         {% set imageName = product.getImages ? product.getImages[0].name : null %}
