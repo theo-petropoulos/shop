@@ -36,7 +36,7 @@
     display: flex;
     position: relative;
     flex-direction: column;
-    padding:1%;
+    padding: 1%;
     min-width: max-content;
     a{
       font-size: large;
@@ -44,14 +44,14 @@
       color: $orange;
       margin: 1%;
       &:hover{
-        color:$orange_light;
+        color: $orange_light;
         transition:all 0.3s;
       }
       &:last-of-type{
         color: $red;
         border-top: 1px solid $orange;
         &:hover{
-          color:  $red_strong;
+          color: $red_strong;
           border-top: 1px solid $orange_light;
           transition: all 0.3s;
         }

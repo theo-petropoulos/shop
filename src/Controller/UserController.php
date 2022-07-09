@@ -94,7 +94,7 @@ class UserController extends AbstractController
 
     # Affichage des adresses
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
-    #[Route(path: '/user/profile/addresses', name: 'user_show_addresses')]
+    #[Route(path: '/user/profile/addresses', name: 'user_show_addresses', methods: ['POST', 'GET'])]
     public function userShowAddresses(Request $request, UserInterface $user, AddressRepository $addressRepository, OrderRepository $orderRepository, EntityManagerInterface $entityManager): Response
     {
         $addresses  = $addressRepository->findBy(['customer' => $user], ['id' => 'ASC']);
@@ -139,7 +139,7 @@ class UserController extends AbstractController
     # Modification d'une adresse
     #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[IsGranted('CAN_EDIT', 'address', 'Vous ne pouvez pas accéder à cette page', 403)]
-    #[Route(path: '/user/profile/addresses/edit/{id}', name: 'user_edit_address')]
+    #[Route(path: '/user/profile/addresses/edit/{id}', name: 'user_edit_address', methods: ['GET', 'POST'])]
     public function userEditAddress(Request $request, UserInterface $user, Address $address, EntityManagerInterface $entityManager): Response
     {
         $form       = $this->createForm(AddAddressType::class, $address);
@@ -188,7 +188,7 @@ class UserController extends AbstractController
             if ($referer && is_string($referer))
                 return $this->redirect($referer);
         }
-        // Todo : Catch exception if order exist
+        // Todo : Catch exception if order exists
 
         return $this->redirectToRoute('user_show_addresses');
     }

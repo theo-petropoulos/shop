@@ -46,6 +46,7 @@ class UserOrderTest extends KernelTestCase
             ->setAddress($user->getAddresses()[0])
             ->setPurchaseDate(new \DateTime("today"))
             ->setStatus(Order::STATUS_PENDING);
+
         $this->em->persist($order);
         $this->em->flush();
 
@@ -57,6 +58,7 @@ class UserOrderTest extends KernelTestCase
                 ->setProductQuantity($quantity)
                 ->setTotal($quantity * $product->getPrice())
                 ->setOrder($order);
+
             $this->em->persist($orderDetail);
         }
         $this->em->flush();

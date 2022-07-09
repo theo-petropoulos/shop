@@ -26,8 +26,8 @@ security:
                 target: /
                 invalidate_session: true
             remember_me:
-                secret:   '%env(APP_SECRET)%'
-                lifetime: 604800
+                secret: '%env(APP_SECRET)%'
+                lifetime: 604800 #7 days
                 samesite: 'lax'
                 name : 'minimal_shop_login_keeper'
             login_throttling:
