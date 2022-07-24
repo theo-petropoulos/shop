@@ -25,6 +25,7 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('cart', './assets/js/cart.js')
     .addEntry('modal', './assets/js/modal.js')
+    .addEntry('user_global_searchbar', './assets/js/searchbar.js')
 
     /** User */
     .addEntry('edit_delete_address', './assets/js/user/addresses/edit_delete_address.js')

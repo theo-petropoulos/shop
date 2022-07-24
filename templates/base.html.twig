@@ -12,6 +12,23 @@
         {% include 'includes/header.html.twig' %}
         {% block body %}{% endblock %}
         {#{% include 'includes/footer.html.twig' %}#}
+        {% block searchbar %}
+            <section id="search_global_container" class="search_item_container">
+                <div id="search_global_box" class="search_item_box">
+                    <button id="search_global_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
+                    <input type="text" name="user_search" class="user_search_input" id="user_search_input_global">
+                    <div class="search_results_box" id="search_results_global">
+
+                    </div>
+                </div>
+            </section>
+        {% endblock %}
+        {% block global_javascripts %}
+            <script type="text/javascript">
+                window.globalSearchPath = "{{ path('user_global_search') }}"
+            </script>
+            {{ encore_entry_script_tags('user_global_searchbar') }}
+        {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>

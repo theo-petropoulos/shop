@@ -38,6 +38,37 @@ class ProductRepository extends ServiceEntityRepository
        return $results;
     }
 
+    public function searchProducts(string $search): mixed
+    {
+        $array      = preg_split("/[\s,]*\\\"([^\\\"]+)\\\"[\s,]*|" . "[\s,]*'([^']+)'[\s,]*|" . "[\s,]+/", $search, 0,  PREG_SPLIT_DELIM_CAPTURE);
+        $searchn    = '';
+        foreach ($array as $key => $value) {
+            if ($key === 0)
+                $searchn    = $value;
+            else
+                $searchn    .= " " . $value;
+        }
+
+        $query      = $this->createQueryBuilder('p')
+                        ->distinct()
+                        ->innerJoin(Author::class, 'a')
+                        ->where(
+                            'p.name LIKE :searchn1 OR p.name LIKE :searchn2 OR 
+                            a.name LIKE :searchn1 OR a.name LIKE :searchn2 OR 
+                            p.description LIKE :searchn1 OR p.description LIKE :searchn2')
+                        ->orderBy(
+                            'CASE 
+                                    WHEN p.name LIKE :searchn1 OR p.name LIKE :searchn2 THEN 1 
+                                    WHEN a.name LIKE :searchn1 OR a.name LIKE :searchn2 THEN 2
+                                    WHEN p.description LIKE :searchn1 OR p.description LIKE :searchn2 THEN 3
+                                    ELSE 99
+                                END')
+                        ->setMaxResults(30)
+                        ->setParameters(['searchn1' => "$searchn%", 'searchn2' => " $searchn%"]);
+
+        return $query->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */
