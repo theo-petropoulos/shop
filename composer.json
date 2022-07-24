@@ -46,6 +46,7 @@
         "symfony/var-dumper": "5.4.*",
         "symfony/webpack-encore-bundle": "^1.14",
         "symfony/yaml": "5.4.*",
+        "symfonycasts/reset-password-bundle": "^1.14",
         "symfonycasts/verify-email-bundle": "^1.10",
         "twig/extra-bundle": "^3.3",
         "twig/intl-extra": "^3.3"

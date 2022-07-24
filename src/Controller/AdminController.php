@@ -6,7 +6,6 @@ use App\Entity\Author;
 use App\Entity\Discount;
 use App\Entity\Image;
 use App\Entity\Product;
-use App\Errors\ErrorFormatter;
 use App\Exceptions\InvalidSizeException;
 use App\Form\Admin\AddAdminType;
 use App\Form\Admin\AddAuthorType;
@@ -93,7 +92,7 @@ class AdminController extends AbstractController
         $discounts  = $discountRepository->findBy([], ['startingDate' => 'ASC']);
 
         return $this->render('admin/includes/products/show_products.html.twig', [
-            'authors'        => $authors,
+            'authors'       => $authors,
             'products'      => $products,
             'discounts'     => $discounts
         ]);
@@ -156,8 +155,8 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted())
         {
-            if ($form->isValid()) {
-
+            if ($form->isValid())
+            {
                 switch ($entity) {
                     case 'author':
                         $this->em->persist($item);
@@ -242,11 +241,11 @@ class AdminController extends AbstractController
     #[Route(path: '/admin/products/fetch', name: 'admin_fetch_products')]
     public function adminFetchProductsByAuthor(Request $request, ProductRepository $productRepository, AuthorRepository $authorRepository): Response
     {
-        $authorId    = $request->get('author');
+        $authorId   = $request->get('author');
         $return     = [];
 
         if ($authorId !== '999999') {
-            $author      = $authorRepository->findOneBy(['id' => $authorId]);
+            $author     = $authorRepository->findOneBy(['id' => $authorId]);
             $products   = $productRepository->findBy(['author' => $author]);
         }
         else {
@@ -265,7 +264,7 @@ class AdminController extends AbstractController
     #[Route(path: '/admin/authors/fetch', name: 'admin_fetch_authors', methods: ['GET'])]
     public function adminFetchAuthors(AuthorRepository $authorRepository): JsonResponse
     {
-        $authors             = $authorRepository->findAll();
+        $authors            = $authorRepository->findAll();
         $arrayCollection    = [];
 
         foreach ($authors as $author) {

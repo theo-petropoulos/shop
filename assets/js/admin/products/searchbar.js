@@ -6,8 +6,8 @@ window.itemBox          = '';
 $(function() {
     // Dictionary
     let trans       = {
-        'author'         : 'Auteur',
-        'author_name'    : 'Auteur',
+        'author'        : 'Auteur',
+        'author_name'   : 'Auteur',
         'product'       : 'Produit',
         'product_name'  : 'Produit',
         'Produit'       : 'Produit',

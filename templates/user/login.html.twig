@@ -8,22 +8,23 @@
             <h3>CONNEXION</h3>
             <h4>Vous n'êtes pas encore inscrit ? <a href="{{ path('user_register') }}">INSCRIPTION</a></h4>
         </div>
+        {% set flashWarning = app.session.flashbag.get('warning') %}
+
+        {% if error|default and flashWarning is empty %}
+            <div class="failure">{{ "connexion.error"|trans({}, 'messages') }}</div>
+        {% endif %}
 
         {% for flashMessage in app.session.flashbag.get('success') %}
             <div class="success">{{ flashMessage }}</div>
         {% endfor %}
 
-        {% for flashMessage in app.session.flashbag.get('warning') %}
+        {% for flashMessage in flashWarning %}
             <div class="warning">{{ flashMessage }}</div>
         {% endfor %}
 
         {% for flashMessage in app.session.flashbag.get('failure') %}
             <div class="failure">{{ flashMessage }}</div>
         {% endfor %}
-
-        {% if error is defined and error %}
-            <div class="failure">{{ "connexion.error"|trans({}, 'messages') }}</div>
-        {% endif %}
 
         <form method="post">
             <label for="inputEmail">Adresse mail</label>

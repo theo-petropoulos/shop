@@ -3,7 +3,9 @@
 namespace App\Security;
 
 use App\Entity\IP;
+use App\Entity\User;
 use App\Repository\IPRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -49,9 +51,54 @@ class UserLoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $this->accessManager    = $accessManager;
     }
 
-    public function authenticate(Request $request): Passport
+    /**
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     */
+    public function authenticate(Request $request): RedirectResponse|Passport
     {
         $email = $request->request->get('email', '');
+
+        /** @var IPRepository $IPRepository */
+        $IPRepository   = $this->entityManager->getRepository(IP::class);
+        /** @var UserRepository $userRepository */
+        $userRepository = $this->entityManager->getRepository(User::class);
+
+        $currentIP      = $IPRepository->findOneBy(['address' => $request->getClientIp()]) ?? (new IP())->setAddress($request->getClientIp());
+        $user           = $userRepository->findOneBy(['email' => $email]);
+
+        if ($user) {
+            $knownIPs = $user->getIP();
+            // If the User is logging in for the first time, set the current IP as one of his
+            if ($knownIPs->isEmpty() && !$currentIP->getUser()) {
+                $currentIP->setUser($user);
+                $this->entityManager->persist($currentIP);
+                $this->entityManager->flush();
+            }
+            else {
+                if (!$currentIP->belongsToUser($user)) {
+                    $this->entityManager->persist($currentIP);
+                    $this->entityManager->flush();
+                    try {
+                        $extraParams = ['id' => $user->getId(), 'ip' => $currentIP->getId()];
+                        $this->emailVerifier->sendEmailConfirmation(
+                            'login_verify_ip',
+                            $user,
+                            (new TemplatedEmail())
+                                ->from(new Address('okko.network@gmail.com', 'Stripe Shop'))
+                                ->to($user->getEmail())
+                                ->subject('Connexion depuis un nouvel appareil')
+                                ->htmlTemplate('email/login/confirmation_ip.html.twig'),
+                            $extraParams
+                        );
+                    } catch (Exception $e) {
+                        throw new Exception($e->getMessage());
+                    }
+                    $email = "";
+                    $this->session->getFlashBag()->add('warning', 'Vous venez de vous connecter depuis un nouvel appareil. Un e-mail de confirmation vient de vous être envoyé.');
+                }
+            }
+        }
 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
 
@@ -66,58 +113,12 @@ class UserLoginFormAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     /**
-     * @throws Exception|TransportExceptionInterface
+     * @throws Exception
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): Response
     {
-        /** @var IPRepository $IPRepository */
-        $IPRepository   = $this->entityManager->getRepository(IP::class);
-
-        $currentIP  = $IPRepository->findOneBy(['address' => $request->getClientIp()]) ?? (new IP())->setAddress($request->getClientIp());
-        $user       = $token->getUser();
-        $knownIPs   = $user->getIP();
-
-        // If the User is logging in for the first time, set the current IP as one of his
-        if ($knownIPs->isEmpty() && !$currentIP->getUser()) {
-            $currentIP->setUser($user);
-            $this->entityManager->persist($currentIP);
-            $this->entityManager->flush();
-        }
-        else {
-            // If the IP address is linked to the User
-            if ($currentIP->belongsToUser($user)) {
-                if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-                    return new RedirectResponse($targetPath);
-                }
-            }
-            // If the IP is set for another User or if the IP doesn't match one of the User's
-            else {
-                $this->entityManager->persist($currentIP);
-                $this->entityManager->flush();
-                try {
-                    $extraParams = ['id' => $user->getId(), 'ip' => $currentIP->getId()];
-                    $this->emailVerifier->sendEmailConfirmation(
-                        'login_verify_ip',
-                        $user,
-                        (new TemplatedEmail())
-                            ->from(new Address('okko.network@gmail.com', 'Stripe Shop'))
-                            ->to($user->getEmail())
-                            ->subject('Connexion depuis un nouvel appareil')
-                            ->htmlTemplate('email/login/confirmation_ip.html.twig'),
-                        $extraParams
-                    );
-                } catch (Exception $e) {
-                    throw new Exception($e->getMessage());
-                }
-                $this->tokenStorage->setToken();
-                $this->session->invalidate();
-                $this->session->getFlashBag()->add('warning', 'Vous venez de vous connecter depuis un nouvel appareil. Un e-mail de confirmation vient de vous être envoyé.');
-
-                return new RedirectResponse($this->urlGenerator->generate('user_login'));
-            }
-        }
-
-        $roles = $user->getRoles();
+        $user   = $token->getUser();
+        $roles  = $user->getRoles();
 
         if (array_intersect(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'], $roles))
             return new RedirectResponse($this->urlGenerator->generate('admin'));

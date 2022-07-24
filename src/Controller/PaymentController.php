@@ -14,6 +14,7 @@ use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
@@ -36,7 +37,7 @@ class PaymentController extends AbstractController
 {
     public function __construct(private Security $security, private EntityManagerInterface $em, private MailerInterface $mailer) {}
 
-    # Sélection de l'adresse pour un invité avant paiement
+    # Sélection de l'adresse pour un invité avant le paiement
     #[Route('/gcheckout/address', name: 'guest_checkout_set_address')]
     public function guestCheckoutSetAddress(Request $request): Response
     {
@@ -46,7 +47,9 @@ class PaymentController extends AbstractController
         // todo : Ajouter une adresse et submit => checkout
     }
 
+    # Sélection de l'adresse pour un utilisateur authentifié avant le paiement
     #[Route('/ucheckout/address', name: 'user_checkout_set_address')]
+    #[IsGranted('ROLE_USER', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     public function userCheckoutSetAddress(Request $request, EntityManagerInterface $entityManager, AddressRepository $addressRepository): Response
     {
         if (!$this->isGranted('ROLE_USER'))

@@ -223,13 +223,13 @@ class UserController extends AbstractController
     public function orderShowInvoice(Request $request, Order $order, MpdfFactory $factory): Response
     {
         $mpdf = new Mpdf([
-            'margin_left' => 20,
-            'margin_right' => 15,
-            'margin_top' => 48,
+            'margin_left'   => 20,
+            'margin_right'  => 15,
+            'margin_top'    => 48,
             'margin_bottom' => 25,
             'margin_header' => 10,
             'margin_footer' => 10,
-            'default_font' => 'Courier'
+            'default_font'  => 'Courier'
         ]);
 
         $mpdf->SetProtection(array('print'));
