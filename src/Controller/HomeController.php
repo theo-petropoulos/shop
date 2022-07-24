@@ -2,27 +2,39 @@
 
 namespace App\Controller;
 
+use App\Entity\Author;
+use App\Entity\Product;
+use App\Repository\AuthorRepository;
 use App\Repository\ProductRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
+    public function __construct() {}
 
-    public function __construct(EntityManagerInterface $entityManager) {
-        $this->entityManager = $entityManager;
-    }
-
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     # Accueil
     #[Route(path: '/', name: 'home')]
-    public function index(Request $request, ProductRepository $productRepository): Response
+    public function index(ProductRepository $productRepository, AuthorRepository $authorRepository): Response
     {
-        return $this->render('home/index.html.twig', [
+        /** @var Author|null $author */
+        $author             = $authorRepository->getRandomAuthors(1)[0];
+        /** @var Product|null $product */
+        $product            = $productRepository->getRandomProducts(1)[0];
+        /** @var Product|null $lastSoldProduct */
+        $lastSoldProduct    = $productRepository->getLastSoldProduct();
 
+        return $this->render('home/index.html.twig', [
+            'author'            => $author,
+            'product'           => $product,
+            'lastSoldProduct'   => $lastSoldProduct
         ]);
     }
 }

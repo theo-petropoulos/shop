@@ -3,8 +3,13 @@
 namespace App\Repository;
 
 use App\Entity\Author;
+use App\Entity\Order;
+use App\Entity\OrderDetail;
 use App\Entity\Product;
+use App\QueryBuilder\RandomizedFetch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use JetBrains\PhpStorm\Pure;
 
@@ -19,6 +24,20 @@ class ProductRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Product::class);
+    }
+
+    /**
+     * Retourne une quantité de produits aléatoires
+     *
+     * @param int|null $amount
+     *
+     * @return mixed
+     */
+    public function getRandomProducts(?int $amount): mixed
+    {
+        $randomQB = new RandomizedFetch($this->getEntityManager());
+
+        return $randomQB->getRandom(Product::class, $amount);
     }
 
     public function findAllSortedByAuthors()
@@ -36,6 +55,27 @@ class ProductRepository extends ServiceEntityRepository
            $results[$k] = $v[0];
 
        return $results;
+    }
+
+    /**
+     * Retourne le dernier produit vendu
+     *
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function getLastSoldProduct(): Product
+    {
+        $query  = $this->createQueryBuilder('p')
+            ->innerJoin(Order::class, 'o')
+            ->innerJoin(OrderDetail::class, 'od')
+            ->where('od.order = o.id')
+            ->andWhere('od.product = p.id')
+            ->orderBy('o.purchaseDate', 'DESC')
+            ->addOrderBy('od.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery();
+
+        return $query->getSingleResult();
     }
 
     // /**
