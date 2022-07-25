@@ -55,6 +55,16 @@ main{
   color: $white_light;
 }
 
+form{
+  border: 1px solid $orange !important;
+  background: $grey_shade !important;
+  border-radius: 8px !important;
+  transition: all 0.2s !important;
+  &:hover{
+    border: 1px solid $orange_light !important;
+  }
+}
+
 // Specific rules
 .success, .failure, .warning{
   text-align: center;

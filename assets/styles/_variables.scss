@@ -1,11 +1,13 @@
 $font                     : 'Yantramanav';
 $white                    : rgb(255, 255, 255);
 $white_light              : rgb(220, 220, 220);
+$white_light_transparent  : rgb(220, 220, 220, 0.8);
 $black                    : rgb(0, 0, 0);
 $grey_dark                : rgb(20, 20, 20);
 $grey_dark_transparent    : rgba(20, 20, 20, 0.5);
 $grey                     : rgb(45, 45, 45);
 $grey_transparent         : rgba(45, 45, 45, 0.3);
+$grey_shade               : rgb(50, 50, 50);
 $grey_light               : rgb(115, 115, 115);
 $grey_light_transparent   : rgba(115, 115, 115, 0.3);
 $orange                   : rgb(240, 95, 0);
@@ -23,6 +25,8 @@ $blue_light               : rgb(90, 190, 255);
 $yellow                   : rgb(255, 220, 60);
 $yellow_transparent       : rgba(255, 225, 95, 0.50);
 
+$grandient_greyToLight    : linear-gradient(45deg, rgba(50,50,50,1) 0%, rgba(115,115,115,1) 100%);
+
 @mixin login-register{
   font-family: $font;
   display: flex;
@@ -32,7 +36,7 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
   width:100%;
   background: $grey;
   color: $white_light;
-  #inscription_header, #connexion_header, #modify_password_header{
+  #inscription_header, #connexion_header, #modify_password_header, #reset_password_request_header, #header_check_email, #reset_password_header{
     text-align: center;
     h3{
       font-size: calc(14px + 1vw);
@@ -53,18 +57,32 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
 
 @mixin standard-form{
   form{
-    border:1px solid $grey_dark;
-    padding:2%;
-    display:flex;
+    border: 1px solid $orange;
+    border-radius: 8px;
+    padding: 2%;
+    display: flex;
     flex-direction: column;
-    position:relative;
+    position: relative;
     align-items: center;
     justify-content: center;
-    width:50%;
-    margin:2%;
+    width: 50%;
+    margin: 2%;
+    background: $grey_shade;
+    box-shadow: 3px 3px 6px 3px $grey_dark_transparent;
+    transition: all 0.2s;
+    &:hover{
+      border: 1px solid $orange_light;
+    }
     div{
       position: relative;
       width: 100%;
+      label{
+        font-size: calc(11px + 0.6vw);
+      }
+      input[type=text], input[type=email], input[type=password]{
+        padding: min(1%, 3px);
+        font-size: calc(10px + 0.5vw);
+      }
       div{
         display: flex;
         flex-direction: row;
@@ -160,13 +178,13 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
 
 @mixin submit-button{
   margin:2%;
+  padding: 1% 2%;
   background:$grey_dark;
   color:white;
   font-family: $font;
   outline:0;
   border:1px solid black;
   border-radius: unset;
-  padding:1% 0;
   font-size:calc(10px + 0.5vw);
   line-height:calc(10px + 0.5vw);
   &:hover{
