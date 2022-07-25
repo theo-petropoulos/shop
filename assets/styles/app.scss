@@ -3,6 +3,7 @@
 // Import globals
 @use 'globals/header';
 @use 'globals/footer';
+@use 'globals/search';
 @use '_modal';
 
 // Import user
@@ -285,6 +286,117 @@ main{
       padding: 1% 2%;
       font-size: medium;
       font-weight: bolder;
+    }
+  }
+}
+
+.search_item_container{
+  height:100vh;
+  width:100%;
+  position:fixed;
+  top:0;
+  background:rgba(136, 136, 136, 0.8);
+  z-index:7;
+  visibility: hidden;
+  left:0;
+  .search_item_box{
+    position: absolute;
+    height:80%;
+    width:100%;
+    bottom:-100%;
+    background: $grey_dark;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    z-index:8;
+    &#search_global_box{
+      height: 90%;
+    }
+    button{
+      background: transparent;
+      border: none;
+      width: max-content;
+      font-size: calc(18px + 1vw);
+      color: $blue_light;
+      &:hover{
+        cursor:pointer;
+        color: $white_light;
+        transition: color 0.3s;
+      }
+    }
+    input{
+      width:80%;
+      line-height: calc(20px + 1.5vw);
+      font-size: calc(22px + 1.6vw);
+      font-family: $font;
+      text-align: center;
+    }
+  }
+  .search_results_box{
+    overflow-y: auto;
+    height:auto;
+    scrollbar-color: $orange #e0e0e0;
+    scrollbar-width: thin;
+    padding:2%;
+    width:100%;
+    .div_det{
+      @include div-det;
+      div{
+        width:20%;
+        min-width: 120px;
+        flex-grow: 1;
+        display:flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        &.active, &.stock, &.price{
+          width:10%;
+          min-width:50px;
+        }
+        &.name, &.author_name, &.product_name{
+          width:15%;
+          min-width:120px;
+        }
+        button{
+          outline: 0;
+          border: 1px solid $orange_light;
+          padding: 2px 5px;
+          border-radius: unset;
+          font-family: $font;
+          background: $grey_light;
+          color: black;
+          width: max-content;
+          align-self: center;
+          font-size: initial;
+          font-weight: bold;
+          &:hover{
+            cursor: pointer;
+            background: $orange_light;
+            transition: all 0.3s;
+          }
+        }
+        p{
+          @include clamped-lines-2;
+        }
+      }
+      a{
+        width:30%;
+        flex-grow: 1;
+        text-decoration: none;
+        color: $blue_light;
+        text-align: center;
+        &:hover{
+          color:$white;
+          transition: all 0.3s;
+        }
+      }
+    }
+    &#search_results_discount{
+      .div_det{
+        div{
+          width:15%;
+        }
+      }
     }
   }
 }

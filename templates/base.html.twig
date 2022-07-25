@@ -12,6 +12,13 @@
         {% include 'includes/header.html.twig' %}
         {% block body %}{% endblock %}
         {#{% include 'includes/footer.html.twig' %}#}
+        {% include 'includes/searchbar.html.twig' %}
+        {% block searchbarScript %}
+            <script type="text/javascript">
+                window.globalSearchPath = "{{ path('user_global_search') }}"
+            </script>
+            {{ encore_entry_script_tags('user_global_searchbar') }}
+        {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
 </html>
