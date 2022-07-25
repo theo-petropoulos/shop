@@ -242,7 +242,7 @@ class PaymentController extends AbstractController
 
             $email      = new TemplatedEmail();
             $email
-                ->from(new \Symfony\Component\Mime\Address('okko.network@gmail.com', 'Stripe Shop'))
+                ->from(new \Symfony\Component\Mime\Address('okko.network@gmail.com', 'MinimalShop'))
                 ->to($user->getEmail())
                 ->subject('Confirmation de votre commande #' . $orderId)
                 ->htmlTemplate('email/order/confirmation_order.html.twig')
