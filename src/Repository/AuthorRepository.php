@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Author;
+use App\QueryBuilder\RandomizedFetch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +18,20 @@ class AuthorRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Author::class);
+    }
+
+    /**
+     * Retourne une quantité d'auteurs aléatoires
+     *
+     * @param int|null $amount
+     *
+     * @return mixed
+     */
+    public function getRandomAuthors(?int $amount): mixed
+    {
+        $randomQB = new RandomizedFetch($this->getEntityManager());
+
+        return $randomQB->getRandom(Author::class, $amount);
     }
 
     // /**

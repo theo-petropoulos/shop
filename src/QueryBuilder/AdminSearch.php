@@ -50,7 +50,7 @@ class AdminSearch
                 ->where('d.name LIKE :search1 OR d.name LIKE :search2 OR p.name LIKE :search1 OR p.name LIKE :search2')
                 ->orderBy('d.name, p.name')
                 ->getQuery(),
-            default     => throw new InvalidArgumentException(),
+            default     => throw new InvalidArgumentException()
         };
 
         $query->setParameters([

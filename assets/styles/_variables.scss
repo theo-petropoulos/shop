@@ -25,6 +25,7 @@ $blue_light               : rgb(90, 190, 255);
 $yellow                   : rgb(255, 220, 60);
 $yellow_transparent       : rgba(255, 225, 95, 0.50);
 
+$gradient_yellow_blue     : linear-gradient(90deg, $orange_light 0%, $blue_light 100%);
 $grandient_greyToLight    : linear-gradient(45deg, rgba(50,50,50,1) 0%, rgba(115,115,115,1) 100%);
 
 @mixin login-register{

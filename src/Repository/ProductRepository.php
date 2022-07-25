@@ -3,9 +3,14 @@
 namespace App\Repository;
 
 use App\Entity\Author;
+use App\Entity\Order;
+use App\Entity\OrderDetail;
 use App\Entity\Image;
 use App\Entity\Product;
+use App\QueryBuilder\RandomizedFetch;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use JetBrains\PhpStorm\Pure;
 
@@ -22,6 +27,24 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    /**
+     * Retourne une quantité de produits aléatoires
+     *
+     * @param int|null $amount
+     *
+     * @return mixed
+     */
+    public function getRandomProducts(?int $amount): mixed
+    {
+        $randomQB = new RandomizedFetch($this->getEntityManager());
+
+        return $randomQB->getRandom(Product::class, $amount);
+    }
+    
+    /**
+    * Retourne tous les produits classés par auteurs
+    *
+    */
     public function findAllSortedByAuthors()
     {
        $query   = $this->createQueryBuilder('p')
@@ -39,6 +62,31 @@ class ProductRepository extends ServiceEntityRepository
        return $results;
     }
 
+    /**
+     * Retourne le dernier produit vendu
+     *
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function getLastSoldProduct(): Product
+    {
+        $query  = $this->createQueryBuilder('p')
+            ->innerJoin(Order::class, 'o')
+            ->innerJoin(OrderDetail::class, 'od')
+            ->where('od.order = o.id')
+            ->andWhere('od.product = p.id')
+            ->orderBy('o.purchaseDate', 'DESC')
+            ->addOrderBy('od.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery();
+
+        return $query->getSingleResult();
+    }
+
+    /**
+    * Recherche de produit dans le catalogue
+    *
+    */
     public function searchProducts(string $search): mixed
     {
         $array      = preg_split("/[\s,]*\\\"([^\\\"]+)\\\"[\s,]*|" . "[\s,]*'([^']+)'[\s,]*|" . "[\s,]+/", $search, 0,  PREG_SPLIT_DELIM_CAPTURE);
