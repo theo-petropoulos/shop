@@ -1,0 +1,43 @@
+@use 'assets/styles/variables' as *;
+
+#search_results_global{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 1%;
+  box-sizing: border-box;
+  .div_det{
+    position: relative;
+    width: 23%;
+    height: 30%;
+    margin: 1%;
+    min-width: 150px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    overflow: hidden;
+    transition: all 0.2s;
+    padding: 0;
+    box-sizing: border-box;
+    a{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    img{
+      transition: all 0.2s;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    &:hover{
+      border: 1px solid $yellow;
+      img{
+        transform: scale(1.1);
+        transition: all 0.3s;
+      }
+    }
+  }
+}

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Author;
+use App\Entity\Image;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -51,50 +52,27 @@ class ProductRepository extends ServiceEntityRepository
 
         $query      = $this->createQueryBuilder('p')
                         ->distinct()
+                        ->addSelect('a.id as author')
+                        ->addSelect('i.name as imageName')
                         ->innerJoin(Author::class, 'a')
+                        ->innerJoin(Image::class, 'i')
                         ->where(
-                            'p.name LIKE :searchn1 OR p.name LIKE :searchn2 OR 
-                            a.name LIKE :searchn1 OR a.name LIKE :searchn2 OR 
-                            p.description LIKE :searchn1 OR p.description LIKE :searchn2')
+                            'p.name LIKE :searchn1 OR p.name LIKE :searchn2 OR p.name LIKE :searchn3 OR
+                            a.name LIKE :searchn1 OR a.name LIKE :searchn2 OR a.name LIKE :searchn3 OR
+                            p.description LIKE :searchn1 OR p.description LIKE :searchn2 OR p.description LIKE :searchn3')
+                        ->andWhere('a.id = p.author')
+                        ->andWhere('i.product = p.id')
                         ->orderBy(
                             'CASE 
                                     WHEN p.name LIKE :searchn1 OR p.name LIKE :searchn2 THEN 1 
                                     WHEN a.name LIKE :searchn1 OR a.name LIKE :searchn2 THEN 2
-                                    WHEN p.description LIKE :searchn1 OR p.description LIKE :searchn2 THEN 3
+                                    WHEN p.description LIKE :searchn1 OR p.description LIKE :searchn2 THEN 3 
+                                    WHEN p.name LIKE :searchn3 OR a.name LIKE :searchn3 OR p.description LIKE :searchn3 THEN 4
                                     ELSE 99
                                 END')
                         ->setMaxResults(30)
-                        ->setParameters(['searchn1' => "$searchn%", 'searchn2' => " $searchn%"]);
+                        ->setParameters(['searchn1' => "$searchn%", 'searchn2' => " $searchn%", 'searchn3' => "%$searchn%"]);
 
-        return $query->getQuery()->getResult();
+        return $query->getQuery()->getArrayResult();
     }
-
-    // /**
-    //  * @return Product[] Returns an array of Product objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Product
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

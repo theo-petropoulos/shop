@@ -1,4 +1,5 @@
-window.search           = '';
+window.search           = ''
+window.searchTimeout    = ''
 window.globalSearchBar  = $("#search_bar")
 window.globalSubBar     = $("#user_search_input_global")
 window.itemContainer    = $("#search_global_container")
@@ -45,98 +46,58 @@ $(function() {
         if (e.key === 'Escape')
             closeSearchBar(itemBox, itemContainer)
     })
-console.log('toto')
+
     // Ajax search
     $(document).on({
         'keyup': function() {
-            let search      = globalSubBar.val()
-            globalSearchBar.val(globalSubBar.val())
+            if (searchTimeout)
+                clearTimeout(searchTimeout)
 
-            if (search.length > 0) {
-                $.post(
-                    globalSearchPath,
-                    {
-                        search
-                    },
-                    (res) => {
-                        console.log(res)
-                    })
-                .done(function (data, status) {
-                    try {
-                        let results = JSON.parse(data);
-                        $("#search_results_global .div_det").remove();
+            window.searchTimeout = setTimeout(function() {
+                let search      = globalSubBar.val()
+                globalSearchBar.val(globalSubBar.val())
 
-                        $(results).each(function (arrkey, object) {
-                            resultsBox.prepend(
-                                "<div id='" + item + "_" + object['id'] + "_search' class='div_det'>\
+                if (search.length > 0) {
+                    $.post(
+                        globalSearchPath,
+                        {
+                            search
+                        },
+                        (res) => {
+                            //console.log(res)
+                        })
+                        .done(function (data, status) {
+                            try {
+                                let results = JSON.parse(data);
+                                $("#search_results_global .div_det").remove();
+
+                                $(results).each(function (arrkey, object) {
+                                    object[0]['author'] = object['author']
+                                    object[0]['imageName'] = object['imageName']
+                                    object = object[0]
+                                    resultsBox.prepend(
+                                        "<div id='product_" + object['id'] + "_search' class='div_det'>\
+                                    <img src='/images/products/" + object['author'] + "/" + object['imageName'] +"' alt='" + object['name'] + "'>\
+                                    <a href='/products/" + object['id'] + "'></a>\
                                 </div>"
-                            )
-
-                            for (let key in object) {
-                                let array = ['id', 'product_id']
-
-                                if (table === 'discount')
-                                    array.push('product_name')
-
-                                if (!array.includes(key)) {
-                                    let value = object[key]
-
-                                    if (key === 'author_name' && table === 'discount') {
-                                        key     = 'Produit'
-                                        value  += ' - ' + object['product_name']
-                                    }
-
-                                    if (table === 'discount') {
-                                        if (key === 'author_name') {
-                                            key         = 'Produit'
-                                            value      += ' - ' + object['product_name']
-                                        }
-                                        if (key === 'startingDate' || key === 'endingDate') {
-                                            let date    = new Date(value.date)
-                                            value       = date.toLocaleDateString("fr-FR")
-                                        }
-                                    }
-
-                                    if (key !== 'active') {
-                                        $("#" + item + "_" + object['id'] + "_search").append(
-                                            "<div id='" + object['id'] + "_" + key + "_" + item + "_search' class='" + key + "'>\
-                                                <h3>" + trans[key] + "</h3>\
-                                                <p>" + value + "</p>\
-                                            </div>"
-                                        )
-
-                                        if (key !== 'product_name' || table !== 'discount') {
-                                            $("#" + object['id'] + "_" + key + "_" + item + "_search").append(
-                                                "<button class='adm_modify_button'>Modifier</button>"
-                                            )
-                                        }
-                                    }
-                                    else {
-                                        $("#" + item + "_" + object['id'] + "_search").append(
-                                            "<div id='" + object['id'] + "_" + key + "_" + item + "_search' class='" + key + "'>\
-                                                <h3>" + trans[key] + "</h3>\
-                                                <button class='adm_modify_button'>" + trans[value] + "</button>\
-                                            </div>"
-                                        )
-                                    }
-                                }
+                                    )
+                                })
+                            } catch(e) {
+                                return false
                             }
-                        });
-                    } catch(e) {
-                        return false;
-                    }
 
-                    if ($("#results_box p").length > 1) {
-                        $("#search_input").css({
-                            "border-bottom-right-radius": "0",
-                            "border-bottom-left-radius": "0"
-                        });
-                    }
-                })
-                .fail(function() {
-                    console.log('Search failed')
-                })
-            }
+                            if ($("#results_box p").length > 1) {
+                                $("#search_input").css({
+                                    "border-bottom-right-radius": "0",
+                                    "border-bottom-left-radius": "0"
+                                });
+                            }
+                        })
+                        .fail(function() {
+                            console.log('Search failed')
+                        })
+                }
+            }, 600)
         }
     }, "#user_search_input_global")
 })

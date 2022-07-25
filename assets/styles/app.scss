@@ -3,6 +3,7 @@
 // Import globals
 @use 'globals/header';
 @use 'globals/footer';
+@use 'globals/search';
 @use '_modal';
 
 // Import user
@@ -308,6 +309,9 @@ main{
     flex-direction: column;
     align-items: center;
     z-index:8;
+    &#search_global_box{
+      height: 90%;
+    }
     button{
       background: transparent;
       border: none;

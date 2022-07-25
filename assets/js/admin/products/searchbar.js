@@ -1,4 +1,5 @@
 window.search           = '';
+window.searchTimeout    = ''
 window.item             = '';
 window.itemContainer    = '';
 window.itemBox          = '';
@@ -52,95 +53,99 @@ $(function() {
     // Ajax search
     $(document).on({
         'keyup': function() {
-            let search      = $('#adm_search_input_' + item).val()
-            table           = item
+            if (searchTimeout)
+                clearTimeout(searchTimeout)
 
-            if (search.length > 0) {
-                $.post(
-                    searchPath,
-                    {
-                        search,
-                        table
-                    },
-                    (res) => {
-                        // console.log(res)
-                    })
-                .done(function (data, status) {
-                    try {
-                        let results = JSON.parse(data);
-                        $("#search_results_" + item + " div").remove();
+            window.searchTimeout = setTimeout(function() {
+                let search = $('#adm_search_input_' + item).val()
+                table = item
 
-                        $(results).each(function (arrkey, object) {
-                            $("#search_results_" + item).prepend(
-                                "<div id='" + item + "_" + object['id'] + "_search' class='div_det'>\
-                                </div>"
-                            )
+                if (search.length > 0) {
+                    $.post(
+                        searchPath,
+                        {
+                            search,
+                            table
+                        },
+                        (res) => {
+                            // console.log(res)
+                        })
+                        .done(function (data, status) {
+                            try {
+                                let results = JSON.parse(data);
+                                $("#search_results_" + item + " div").remove();
 
-                            for (let key in object) {
-                                let array = ['id', 'product_id']
+                                $(results).each(function (arrkey, object) {
+                                    $("#search_results_" + item).prepend(
+                                        "<div id='" + item + "_" + object['id'] + "_search' class='div_det'>\
+                                    </div>"
+                                    )
 
-                                if (table === 'discount')
-                                    array.push('product_name')
+                                    for (let key in object) {
+                                        let array = ['id', 'product_id']
 
-                                if (!array.includes(key)) {
-                                    let value = object[key]
+                                        if (table === 'discount')
+                                            array.push('product_name')
 
-                                    if (key === 'author_name' && table === 'discount') {
-                                        key     = 'Produit'
-                                        value  += ' - ' + object['product_name']
-                                    }
+                                        if (!array.includes(key)) {
+                                            let value = object[key]
 
-                                    if (table === 'discount') {
-                                        if (key === 'author_name') {
-                                            key         = 'Produit'
-                                            value      += ' - ' + object['product_name']
+                                            if (key === 'author_name' && table === 'discount') {
+                                                key = 'Produit'
+                                                value += ' - ' + object['product_name']
+                                            }
+
+                                            if (table === 'discount') {
+                                                if (key === 'author_name') {
+                                                    key = 'Produit'
+                                                    value += ' - ' + object['product_name']
+                                                }
+                                                if (key === 'startingDate' || key === 'endingDate') {
+                                                    let date = new Date(value.date)
+                                                    value = date.toLocaleDateString("fr-FR")
+                                                }
+                                            }
+
+                                            if (key !== 'active') {
+                                                $("#" + item + "_" + object['id'] + "_search").append(
+                                                    "<div id='" + object['id'] + "_" + key + "_" + item + "_search' class='" + key + "'>\
+                                                    <h3>" + trans[key] + "</h3>\
+                                                    <p>" + value + "</p>\
+                                                </div>"
+                                                )
+
+                                                if (key !== 'product_name' || table !== 'discount') {
+                                                    $("#" + object['id'] + "_" + key + "_" + item + "_search").append(
+                                                        "<button class='adm_modify_button'>Modifier</button>"
+                                                    )
+                                                }
+                                            } else {
+                                                $("#" + item + "_" + object['id'] + "_search").append(
+                                                    "<div id='" + object['id'] + "_" + key + "_" + item + "_search' class='" + key + "'>\
+                                                    <h3>" + trans[key] + "</h3>\
+                                                    <button class='adm_modify_button'>" + trans[value] + "</button>\
+                                                </div>"
+                                                )
+                                            }
                                         }
-                                        if (key === 'startingDate' || key === 'endingDate') {
-                                            let date    = new Date(value.date)
-                                            value       = date.toLocaleDateString("fr-FR")
-                                        }
                                     }
-
-                                    if (key !== 'active') {
-                                        $("#" + item + "_" + object['id'] + "_search").append(
-                                            "<div id='" + object['id'] + "_" + key + "_" + item + "_search' class='" + key + "'>\
-                                                <h3>" + trans[key] + "</h3>\
-                                                <p>" + value + "</p>\
-                                            </div>"
-                                        )
-
-                                        if (key !== 'product_name' || table !== 'discount') {
-                                            $("#" + object['id'] + "_" + key + "_" + item + "_search").append(
-                                                "<button class='adm_modify_button'>Modifier</button>"
-                                            )
-                                        }
-                                    }
-                                    else {
-                                        $("#" + item + "_" + object['id'] + "_search").append(
-                                            "<div id='" + object['id'] + "_" + key + "_" + item + "_search' class='" + key + "'>\
-                                                <h3>" + trans[key] + "</h3>\
-                                                <button class='adm_modify_button'>" + trans[value] + "</button>\
-                                            </div>"
-                                        )
-                                    }
-                                }
+                                });
+                            } catch (e) {
+                                return false;
                             }
-                        });
-                    } catch(e) {
-                        return false;
-                    }
 
-                    if ($("#results_box p").length > 1) {
-                        $("#search_input").css({
-                            "border-bottom-right-radius": "0",
-                            "border-bottom-left-radius": "0"
-                        });
-                    }
-                })
-                .fail(function() {
-                    console.log('Search failed')
-                })
-            }
+                            if ($("#results_box p").length > 1) {
+                                $("#search_input").css({
+                                    "border-bottom-right-radius": "0",
+                                    "border-bottom-left-radius": "0"
+                                });
+                            }
+                        })
+                        .fail(function () {
+                            console.log('Search failed')
+                        })
+                }
+            }, 600)
         }
     }, ".adm_search_input")
 

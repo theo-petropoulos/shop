@@ -19,9 +19,8 @@ class SearchController extends AbstractController
     public function search(Request $request, ProductRepository $productRepository, AuthorRepository $authorRepository): Response
     {
         $search             = $request->get('search');
-
         $searchedProducts   = $productRepository->searchProducts($search);
 
-        return new JsonResponse(['search' => $searchedProducts]);
+        return new JsonResponse(json_encode($searchedProducts));
     }
 }
