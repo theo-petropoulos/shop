@@ -110,6 +110,8 @@ class ProductRepository extends ServiceEntityRepository
                             p.description LIKE :searchn1 OR p.description LIKE :searchn2 OR p.description LIKE :searchn3')
                         ->andWhere('a.id = p.author')
                         ->andWhere('i.product = p.id')
+                        ->andWhere('a.active = 1')
+                        ->andWhere('p.active = 1')
                         ->orderBy(
                             'CASE 
                                     WHEN p.name LIKE :searchn1 OR p.name LIKE :searchn2 THEN 1 

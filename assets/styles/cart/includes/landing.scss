@@ -163,24 +163,23 @@
         width: 10%;
         button{
           background: none;
-          border: 1px solid $orange;
           border-radius: 6px;
+          border: unset;
           color: $orange;
           font-weight: bold;
-          font-size: large;
+          font-size: xx-large;
           padding: 1% 5%;
           &:hover{
             cursor: pointer;
-            background-color: $orange;
-            border-color: $orange_light;
-            color: $white_light;
+            color: $orange_light;
             transition: all 0.4s ease-in;
           }
         }
         p{
           margin: 0.5%;
-          font-size: large;
           font-weight: bold;
+          color: $grey;
+          font-size: x-large;
         }
       }
       a{
@@ -216,7 +215,7 @@
     justify-content: center;
     align-items: center;
     width: 40%;
-    background: linear-gradient(37deg, $green_light 0%, $blue_light 100%);
+    background: $grey;
     flex-grow: 1;
     #cart_payment_main{
       position: relative;
@@ -224,15 +223,65 @@
       height: 80%;
       background: $white;
       border-radius: 10px;
-      box-shadow: 4px 4px 12px 6px $grey_transparent;
-      #cart_payment_total{
+      box-shadow: 4px 4px 12px 6px $grey_dark_transparent;
+      overflow: hidden;
+      #cart_payment_total_container{
         position: relative;
         height: 40%;
         width: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
+        background: $grandient_whiteToLight;
+        #cart_payment_details{
+          position: relative;
+          width: 100%;
+          padding: 1% 2%;
+          box-sizing: border-box;
+          justify-self: flex-start;
+          display: flex;
+          flex-direction: column;
+          color: $grey;
+          text-align: center;
+        }
+        #cart_payment_shipping{
+          width: 100%;
+          background: $orange_light;
+          padding: 1%;
+          color: $grey;
+          font-style: italic;
+        }
+        #cart_payment_total{
+          width: 100%;
+          display: inline-block;
+          align-self: flex-end;
+          overflow: hidden;
+          font-size: xxx-large;
+          span:first-of-type{
+            display: inline-block;
+            width: 50%;
+            text-align: center;
+            font-weight: bold;
+            padding: 2% 3%;
+            box-sizing: border-box;
+            background: $orange;
+            color: $white_light;
+            border-top: 2px solid $orange;
+          }
+          span:last-of-type{
+            display: inline-block;
+            width: 50%;
+            text-align: center;
+            padding: 2% 3%;
+            background: transparent;
+            color: $grey_dark;
+            box-sizing: border-box;
+            border-top: 2px solid;
+            border-image-source: $grandient_orangeToFade;
+            border-image-slice: 1;
+          }
+        }
         p{
           font-size: x-large;
           text-align: center;
@@ -252,10 +301,12 @@
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
+        background: $grandient_whiteToLight;
         h2{
           margin: 1%;
         }
         #cart_payment_buttons{
+          position: relative;
           width: 100%;
           display: flex;
           flex-direction: column;
@@ -263,19 +314,25 @@
           align-items: center;
           a{
             text-decoration: none;
+            text-transform: uppercase;
             font-size: x-large;
-            padding: 1% 2%;
+            padding: 3% 2%;
             box-sizing: border-box;
-            border: 1px solid $grey_dark;
+            border: 1px solid $white_light;
             border-radius: 12px;
             color: $grey_dark;
             background: $white;
             transition: all 0.3s;
             margin: 1% 0;
+            width: 65%;
+            text-align: center;
+            box-shadow: 0 0 3px 2px $grey_light_transparent;
             &:hover{
-              background: $orange;
-              border: 1px solid $orange;
-              transition: all 0.3s ease-in;
+              transform: scale(1.1);
+              background: $orange_light;
+              border: 1px solid $orange_light;
+              color: $grey_dark;
+              transition: background 0.3s ease-in, color 0.3s ease-in, border 0.3s ease-in, transform 0.2s;
             }
           }
         }

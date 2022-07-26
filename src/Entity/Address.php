@@ -17,7 +17,6 @@ class Address
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: "addresses")]
     #[ORM\JoinColumn(nullable: true, onDelete: "set null")]
-    #[Assert\NotBlank(message: "Le champ 'customer' est obligatoire.")]
     private ?User $customer;
 
     #[ORM\Column(type: "string", length: 155)]

@@ -10,7 +10,7 @@
         </div>
 
         {% for flashMessage in app.session.flashbag.get('warning') %}
-            <div class="warning">{{ flashMessage }}</div>
+            <div class="warning">{{ flashMessage|nl2br }}</div>
         {% endfor %}
 
         {% if errors %}

@@ -91,12 +91,16 @@
                 <div id="product_buy">
                     <div id="product_buy_group">
                         <p>{{ product.price|number_format(2, '.', ',') }} €</p>
-                        <span id="product_buy_selector">
-                            <button id="{{ product.id }}_buy_minus" class="buy_minus" disabled>-</button>
-                            <span id="{{ product.id }}_buy_counter" class="buy_counter">1</span>
-                            <button id="{{ product.id }}_buy_plus" class="buy_plus">+</button>
-                        </span>
-                        <button id="{{ product.id }}_add2cart" class="btn-cart_add"><i class="fa-solid fa-cart-arrow-down"></i></button>
+                        {% if product.stock > 0 %}
+                            <span id="product_buy_selector">
+                                <button id="{{ product.id }}_buy_minus" class="buy_minus" disabled>-</button>
+                                <span id="{{ product.id }}_buy_counter" class="buy_counter">1</span>
+                                <button id="{{ product.id }}_buy_plus" class="buy_plus">+</button>
+                            </span>
+                            <button id="{{ product.id }}_add2cart" class="btn-cart_add"><i class="fa-solid fa-cart-arrow-down"></i></button>
+                        {% else %}
+                            <em style="font-size: medium; color: gray">Produit épuisé</em>
+                        {% endif %}
                     </div>
                 </div>
             </div>
