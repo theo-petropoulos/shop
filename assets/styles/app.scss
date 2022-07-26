@@ -9,6 +9,9 @@
 // Import user
 @use 'user/user';
 
+// Import visitor
+@use 'visitor/visitor';
+
 // Import admin
 @use 'admin/admin';
 
@@ -409,6 +412,13 @@ form{
       }
     }
   }
+}
+
+.divider-70{
+  width: 70%;
+  height: 2px;
+  justify-self: center;
+  background: $grey_transparent;
 }
 
 @media screen and (max-width:499px){

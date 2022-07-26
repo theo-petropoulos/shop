@@ -120,6 +120,8 @@
         color: $grey_dark;
         transition: all 0.2s;
         text-decoration: none;
+        width: max(23%, 250px);
+        text-align: center;
         &:hover{
           color: $grey;
           &+ img{
@@ -131,6 +133,18 @@
       &:hover{
         border: 1px solid $yellow;
       }
+    }
+  }
+}
+
+@media screen and (max-width:499px) {
+  #home_left_img{
+    #home_left_conditions{
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: $gradient_yellow_blue;
+      color: $grey;
     }
   }
 }

@@ -4,8 +4,9 @@
 
 {% block body %}
     {% for flashMessage in app.session.flashbag.get('success') %}
-        <div class="success">{{ flashMessage }}</div>
+        <div class="success">{{ flashMessage|nl2br }}</div>
     {% endfor %}
+
     <main id="home">
         <section id="home_left_section">
             <div id="home_left_title">

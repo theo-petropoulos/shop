@@ -27,6 +27,8 @@ $yellow_transparent       : rgba(255, 225, 95, 0.50);
 
 $gradient_yellow_blue     : linear-gradient(90deg, $orange_light 0%, $blue_light 100%);
 $grandient_greyToLight    : linear-gradient(45deg, rgba(50,50,50,1) 0%, rgba(115,115,115,1) 100%);
+$grandient_whiteToLight   : linear-gradient(45deg, $white_light 0%, $white 100%);
+$grandient_orangeToFade   : linear-gradient(45deg, $orange 0%, rgba(240, 95, 0, 0) 100%);
 
 @mixin login-register{
   font-family: $font;
@@ -305,12 +307,11 @@ $grandient_greyToLight    : linear-gradient(45deg, rgba(50,50,50,1) 0%, rgba(115
   }
 }
 
-@mixin standard-h2-bordered{
-  font-size: calc(14px + 2vw);
+@mixin standard-h2-title{
+  font-size: calc(14px + 1.6vw);
   padding: 1% 2%;
   margin-top: 1%;
-  color: $orange;
-  border: 1px solid $orange;
+  color: $white_light;
 }
 
 @mixin clamped-lines-2{

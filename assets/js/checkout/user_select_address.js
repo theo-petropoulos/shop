@@ -1,11 +1,7 @@
 $(document).on('click', '.select_checkout_address', function () {
-    $('.select_checkout_address').removeClass('address-selected').css({
-        background: 'initial'
-    }).text('Sélectionner')
+    $('.select_checkout_address').removeClass('address-selected').text('Sélectionner')
 
-    $(this).addClass('address-selected').css({
-        background: 'rgb(230, 255, 175)'
-    }).text('Sélectionné')
+    $(this).addClass('address-selected').text('Sélectionné')
 })
 
 $(document).on('submit', '#checkout_form_stripe', function (e) {
