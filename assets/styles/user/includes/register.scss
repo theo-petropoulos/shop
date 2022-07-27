@@ -3,15 +3,15 @@
 #inscription{
   @include login-register;
   form{
-    border:1px solid $grey_dark;
-    padding:2%;
-    display:flex;
+    border: 1px solid $grey_dark;
+    padding: 2%;
+    display: flex;
     flex-direction: column;
-    position:relative;
+    position: relative;
     align-items: center;
     justify-content: center;
-    width:50%;
-    margin:2%;
+    width: 50%;
+    margin: 2%;
     #registration_form{
       width: 100%;
       position: relative;

@@ -83,6 +83,7 @@ form{
   padding: 1.5%;
   animation: disappear 0.5s ease-in 3s forwards;
   transition: opacity 0.4s;
+  box-shadow: 0 0 4px 3px $grey_dark_transparent;
   &.warning {
     color: $grey_dark;
     background: $orange_light;
@@ -177,15 +178,22 @@ form{
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   border: 1px solid $red;
+  border-radius: 8px;
+  margin: 1%;
   padding: 1%;
-  background: $white;
-  color: $red;
+  background: $grey_light;
+  color: darkred;
+  box-shadow: 3px 3px 4px 2px $grey_dark_transparent;
+  i{
+    font-size: xx-small;
+  }
 }
 
 .required{
   color: $red;
+  font-weight: bold;
 }
 
 .current_admin{
@@ -419,6 +427,10 @@ form{
   height: 2px;
   justify-self: center;
   background: $grey_transparent;
+}
+
+.swal2-container.swal2-center.swal2-backdrop-show{
+  position: fixed !important;
 }
 
 @media screen and (max-width:499px){
