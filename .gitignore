@@ -14,14 +14,6 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
-###> phpunit/phpunit ###
-/phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###
-<<<<<<< HEAD
-
-/.idea/
-=======
 /.idea
 >>>>>>> 06b225370a4fd8bc02a6a8a773b3a0e0cd142cc2
 
@@ -31,3 +23,7 @@
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+###> Testing Controller ###
+/src/Controller/TestController.php
+###< Testing Controller ###

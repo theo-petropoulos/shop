@@ -7,11 +7,11 @@
         <h2>Carnet d'adresses</h2>
 
         {% for flashMessage in app.session.flashbag.get('success') %}
-            <div class="success">{{ flashMessage }}</div>
+            <div class="success">{{ flashMessage|nl2br }}</div>
         {% endfor %}
 
         {% for flashMessage in app.session.flashbag.get('failure') %}
-            <div class="failure">{{ flashMessage }}</div>
+            <div class="failure">{{ flashMessage|nl2br }}</div>
         {% endfor %}
 
         <section id="registered_addresses">
@@ -20,7 +20,9 @@
                     <div class="address_container" id="address_{{ address.id }}">
                         <span class="modal_buttons">
                             <button href="{{ path('user_edit_address', {id: address.id}) }}" class="edit_address"><i class="fa fa-solid fa-pen"></i></button>
-                            <button href="{{ path('user_delete_address', {id: address.id}) }}" class="delete_address"><i class="fa fa-solid fa-trash"></i></button>
+                            <button href="{{ path('user_delete_address', {id: address.id}) }}" class="delete_address"
+                            {% if not address.isDeletable %} disabled title="Au moins un achat est associé à cette adresse, vous ne pouvez pas la supprimer."{% endif %}
+                            ><i class="fa fa-solid fa-trash"></i></button>
                         </span>
                         <p class="str">{{ address.lastName }} {{ address.firstName }}</p>
                         <p>{{ address.streetNumber ~ " " ~ address.streetName }}</p>
@@ -35,7 +37,7 @@
                 {% endif %}
             </section>
 
-        <form action="{{ path('user_checkout') }}" method="POST" id="checkout_form_stripe">
+        <form style="background: unset !important; box-shadow: unset;" action="{{ path('user_checkout') }}" method="POST" id="checkout_form_stripe">
             <button type="submit">Paiement</button>
         </form>
 
@@ -43,15 +45,15 @@
             <div class="form-errors">
                 {% for error in errors %}
                     <div class="form-error">
-                        {{ error }}
+                        <i class="fa-solid fa-square"></i> {{ error }}
                     </div>
                 {% endfor %}
             </div>
         {% endif %}
 
         {{ form_start(form, {'action': path('user_checkout_set_address')}) }}
-        {{ form_widget(form, {'attr': {'class': 'user_add_address'}}) }}
-        <input type="submit" value="Ajouter">
+            {{ form_widget(form, {'attr': {'class': 'user_add_address'}}) }}
+            <input type="submit" value="Ajouter">
         {{ form_end(form) }}
 
         <a class="back-btn" href="{{ path('show_cart') }}">Retour</a>

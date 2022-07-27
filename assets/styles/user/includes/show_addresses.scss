@@ -10,30 +10,31 @@
   background-color: $grey !important;
   color: $white_light;
   h2{
-    @include standard-h2-bordered;
-  }
-  a{
-    text-decoration: none;
-    padding: 1% 2%;
-    border: 1px solid $orange;
-    background: $grey_dark;
-    color: $orange;
-    margin:calc(max(2%, 20px));
-    &:hover{
-      background: $grey;
-      color: $orange_light;
-      transition: all 0.3s;
-    }
+    @include standard-h2-title;
   }
   @include standard-form;
   form[name="add_address"]{
     border: 1px solid $orange;
   }
+  #checkout_form_stripe{
+    button{
+      color: $grey_dark;
+      border: none;
+      border-radius: 8px;
+      background: $orange;
+      transition: all 0.2s;
+      &:hover{
+        transform: scale(1.1);
+        background: $orange_light;
+        transition: all 0.3s ease-out;
+      }
+    }
+  }
   #registered_addresses{
     display:flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     width:90%;
     position:relative;
     div{
@@ -46,7 +47,7 @@
       border-radius: 8px;
       margin: 2%;
       padding: 1% 2%;
-      background: $grey_dark;
+      background: $grandient_greyToLight;
       transition: all 0.2s;
       &:hover{
         border: 1px solid $yellow;

@@ -26,10 +26,11 @@
       }
       a{
         text-decoration: none;
-        background:rgb(195, 195, 195);
-        color:black;
-        padding:1% 2%;
-        margin:calc(max(1%, 10px));
+        background: $grey_light;
+        color: $grey_dark;
+        padding: max(0.5%, 4px);
+        margin: calc(max(1%, 10px));
+        border-radius: 8px;
         &:hover{
           background:grey;
           transition: all 0.3s;

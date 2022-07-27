@@ -6,16 +6,16 @@
     <main id="admin_alt">
 
         {% for flashMessage in app.session.flashbag.get('success') %}
-            <div class="success">{{ flashMessage }}</div>
+            <div class="success">{{ flashMessage|nl2br }}</div>
         {% endfor %}
 
         {% for flashMessage in app.session.flashbag.get('failure') %}
-            <div class="failure">{{ flashMessage }}</div>
+            <div class="failure">{{ flashMessage|nl2br }}</div>
         {% endfor %}
 
         <div id="admins">
             {# Affiche les admins #}
-            <details id="admin_det">
+            <details id="admin_det" open>
                 <summary>Afficher les administrateurs</summary>
                 {% if admins is not empty %}
                     {% for admin in admins %}
@@ -23,7 +23,6 @@
                             <div id="{{ admin.id }}_email" class="email">
                                 <h3>Email :</h3>
                                 <p>{{ admin.email }}</p>
-                                <button class="adm_modify_button">Modifier</button>
                             </div>
                             <div id="{{ admin.id }}_lastname" class="lastname">
                                 <h3>Nom :</h3>
@@ -39,19 +38,22 @@
                                 <h3>Statut :</h3>
                                 <button class="adm_modify_button">{{ admin.isVerified ? 'Désactiver' : 'Activer' }}</button>
                             </div>
-                            <span>
-                                <a href="{{ path('admin_delete_admin', {id: admin.id}) }}" id="{{ admin.id }}_delete" class="delete_admin_btn">
-                                    Supprimer le compte
-                                </a>
-                                <a href="{{ path('admin_edit_admin_password', {id: admin.id}) }}" id="{{ admin.id }}_edit_admin_password" class="edit_admin_password open-modal">
+                            <span style="width: 20%;">
+                                {% if is_granted('ROLE_SUPER_ADMIN') or admin == currAdmin %}
+                                    <a href="{{ path('admin_delete_admin', {id: admin.id}) }}" id="{{ admin.id }}_delete" class="delete_admin_btn">
+                                        Supprimer le compte
+                                    </a>
+                                {% endif %}
+                                <a href="{{ path('admin_edit_admin_password', {id: admin.id}) }}" id="{{ admin.id }}_edit_admin_password" class="edit_admin_password">
                                     {% if is_granted('ROLE_SUPER_ADMIN') or admin == currAdmin %}
-                                        Modifier le mot de passe
+                                        {# Modifier le mot de passe #}Réintialiser le mot de passe
                                     {% else %}
                                         Réintialiser le mot de passe
                                     {% endif %}
                                 </a>
                             </span>
                         </div>
+                        <span class="divider-70_light"></span>
                     {% endfor %}
                 {% endif %}
             </details>

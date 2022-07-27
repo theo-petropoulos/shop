@@ -6,7 +6,6 @@ use App\Entity\Author;
 use App\Entity\Discount;
 use App\Entity\Image;
 use App\Entity\Product;
-use App\Errors\ErrorFormatter;
 use App\Exceptions\InvalidSizeException;
 use App\Form\Admin\AddAdminType;
 use App\Form\Admin\AddAuthorType;
@@ -14,8 +13,11 @@ use App\Form\Admin\AddDiscountType;
 use App\Form\Admin\AddProductType;
 use App\Form\ModifyPasswordType;
 use App\QueryBuilder\AdminSearch;
+use App\Repository\AddressRepository;
 use App\Repository\AuthorRepository;
 use App\Repository\DiscountRepository;
+use App\Repository\IPRepository;
+use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
@@ -73,13 +75,13 @@ class AdminController extends AbstractController
     #[Route(path: '/admin/customers', name: 'admin_show_customers')]
     public function adminShowCustomers(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $users      = $entityManager->getRepository(User::class)->findAll();
-        foreach ($users as $k => $user)
-            if (in_array('ROLE_ADMIN', $user->getRoles()))
-                unset($users[$k]);
+        $customers      = $entityManager->getRepository(User::class)->findAll();
+        foreach ($customers as $k => $customer)
+            if (in_array('ROLE_ADMIN', $customer->getRoles()))
+                unset($customers[$k]);
 
-        return $this->render('admin/includes/show_customers.html.twig', [
-            'users'         => $users,
+        return $this->render('admin/includes/customers/show_customers.html.twig', [
+            'customers'         => $customers,
         ]);
     }
 
@@ -93,7 +95,7 @@ class AdminController extends AbstractController
         $discounts  = $discountRepository->findBy([], ['startingDate' => 'ASC']);
 
         return $this->render('admin/includes/products/show_products.html.twig', [
-            'authors'        => $authors,
+            'authors'       => $authors,
             'products'      => $products,
             'discounts'     => $discounts
         ]);
@@ -156,8 +158,8 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted())
         {
-            if ($form->isValid()) {
-
+            if ($form->isValid())
+            {
                 switch ($entity) {
                     case 'author':
                         $this->em->persist($item);
@@ -242,11 +244,11 @@ class AdminController extends AbstractController
     #[Route(path: '/admin/products/fetch', name: 'admin_fetch_products')]
     public function adminFetchProductsByAuthor(Request $request, ProductRepository $productRepository, AuthorRepository $authorRepository): Response
     {
-        $authorId    = $request->get('author');
+        $authorId   = $request->get('author');
         $return     = [];
 
         if ($authorId !== '999999') {
-            $author      = $authorRepository->findOneBy(['id' => $authorId]);
+            $author     = $authorRepository->findOneBy(['id' => $authorId]);
             $products   = $productRepository->findBy(['author' => $author]);
         }
         else {
@@ -265,7 +267,7 @@ class AdminController extends AbstractController
     #[Route(path: '/admin/authors/fetch', name: 'admin_fetch_authors', methods: ['GET'])]
     public function adminFetchAuthors(AuthorRepository $authorRepository): JsonResponse
     {
-        $authors             = $authorRepository->findAll();
+        $authors            = $authorRepository->findAll();
         $arrayCollection    = [];
 
         foreach ($authors as $author) {
@@ -286,7 +288,7 @@ class AdminController extends AbstractController
     # Edition d'un produit
     #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
     #[Route(path: '/admin/products/edit', name: 'admin_edit_item')]
-    public function adminEditItem(Request $request, AuthorRepository $authorRepository, ProductRepository $productRepository, DiscountRepository $discountRepository): JsonResponse
+    public function adminEditItem(Request $request, AuthorRepository $authorRepository, ProductRepository $productRepository, DiscountRepository $discountRepository, OrderRepository $orderRepository, AddressRepository $addressRepository, IPRepository $IPRepository, UserRepository $userRepository): JsonResponse
     {
         $entity     = $request->get('entity');
         $id         = $request->get('id');
@@ -438,32 +440,55 @@ class AdminController extends AbstractController
     #[Route(path: '/admin/admins/edit/{id}/password', name: 'admin_edit_admin_password')]
     public function adminEditAdminPassword(Request $request, User $admin, UserPasswordHasherInterface $userPasswordHasher): Response
     {
-        if ($this->isGranted('ROLE_SUPER_ADMIN') || $admin === $this->security->getUser()) {
-            $sortedErrors   = [];
+        /* if (($this->isGranted('ROLE_SUPER_ADMIN') || $admin === $this->security->getUser()) { */
+        if (false) {
+            $errors = [];
             /** @var Form $form */
-            $form           = $this->createForm(ModifyPasswordType::class, $admin);
+            $form   = $this->createForm(ModifyPasswordType::class, $admin, [
+                'isAdminEdit'   => true,
+                'adminRoute'    => $this->generateUrl('admin_edit_admin_password', [
+                    'id'    => $admin->getId()
+                ])
+            ]);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted())
+            {
+                if ($form->isValid()) {
+                    $oldPassword = $form->get('old_password')->getData();
+
+                    if ($userPasswordHasher->isPasswordValid($admin, $oldPassword)) {
+                        $hashedPassword = $userPasswordHasher->hashPassword(
+                            $admin,
+                            $form->get('password')->getData()
+                        );
+                        $admin->setPassword($hashedPassword);
+
+                        $this->em->flush();
+
+                        $this->addFlash('success', 'Le mot de passe a été modifié avec succès.');
+                    }
+                    else
+                        $this->addFlash('failure', 'Votre ancien mot de passe ne correspond pas avec ce que vous avez saisi.');
+
+                }
+                else {
+                    foreach ($form->getErrors(true) as $key => $error)
+                        $errors[$key] = $error->getMessage();
+
+                    $form->clearErrors(true);
+                }
+
+                return $this->redirectToRoute('admin_show_admins', [], 307);
+            }
 
             return $this->renderForm('admin/includes/admins/_modal_edit_password.html.twig', [
-                'form'          => $form,
-                'sortedErrors'  => $sortedErrors
+                'form'      => $form,
+                'errors'    => $errors
             ]);
         }
-        else {
-            $extraParams = ['id' => $admin->getId()];
-            $this->emailVerifier->sendEmailConfirmation(
-                'user_reset_password',
-                $admin,
-                (new TemplatedEmail())
-                    ->from(new Address('okko.network@gmail.com', 'Stripe Shop'))
-                    ->to($admin->getEmail())
-                    ->subject('Réinitialisation du mot de passe')
-                    ->htmlTemplate('email/login/confirmation_ip.html.twig'),
-                $extraParams
-            );
-
-            $this->addFlash('success', 'Un email de réinitialisation du mot de passe vient d\'être envoyé.');
-            return new RedirectResponse($this->generateUrl('admin_show_admins'));
-        }
+        else
+            return $this->redirectToRoute('forgot_password_request');
     }
 
     # Suppression d'un administrateur
@@ -477,4 +502,30 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_show_admins');
     }
 
+    # Affichage des commandes d'un utilisateur
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/customers/{id}/orders', name: 'admin_show_customer_orders')]
+    public function adminShowCustomerOrders(Request $request, User $customer): RedirectResponse
+    {
+        dd('ici');
+        return $this->redirectToRoute('admin_show_admins');
+    }
+
+    # Affichage des adresses postales d'un utilisateur
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/customers/{id}/addresses', name: 'admin_show_customer_addresses')]
+    public function adminShowCustomerAddresses(Request $request, User $customer): RedirectResponse
+    {
+        dd('ici');
+        return $this->redirectToRoute('admin_show_admins');
+    }
+
+    # Affichage des adresses IP d'un utilisateur
+    #[IsGranted('ROLE_ADMIN', null, 'Vous ne pouvez pas accéder à cette page', 403)]
+    #[Route(path: '/admin/customers/{id}/ips', name: 'admin_show_customer_ips')]
+    public function adminShowCustomerIPs(Request $request, User $customer): RedirectResponse
+    {
+        dd('ici');
+        return $this->redirectToRoute('admin_show_admins');
+    }
 }

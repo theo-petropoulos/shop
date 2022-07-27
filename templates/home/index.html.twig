@@ -4,8 +4,9 @@
 
 {% block body %}
     {% for flashMessage in app.session.flashbag.get('success') %}
-        <div class="success">{{ flashMessage }}</div>
+        <div class="success">{{ flashMessage|nl2br }}</div>
     {% endfor %}
+
     <main id="home">
         <section id="home_left_section">
             <div id="home_left_title">
@@ -27,13 +28,29 @@
                     <li>> Artistes renommés</li>
                     <li>> Paiement sécurisé</li>
                 </ul>
-            </div>
-            <div id="home_left_conditions">
-                *Livraison offerte en point relais et à domicile pour tous les articles vendus et expédiés par MinimalSHOP à destination de la France Métropolitaine.
+                <small id="home_left_conditions">
+                    * Livraison offerte en point relais et à domicile pour tous les articles vendus et expédiés par MinimalSHOP à destination de la France Métropolitaine.
+                </small>
             </div>
         </section>
         <section id="home_right_section">
-            A remplir
+            <article class="home_right_article_container" id="home_right_author_article">
+                {% set imageName    = author.getLastProduct.Images[0].name|default %}
+                <a href="{{ path('show_author', {id: author.id}) }}">Découvrir {{ author.name }}</a>
+                <img src="{{ asset('images/products/' ~ author.id ~ '/' ~ imageName) }}" alt="Image de l'artiste {{ author.name }}">
+            </article>
+            <article class="home_right_article_container" id="home_right_product_article">
+                {% set currAuthor   = product.author %}
+                {% set imageName    = product.Images[0].name|default %}
+                <a href="{{ path('show_author', {id: currAuthor.id}) }}">Découvrir {{ currAuthor.name }}</a>
+                <img src="{{ asset('images/products/' ~ currAuthor.id ~ '/' ~ imageName|default) }}" alt="Image de l'artiste {{ currAuthor.name }}">
+            </article>
+            <article class="home_right_article_container" id="home_right_sold_article">
+                {% set currAuthor   = lastSoldProduct.author %}
+                {% set imageName    = lastSoldProduct.Images[0].name|default %}
+                <a href="{{ path('show_author', {id: currAuthor.id}) }}">Découvrir {{ currAuthor.name }}</a>
+                <img src="{{ asset('images/products/' ~ currAuthor.id ~ '/' ~ imageName|default) }}" alt="Image de l'artiste {{ currAuthor.name }}">
+            </article>
         </section>
     </main>
 {% endblock body %}

@@ -69,7 +69,7 @@
                             {% set total = 0 %}
                             {% for detail in order.details %}
                                 {% set total = total + detail.total %}
-                                {{ detail.quantity }} * {{ detail.product.name }} - {{ detail.total|number_format(2) }}<br>
+                                {{ detail.quantity }} * {{ detail.product.name }} - {{ detail.total|number_format(2) }} €<br>
                             {% endfor %}
                             Montant total : {{ total|number_format(2) }}<br><br>
 

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}RÉINITIALISATION DU MOT DE PASSE{% endblock %}
+
+{% block body %}
+    <main id="check_email">
+        <div id="header_check_email">
+            <h3>E-mail envoyé !</h3>
+        </div>
+        <div id="text_check_email">
+            <p>
+                Si un compte existant est associé à cette adresse, un e-mail de confirmation vient d'être envoyé et vous pouvez suivre les instructions pour réinitialiser votre mot de passe.
+                Le lien contenu dans ce mail expirera dans {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+            </p>
+            <p>
+                Si vous ne recevez pas de mail, veuillez vérifier le dossier Spam de votre messagerie électronique, sinon <a href="{{ path('forgot_password_request') }}">réessayer</a>.
+                Si le problème persiste, veuillez contacter le support à l'adresse <a href="mailto:support@minimalshop.com">support@minimalshop.com</a>.
+            </p>
+        </div>
+    </main>
+{% endblock %}

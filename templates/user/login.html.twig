@@ -7,23 +7,25 @@
         <div id="connexion_header">
             <h3>CONNEXION</h3>
             <h4>Vous n'êtes pas encore inscrit ? <a href="{{ path('user_register') }}">INSCRIPTION</a></h4>
+            <a href="{{ path('forgot_password_request') }}">Mot de passe oublié ?</a>
         </div>
+        {% set flashWarning = app.session.flashbag.get('warning') %}
+
+        {% if error|default and flashWarning is empty %}
+            <div class="failure">{{ "connexion.error"|trans({}, 'messages') }}</div>
+        {% endif %}
 
         {% for flashMessage in app.session.flashbag.get('success') %}
-            <div class="success">{{ flashMessage }}</div>
+            <div class="success">{{ flashMessage|nl2br }}</div>
         {% endfor %}
 
-        {% for flashMessage in app.session.flashbag.get('warning') %}
-            <div class="warning">{{ flashMessage }}</div>
+        {% for flashMessage in flashWarning %}
+            <div class="warning">{{ flashMessage|nl2br }}</div>
         {% endfor %}
 
         {% for flashMessage in app.session.flashbag.get('failure') %}
-            <div class="failure">{{ flashMessage }}</div>
+            <div class="failure">{{ flashMessage|nl2br }}</div>
         {% endfor %}
-
-        {% if error is defined and error %}
-            <div class="failure">{{ "connexion.error"|trans({}, 'messages') }}</div>
-        {% endif %}
 
         <form method="post">
             <label for="inputEmail">Adresse mail</label>

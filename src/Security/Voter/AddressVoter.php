@@ -42,7 +42,6 @@ class AddressVoter extends Voter
     }
 
     # Check if an Address belongs to an User
-    #[Pure]
     protected function isOwner(User $user, Address $address): bool
     {
         return $address->getCustomer() === $user;

@@ -9,6 +9,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    min-height: max-content;
     width: 35%;
     min-width: 250px;
     flex-grow: 1;
@@ -42,7 +43,9 @@
       text-align: center;
     }
     #home_left_img{
-      height: 40%;
+      display: flex;
+      flex-direction: row;
+      height: 60%;
       position: relative;
       img{
         position: relative;
@@ -61,7 +64,7 @@
         li{
           padding: 2% 4%;
           list-style-type: none;
-          background: linear-gradient(90deg, $orange_light 0%, $blue_light 100%);
+          background: $gradient_yellow_blue;
           margin: max(8px, 1vh);
           box-shadow: -2px 2px 3px 2px $grey_dark_transparent;
           &:hover{
@@ -70,21 +73,79 @@
           }
         }
       }
-    }
-    #home_left_conditions{
-      margin-top: 10%;
-      color: $grey_light_transparent;
-      font-size: small;
-      align-self: flex-end;
-      text-align: center;
-      padding: 1% 2%;
+      #home_left_conditions{
+        padding: 1% 2%;
+        align-self: flex-end;
+        color: $grey_light;
+      }
     }
   }
 
   #home_right_section{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
     width: 65%;
     min-width: 350px;
+    height: 100%;
     flex-grow: 1;
+    article{
+      display: flex;
+      align-items: center;
+      position: relative;
+      height: 30%;
+      width: 95%;
+      border-radius: 8px;
+      border: 1px solid $white_light;
+      box-shadow: 3px 3px 6px 3px $grey_dark_transparent;
+      overflow: hidden;
+      img{
+        width: 100%;
+        object-fit: contain;
+        transition: all 0.2s;
+      }
+      a{
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        right: 0;
+        padding: 1% 2%;
+        background: $gradient_yellow_blue;
+        border-bottom-left-radius: 8px;
+        box-shadow: -3px 3px 4px 3px $grey_dark_transparent;
+        font-family: $font;
+        font-weight: bold;
+        color: $grey_dark;
+        transition: all 0.2s;
+        text-decoration: none;
+        width: max(23%, 250px);
+        text-align: center;
+        &:hover{
+          color: $grey;
+          &+ img{
+            transform: scale(1.2);
+            transition: all 0.3s;
+          }
+        }
+      }
+      &:hover{
+        border: 1px solid $yellow;
+      }
+    }
+  }
+}
+
+@media screen and (max-width:499px) {
+  #home_left_img{
+    #home_left_conditions{
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: $gradient_yellow_blue;
+      color: $grey;
+    }
   }
 }
 

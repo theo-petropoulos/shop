@@ -33,7 +33,7 @@ class RegistrationFormType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'label'             => 'Adresse mail',
-                'required'          => true,
+                'required'          => true
             ])
             ->add('phone', TextType::class, [
                 'label'             => 'Téléphone',

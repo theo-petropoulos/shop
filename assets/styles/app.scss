@@ -3,10 +3,14 @@
 // Import globals
 @use 'globals/header';
 @use 'globals/footer';
+@use 'globals/search';
 @use '_modal';
 
 // Import user
 @use 'user/user';
+
+// Import visitor
+@use 'visitor/visitor';
 
 // Import admin
 @use 'admin/admin';
@@ -54,6 +58,16 @@ main{
   color: $white_light;
 }
 
+form{
+  border: 1px solid $orange !important;
+  background: $grey_shade !important;
+  border-radius: 8px !important;
+  transition: all 0.2s !important;
+  &:hover{
+    border: 1px solid $orange_light !important;
+  }
+}
+
 // Specific rules
 .success, .failure, .warning{
   text-align: center;
@@ -69,6 +83,7 @@ main{
   padding: 1.5%;
   animation: disappear 0.5s ease-in 3s forwards;
   transition: opacity 0.4s;
+  box-shadow: 0 0 4px 3px $grey_dark_transparent;
   &.warning {
     color: $grey_dark;
     background: $orange_light;
@@ -163,15 +178,22 @@ main{
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   border: 1px solid $red;
+  border-radius: 8px;
+  margin: 1%;
   padding: 1%;
-  background: $white;
-  color: $red;
+  background: $grey_light;
+  color: darkred;
+  box-shadow: 3px 3px 4px 2px $grey_dark_transparent;
+  i{
+    font-size: xx-small;
+  }
 }
 
 .required{
   color: $red;
+  font-weight: bold;
 }
 
 .current_admin{
@@ -287,6 +309,138 @@ main{
       font-weight: bolder;
     }
   }
+}
+
+.search_item_container{
+  height:100vh;
+  width:100%;
+  position:fixed;
+  top:0;
+  background:rgba(136, 136, 136, 0.8);
+  z-index:7;
+  visibility: hidden;
+  left:0;
+  .search_item_box{
+    position: absolute;
+    height:80%;
+    width:100%;
+    bottom:-100%;
+    background: $grey_dark;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    z-index:8;
+    &#search_global_box{
+      height: 90%;
+    }
+    button{
+      background: transparent;
+      border: none;
+      width: max-content;
+      font-size: calc(18px + 1vw);
+      color: $blue_light;
+      &:hover{
+        cursor:pointer;
+        color: $white_light;
+        transition: color 0.3s;
+      }
+    }
+    input{
+      width:80%;
+      line-height: calc(20px + 1.5vw);
+      font-size: calc(22px + 1.6vw);
+      font-family: $font;
+      text-align: center;
+    }
+  }
+  .search_results_box{
+    overflow-y: auto;
+    height:auto;
+    scrollbar-color: $orange #e0e0e0;
+    scrollbar-width: thin;
+    padding:2%;
+    width:100%;
+    .div_det{
+      @include div-det;
+      div{
+        width:20%;
+        min-width: 120px;
+        flex-grow: 1;
+        display:flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        &.active, &.stock, &.price{
+          width:10%;
+          min-width:50px;
+        }
+        &.name, &.author_name, &.product_name{
+          width:15%;
+          min-width:120px;
+        }
+        button{
+          outline: 0;
+          border: 1px solid $orange_light;
+          padding: 2px 5px;
+          border-radius: unset;
+          font-family: $font;
+          background: $grey_light;
+          color: black;
+          width: max-content;
+          align-self: center;
+          font-size: initial;
+          font-weight: bold;
+          &:hover{
+            cursor: pointer;
+            background: $orange_light;
+            transition: all 0.3s;
+          }
+        }
+        p{
+          @include clamped-lines-2;
+        }
+      }
+      a{
+        width:30%;
+        flex-grow: 1;
+        text-decoration: none;
+        color: $blue_light;
+        text-align: center;
+        &:hover{
+          color:$white;
+          transition: all 0.3s;
+        }
+      }
+    }
+    &#search_results_discount{
+      .div_det{
+        div{
+          width:15%;
+        }
+      }
+    }
+  }
+}
+
+.divider-70{
+  width: 70%;
+  height: 2px;
+  justify-self: center;
+  background: $grey_transparent;
+}
+
+.divider-70_light{
+  display: block;
+  width: 70%;
+  height: 2px;
+  justify-self: center;
+  margin-left: auto;
+  margin-right: auto;
+  background: $grey_light_transparent;
+}
+
+.swal2-container.swal2-center.swal2-backdrop-show{
+  position: fixed !important;
 }
 
 @media screen and (max-width:499px){

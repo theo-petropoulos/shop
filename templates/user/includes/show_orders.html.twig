@@ -5,11 +5,11 @@
 {% block body %}
     <main id="orders">
         {% for flashMessage in app.session.flashbag.get('success') %}
-            <div class="success">{{ flashMessage|raw }}</div>
+            <div class="success">{{ flashMessage|nl2br }}</div>
         {% endfor %}
 
         {% for flashMessage in app.session.flashbag.get('failure') %}
-            <div class="failure">{{ flashMessage }}</div>
+            <div class="failure">{{ flashMessage|nl2br }}</div>
         {% endfor %}
 
         <h2>MES COMMANDES</h2>

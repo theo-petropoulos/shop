@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ADMINS | ADMINISTRATION{% endblock %}
+
+{% block body %}
+    <main id="admin_alt">
+
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="success">{{ flashMessage|nl2br }}</div>
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('failure') %}
+            <div class="failure">{{ flashMessage|nl2br }}</div>
+        {% endfor %}
+
+        {# Search triggers #}
+        <div id="adm_search_container">
+            <section id="adm_search_user">
+                <button type="submit" class="trigger_adm_search">Rechercher un client</button>
+            </section>
+            <section id="adm_search_order">
+                <button type="submit" class="trigger_adm_search">Rechercher une commande</button>
+            </section>
+            <section id="adm_search_address">
+                <button type="submit" class="trigger_adm_search">Rechercher une adresse postale</button>
+            </section>
+        </div>
+
+        <div id="customers">
+            {# Affiche les admins #}
+            <details id="customers_det" open>
+                <summary>Afficher les clients</summary>
+                {% if customers is not empty %}
+                    {% for customer in customers %}
+                        <div id="customer_{{ customer.id }}" class="div_det">
+                            <div id="{{ customer.id }}_email" class="email">
+                                <h3>Email :</h3>
+                                <p>{{ customer.email }}</p>
+                            </div>
+                            <div id="{{ customer.id }}_lastname" class="lastname">
+                                <h3>Nom :</h3>
+                                <p>{{ customer.lastName }}</p>
+                                <button class="adm_modify_button">Modifier</button>
+                            </div>
+                            <div id="{{ customer.id }}_firstname" class="firstname">
+                                <h3>Prénom :</h3>
+                                <p>{{ customer.firstName }}</p>
+                                <button class="adm_modify_button">Modifier</button>
+                            </div>
+                            <div id="{{ customer.id }}_isVerified" class="active">
+                                <h3>Statut :</h3>
+                                <button class="adm_modify_button">{{ customer.isVerified ? 'Désactiver' : 'Activer' }}</button>
+                            </div>
+                            <span style="width: 20%;">
+                                <a href="{{ path('admin_show_customer_orders', {id: customer.id}) }}" id="{{ customer.id }}_show_customer_orders" class="show_orders_by_customer edit_admin_password">
+                                    Afficher les commandes
+                                </a>
+                                <a href="{{ path('admin_show_customer_addresses', {id: customer.id}) }}" id="{{ customer.id }}_show_customer_addresses" class="show_addresses_by_customer edit_admin_password">
+                                    Afficher les adresses postales
+                                </a>
+                                <a href="{{ path('admin_show_customer_ips', {id: customer.id}) }}" id="{{ customer.id }}_show_customer_ips" class="show_ips_by_customer edit_admin_password">
+                                    Afficher les adresses IP
+                                </a>
+                            </span>
+                        </div>
+                        <span class="divider-70_light"></span>
+                    {% endfor %}
+                {% endif %}
+            </details>
+        </div>
+
+        {# Customer's search results container #}
+        <section id="search_user_container" class="search_item_container">
+            <div id="search_user_box" class="search_item_box">
+                <button id="search_user_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
+                <input type="text" name="adm_search" class="adm_search_input" id="adm_search_input_user">
+                <div class="search_results_box" id="search_results_user">
+
+                </div>
+            </div>
+        </section>
+        
+        {# Order's search results container #}
+        <section id="search_order_container" class="search_item_container">
+            <div id="search_order_box" class="search_item_box">
+                <button id="search_order_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
+                <input type="text" name="adm_search" class="adm_search_input" id="adm_search_input_order">
+                <div class="search_results_box" id="search_results_order">
+
+                </div>
+            </div>
+        </section>
+
+        {# Address' search results container #}
+        <section id="search_address_container" class="search_item_container">
+            <div id="search_address_box" class="search_item_box">
+                <button id="search_address_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
+                <input type="text" name="adm_search" class="adm_search_input" id="adm_search_input_address">
+                <div class="search_results_box" id="search_results_address">
+
+                </div>
+            </div>
+        </section>
+
+        {# IP's search results container #}
+        <section id="search_ip_container" class="search_item_container">
+            <div id="search_ip_box" class="search_item_box">
+                <button id="search_ip_close_btn" class="search_close_btn"><i class="fas fa-chevron-down"></i></button>
+                <input type="text" name="adm_search" class="adm_search_input" id="adm_search_input_ip">
+                <div class="search_results_box" id="search_results_ip">
+
+                </div>
+            </div>
+        </section>
+        
+        <a href="{{ path('admin') }}" class="back-btn">Retour</a>
+    </main>
+{% endblock body %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        window.searchPath   = "{{ path('admin_product_search') }}"
+        window.postEdit     = "{{ path('admin_edit_item') }}"
+    </script>
+
+    {# Search Bar script #}
+    {{ encore_entry_script_tags('admin_products_searchbar') }}
+    
+    {# Add Modal script #}
+    {{ encore_entry_script_tags('modal') }}
+
+    {# Dynamic Edit script #}
+    {{ encore_entry_script_tags('admin_dynamic_edit') }}
+{% endblock %}

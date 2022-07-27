@@ -6,11 +6,11 @@
     <main id="admin_alt">
 
         {% for flashMessage in app.session.flashbag.get('success') %}
-            <div class="success">{{ flashMessage }}</div>
+            <div class="success">{{ flashMessage|nl2br }}</div>
         {% endfor %}
 
         {% for flashMessage in app.session.flashbag.get('failure') %}
-            <div class="failure">{{ flashMessage }}</div>
+            <div class="failure">{{ flashMessage|nl2br }}</div>
         {% endfor %}
 
         {# Search triggers #}
@@ -201,7 +201,7 @@
 {% block javascripts %}
     <script type="text/javascript">
         window.searchPath   = "{{ path('admin_product_search') }}"
-        window.fetchAuthors  = "{{ path('admin_fetch_authors') }}"
+        window.fetchAuthors = "{{ path('admin_fetch_authors') }}"
         window.postEdit     = "{{ path('admin_edit_item') }}"
     </script>
 

@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Address;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\AbstractType;
@@ -13,6 +14,16 @@ class AddAddressType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if ($options['isVisitor'] ?? null)
+            $builder->add('email', EmailType::class, [
+                'label'     => 'E-mail',
+                'required'  => true,
+                'mapped'    => false,
+                'attr'      => [
+                    'maxlength' => 155
+                ]
+            ]);
+
         $builder
             ->add('lastName', TextType::class, [
                 'label'     => 'Nom',
@@ -71,7 +82,8 @@ class AddAddressType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Address::class,
+            'data_class'    => Address::class,
+            'isVisitor'     => false
         ]);
     }
 }

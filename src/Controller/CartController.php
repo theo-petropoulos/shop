@@ -45,6 +45,7 @@ class CartController extends AbstractController
             'cart'          => $cart->getCart(),
             'trendings'     => $trendings,
             'totalPrice'    => $cart->getTotalPrice(),
+            'sumProducts'   => $cart->getItemCount(),
             'user'          => $user
         ]);
     }
