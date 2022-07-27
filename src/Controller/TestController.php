@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Address;
 use App\Entity\User;
+use App\QueryBuilder\AdminSearch;
 use App\Repository\AddressRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
@@ -22,10 +23,14 @@ class TestController extends AbstractController
     #[Route(path: '/tests', name: 'tests')]
     public function testIndex(Request $request, UserRepository $userRepository, AddressRepository $addressRepository, ProductRepository $productRepository): Response
     {
-        $search             = 'cr';
+        $search             = 'to';
 
+        $qb         = $this->entityManager->createQueryBuilder();
+        $qbSearch   = new AdminSearch($qb, 'user', $search);
         $searchedProducts   = $productRepository->searchProducts($search);
-        dd($searchedProducts);
-        return new JsonResponse(json_encode($searchedProducts));
+
+        $results    = $qbSearch->getResults();
+
+        dd($results);
     }
 }

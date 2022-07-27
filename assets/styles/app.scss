@@ -429,6 +429,16 @@ form{
   background: $grey_transparent;
 }
 
+.divider-70_light{
+  display: block;
+  width: 70%;
+  height: 2px;
+  justify-self: center;
+  margin-left: auto;
+  margin-right: auto;
+  background: $grey_light_transparent;
+}
+
 .swal2-container.swal2-center.swal2-backdrop-show{
   position: fixed !important;
 }
