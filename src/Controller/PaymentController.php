@@ -45,23 +45,35 @@ class PaymentController extends AbstractController
         if ($this->isGranted('ROLE_USER'))
             return $this->redirectToRoute('user_checkout_set_address');
 
+        $errors     = [];
         $address    = new Address();
+        /** @var Form $form */
         $form       = $this->createForm(AddAddressType::class, $address, [
             'isVisitor' => true
         ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->persist($address);
-            $this->em->flush();
+        if ($form->isSubmitted())
+        {
+            if ($form->isValid()) {
+                $this->em->persist($address);
+                $this->em->flush();
 
-            return $this->redirectToRoute('guest_checkout', [
-                'id' => $address->getId()
-            ], 307);
+                return $this->redirectToRoute('guest_checkout', [
+                    'id' => $address->getId()
+                ], 307);
+            }
+            else {
+                foreach ($form->getErrors(true) as $key => $error)
+                    $errors[$key] = $error->getMessage();
+
+                $form->clearErrors(true);
+            }
         }
 
         return $this->renderForm('visitor/address.html.twig', [
-            'form'  => $form
+            'form'      => $form,
+            'errors'    => $errors
         ]);
     }
 

@@ -12,19 +12,6 @@
   h2{
     @include standard-h2-title;
   }
-  a{
-    text-decoration: none;
-    padding: 1% 2%;
-    border: 1px solid $orange;
-    background: $grey_dark;
-    color: $orange;
-    margin:calc(max(2%, 20px));
-    &:hover{
-      background: $grey;
-      color: $orange_light;
-      transition: all 0.3s;
-    }
-  }
   @include standard-form;
   form[name="add_address"]{
     border: 1px solid $orange;
@@ -47,7 +34,7 @@
     display:flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: flex-start;
     width:90%;
     position:relative;
     div{

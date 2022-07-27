@@ -7,6 +7,16 @@
         <h3>Saisissez votre adresse de livraison</h3>
 
         <section id="visitor_address_container">
+            {% if errors|default %}
+                <div class="form-errors">
+                    {% for error in errors %}
+                        <div class="form-error">
+                            <i class="fa-solid fa-square"></i> {{ error }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             {{ form_start(form) }}
                 {{ form_errors(form) }}
                 {{ form_widget(form, {'attr': {'class': 'user_add_address'}}) }}
@@ -15,6 +25,7 @@
 
             <a class="back-btn" href="{{ app.request.headers.get('referer') }}">Retour</a>
         </section>
+
     </main>
 {% endblock %}
 
