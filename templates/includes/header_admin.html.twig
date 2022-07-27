@@ -1,0 +1,23 @@
+<header id="header_nav">
+    <div id="header_left">
+        <a href="{{ path('home') }}">
+            <h1><span>Minimal</span><br><span>SHOP</span></h1>
+        </a>
+    </div>
+    <div id="header_right">
+        <ul id="header_nav_ul">
+            <li>
+                <a href="{{ path('admin_show_customers') }}">UTILISATEURS</a>
+            </li>
+            <li>
+                <a href="{{ path('admin_show_products') }}">PRODUITS</a>
+            </li>
+            <li>
+                <a href="{{ path('admin_show_admins') }}">ADMINISTRATEURS</a>
+            </li>
+            <li>
+                <a href="{{ path('user_logout') }}">DECONNEXION</a>
+            </li>
+        </ul>
+    </div>
+</header>

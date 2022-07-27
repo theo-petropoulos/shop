@@ -14,6 +14,12 @@ class ModifyPasswordType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $isAdminEdit    = $options['isAdminEdit'] ?? null;
+        $adminRoute     = $options['adminRoute'] ?? null;
+
+        if ($isAdminEdit && $adminRoute)
+            $builder->setAction($adminRoute);
+
         $builder
             ->add('old_password', PasswordType::class, [
                 'mapped'            => false,
@@ -40,7 +46,9 @@ class ModifyPasswordType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => User::class,
+            'data_class'    => User::class,
+            'isAdminEdit'   => false,
+            'adminRoute'    => null
         ]);
     }
 }
