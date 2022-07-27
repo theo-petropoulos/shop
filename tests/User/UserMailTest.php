@@ -35,9 +35,12 @@ class UserMailTest extends KernelTestCase
     public function alreayUsedMail()
     {
         $this->expectException(UniqueConstraintViolationException::class);
+
+        /** @var User $registeredUser */
         $registeredUser = $this->em->getRepository(User::class)->findOneBy([], ['id' => 'DESC']);
-        $mail = $registeredUser->getEmail();
-        $user = new User();
+        $mail           = $registeredUser->getEmail();
+
+        $user           = new User();
         $user
             ->setCreationDate(new \DateTime("today"))
             ->setEmail($mail)
@@ -46,6 +49,7 @@ class UserMailTest extends KernelTestCase
             ->setPassword("h4sh3dp4ssw0rd")
             ->setPhone("0123456789")
             ->setRoles(["ROLE_USER"]);
+
         $this->em->persist($user);
         $this->em->flush();
     }

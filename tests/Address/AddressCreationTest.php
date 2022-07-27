@@ -62,8 +62,10 @@ class AddressCreationTest extends KernelTestCase
     public function invalidTypePostalCode()
     {
         $this->expectException(\TypeError::class);
-        $address    = new Address();
+
+        /** @var User $user */
         $user       = $this->em->getRepository(User::class)->findOneBy([], ['id' => 'DESC']);
+        $address    = new Address();
         $address
             ->setCustomer($user)
             ->setFirstName($user->getFirstName())
@@ -73,6 +75,7 @@ class AddressCreationTest extends KernelTestCase
             ->setStreetNumber("3")
             ->setStreetName("rue des cerisiers")
             ->setMain(true);
+
         $this->em->persist($address);
         $this->em->flush();
     }
