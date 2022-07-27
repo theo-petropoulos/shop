@@ -36,8 +36,18 @@
 
 #admin_alt{
   @include admin-alt;
-  #products, #admins{
+  #products, #admins, #customers{
     @include admin-alt-display;
+  }
+}
+
+#search_address_box{
+  .search_results_box{
+    .div_det{
+      div{
+        width: 12%;
+      }
+    }
   }
 }
 

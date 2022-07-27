@@ -9,7 +9,11 @@
         </title>
 </head>
     <body>
-        {% include 'includes/header.html.twig' %}
+        {% if is_granted('ROLE_ADMIN') %}
+            {% include 'includes/header_admin.html.twig' %}
+        {% else %}
+            {% include 'includes/header.html.twig' %}
+        {% endif %}
         {% block body %}{% endblock %}
         {#{% include 'includes/footer.html.twig' %}#}
         {% include 'includes/searchbar.html.twig' %}

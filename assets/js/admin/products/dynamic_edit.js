@@ -17,7 +17,7 @@ $(function() {
 
         window['prevHTML_' + field + '_' + id] = $(this).parents('div').html()
 
-        if (container.hasClass('active')) {
+        if (container.hasClass('active') || container.hasClass('isVerified')) {
             let entity = ''
 
             if (!is_search)

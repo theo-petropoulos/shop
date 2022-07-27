@@ -145,7 +145,8 @@ class UserController extends AbstractController
         $form       = $this->createForm(AddAddressType::class, $address);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted())
+        {
             if ($form->isValid()) {
                 /** @var Address $address */
                 $address = $form->getData();
